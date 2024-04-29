@@ -126,19 +126,104 @@ public partial class Connector : Node{
             return;
         }
         else if(transformed_data_0>=70 && transformed_data_0<=120){
-			GD.Print("The Master Node set the Network channel to " + transformed_data_0.ToString());
+			GD.Print("master Node set the Network channel to " + transformed_data_0.ToString());
 			//Session.NetChannel = (int)output;
 			return;
         }
         else if(transformed_data_0==1){
 			// Session.SerialConnectionInitialized = true;
-            GD.Print("The Master node requested Sync.");
+            GD.Print("master node requested Sync.");
             // StartInitialization();
+            return;
+        }
+        else if(transformed_data_0==2){
+			// Session.SerialConnectionInitialized = true;
+            GD.Print("master node reported netself-repairs.");
+            // StartInitialization();
+            return;
+        }
+        else if(transformed_data_0==3){
+            GD.Print("master node reported netself-repairs (lag detected and cleaned).");
+            return;
+        }
+        else if(transformed_data_0==4){
+            GD.Print("master node reported recieved a network reset request.");
+            return;
+        }
+        else if(transformed_data_0==5){
+            GD.Print("master node reported node resync.");
+            return;
+        }
+        else if(transformed_data_0==6){
+            GD.Print("master node reported that sync was successful. Current session recovered.");
+            return;
+        }
+        else if(transformed_data_0==7){
+            GD.Print("master node reported that sync failed. new game state.");
+            return;
+        }
+        else if(transformed_data_0==8){
+            GD.Print("master node recieved a reset request.");
             return;
         }
 		else{
 			GD.Print("something else was requested: " + transformed_data_0);
 		}
+
+		if(transformed_data_0<=3000){
+			GD.Print("idk what to do with <=3000");
+			return;
+		}
+		
+		GD.Print("riddle information! >3000");
+		int index = 0;
+		for(int i=1; i<=4*7; i+=4){
+			index = i/4; //0,1,2,3,4,5,6
+            uint delay = uint.Parse(data[i + 1]);
+            bool newSolved = (float.Parse(data[i + 2]) == 1) ? true : false;
+            int newState = int.Parse(data[i + 3]);
+			GD.Print("current index: " + index + "- " + delay + " " + newSolved + " " + newState);
+			switch(index){
+				case 0:
+					GD.Print("Separee!");
+					break;
+				case 1:
+					GD.Print("Stoptanz!");
+					break;
+				case 2:
+					GD.Print("Sparkästchen!");
+					break;
+				case 3:
+					GD.Print("Jukebox!");
+					break;
+				case 4:
+					GD.Print("Wasserhahn!");
+					break;
+				case 5:
+					GD.Print("4 Drinks!");
+					break;
+				case 6:
+					GD.Print("Telephone!");
+					break;
+				case 7:
+					GD.Print("Sexdungeon!");
+					break;
+				default:
+					GD.Print("Undefined!");
+					break;
+			}
+		}
+
+
 	}
 
+
+	private void _on_disconnect_com_button_down(){
+		if(_targetPort==null || !_targetPort.IsOpen){
+			GD.Print("targeted port not open");
+			return;
+		}
+		GD.Print("target port will now close...");
+		_targetPort.Close();
+	}
 }

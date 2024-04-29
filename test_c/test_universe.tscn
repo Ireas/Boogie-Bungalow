@@ -40,7 +40,7 @@ layout_mode = 0
 offset_left = 697.0
 offset_top = 66.0
 offset_right = 1072.0
-offset_bottom = 320.0
+offset_bottom = 202.0
 
 [node name="SearchCOMs" type="Button" parent="Panel/VBoxContainer"]
 layout_mode = 2
@@ -54,6 +54,10 @@ text = "Connect to COM5"
 layout_mode = 2
 text = "Send Initial Command (\"00,00,01\")"
 
+[node name="DisconnectCOM" type="Button" parent="Panel/VBoxContainer"]
+layout_mode = 2
+text = "Disconnect"
+
 [node name="MusicPlayer" type="AudioStreamPlayer" parent="."]
 
 [node name="Connector" type="Node" parent="." node_paths=PackedStringArray("timer")]
@@ -66,4 +70,5 @@ timer = NodePath("../WaitForACK")
 [connection signal="button_down" from="Panel/VBoxContainer/SearchCOMs" to="Connector" method="_on_search_coms_button_down"]
 [connection signal="button_down" from="Panel/VBoxContainer/ConnectCOM5" to="Connector" method="_on_connect_com_5_button_down"]
 [connection signal="button_down" from="Panel/VBoxContainer/SendInitialCommand" to="Connector" method="_on_send_initial_command_button_down"]
+[connection signal="button_down" from="Panel/VBoxContainer/DisconnectCOM" to="Connector" method="_on_disconnect_com_button_down"]
 [connection signal="timeout" from="WaitForACK" to="Connector" method="_on_wait_for_ack_timeout"]
