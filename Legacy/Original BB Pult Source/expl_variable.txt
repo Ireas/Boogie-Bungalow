@@ -1,2 +1,0 @@
-Riddle
-	AVGdelayCOM = ping in ms 

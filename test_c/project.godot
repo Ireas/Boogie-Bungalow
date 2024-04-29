@@ -10,7 +10,7 @@ config_version=5
 
 [application]
 
-config/name="Test BB"
+config/name="prototype-00"
 run/main_scene="res://test_universe.tscn"
 config/features=PackedStringArray("4.2", "C#", "GL Compatibility")
 boot_splash/show_image=false
