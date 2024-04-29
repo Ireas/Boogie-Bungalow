@@ -1,0 +1,54 @@
+[gd_scene load_steps=6 format=3 uid="uid://vwdey52kj1k1"]
+
+[ext_resource type="Script" path="res://test.cs" id="1_xpmhx"]
+[ext_resource type="Script" path="res://play_music.gd" id="2_ink66"]
+[ext_resource type="AudioStream" uid="uid://bpdjuogq1gcg6" path="res://Music/boogie_woogie.mp3" id="3_3jkae"]
+[ext_resource type="AudioStream" uid="uid://f3rhbm5snjmk" path="res://Music/september.mp3" id="4_75rxf"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_y3q11"]
+bg_color = Color(0.6763, 0.535819, 0.76293, 1)
+
+[node name="TestUniverse" type="Node"]
+
+[node name="Panel" type="Panel" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxFlat_y3q11")
+
+[node name="MusicButton" type="Button" parent="Panel" node_paths=PackedStringArray("music_player")]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -55.0
+offset_top = 146.0
+offset_right = 55.0
+offset_bottom = 203.0
+grow_horizontal = 2
+text = "Play Music"
+script = ExtResource("2_ink66")
+music_player = NodePath("../../MusicPlayer")
+music_tracks = Array[AudioStream]([ExtResource("3_3jkae"), ExtResource("4_75rxf")])
+
+[node name="ConnectButton" type="Button" parent="Panel"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -55.0
+offset_top = 383.0
+offset_right = 55.0
+offset_bottom = 440.0
+grow_horizontal = 2
+text = "Connect"
+script = ExtResource("1_xpmhx")
+
+[node name="MusicPlayer" type="AudioStreamPlayer" parent="."]
+
+[connection signal="button_down" from="Panel/MusicButton" to="Panel/MusicButton" method="_on_button_down"]
+[connection signal="button_down" from="Panel/ConnectButton" to="Panel/ConnectButton" method="_on_button_down"]
