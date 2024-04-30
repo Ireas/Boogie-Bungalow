@@ -1,9 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://vwdey52kj1k1"]
+[gd_scene load_steps=4 format=3 uid="uid://vwdey52kj1k1"]
 
 [ext_resource type="Script" path="res://Connector.cs" id="1_xpmhx"]
 [ext_resource type="Script" path="res://play_music.gd" id="2_ink66"]
-[ext_resource type="AudioStream" uid="uid://bpdjuogq1gcg6" path="res://Music/boogie_woogie.mp3" id="3_3jkae"]
-[ext_resource type="AudioStream" uid="uid://f3rhbm5snjmk" path="res://Music/september.mp3" id="4_75rxf"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_y3q11"]
 bg_color = Color(0.6763, 0.535819, 0.76293, 1)
@@ -33,7 +31,6 @@ grow_horizontal = 2
 text = "Play Music"
 script = ExtResource("2_ink66")
 music_player = NodePath("../../MusicPlayer")
-music_tracks = Array[AudioStream]([ExtResource("3_3jkae"), ExtResource("4_75rxf")])
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Panel"]
 layout_mode = 0
