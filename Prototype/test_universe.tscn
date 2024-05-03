@@ -1,0 +1,71 @@
+[gd_scene load_steps=4 format=3 uid="uid://vwdey52kj1k1"]
+
+[ext_resource type="Script" path="res://Connector.cs" id="1_xpmhx"]
+[ext_resource type="Script" path="res://play_music.gd" id="2_ink66"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_y3q11"]
+bg_color = Color(0.6763, 0.535819, 0.76293, 1)
+
+[node name="TestUniverse" type="Node"]
+
+[node name="Panel" type="Panel" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxFlat_y3q11")
+
+[node name="MusicButton" type="Button" parent="Panel" node_paths=PackedStringArray("music_player")]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -576.0
+offset_top = 64.0
+offset_right = -466.0
+offset_bottom = 121.0
+grow_horizontal = 2
+text = "Play Music"
+script = ExtResource("2_ink66")
+music_player = NodePath("../../MusicPlayer")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel"]
+layout_mode = 0
+offset_left = 697.0
+offset_top = 66.0
+offset_right = 1072.0
+offset_bottom = 202.0
+
+[node name="SearchCOMs" type="Button" parent="Panel/VBoxContainer"]
+layout_mode = 2
+text = "Search All Coms"
+
+[node name="ConnectCOM5" type="Button" parent="Panel/VBoxContainer"]
+layout_mode = 2
+text = "Connect to COM5"
+
+[node name="ConnectCOM5While" type="Button" parent="Panel/VBoxContainer"]
+layout_mode = 2
+text = "Connect to COM5 (While-Loop)"
+
+[node name="DisconnectCOM" type="Button" parent="Panel/VBoxContainer"]
+layout_mode = 2
+text = "Disconnect"
+
+[node name="MusicPlayer" type="AudioStreamPlayer" parent="."]
+
+[node name="Connector" type="Node" parent="."]
+script = ExtResource("1_xpmhx")
+
+[node name="ACKTimerMax" type="Timer" parent="."]
+wait_time = 30.0
+one_shot = true
+
+[connection signal="button_down" from="Panel/MusicButton" to="Panel/MusicButton" method="_on_button_down"]
+[connection signal="button_down" from="Panel/VBoxContainer/SearchCOMs" to="Connector" method="_on_search_coms_button_down"]
+[connection signal="button_down" from="Panel/VBoxContainer/ConnectCOM5" to="Connector" method="_on_connect_com_5_button_down"]
+[connection signal="button_down" from="Panel/VBoxContainer/ConnectCOM5While" to="Connector" method="_on_connect_com_5_while_button_down"]
+[connection signal="button_down" from="Panel/VBoxContainer/DisconnectCOM" to="Connector" method="_on_disconnect_com_button_down"]
