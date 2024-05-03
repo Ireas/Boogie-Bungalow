@@ -11,6 +11,7 @@ public partial class Connector : Node{
 	
 	public override void _Ready(){
 		GD.Print("Hello from C# to Godot :)");
+		GD.Print("Also hello from PC!");
 		GD.Print("");
 	}
 
