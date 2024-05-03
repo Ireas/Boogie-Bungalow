@@ -1,0 +1,11 @@
+ea4bc82a6ad023ab7ee23ee620429895
+::res://::1714733267
+Connector.cs::CSharpScript::-1::1714733182::0::1::::<><>::
+export_presets.cfg::TextFile::-1::1714732612::0::1::::<><>::
+icon.svg::CompressedTexture2D::6270785917842479973::1714056149::1714056156::1::::<><>::
+play_music.gd::GDScript::-1::1714478780::0::1::::<>Button<>::
+test_universe.tscn::PackedScene::1519572629286954014::1714733253::0::1::::<><>::res://Connector.cs<>res://play_music.gd
+::res://data_boogie_bungalow_windows_x86_64/::1714732576
+boogie_bungalow.deps.json::JSON::-1::1714722429::0::1::::<><>::
+boogie_bungalow.runtimeconfig.json::JSON::-1::1714722429::0::1::::<><>::
+::res://Export/::1714732596

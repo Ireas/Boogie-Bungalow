@@ -1,0 +1,8 @@
+ - Riddle
+	AVGdelayCOM = ping in ms 
+
+
+
+
+ - COMportsList = DropDownMenu above connect Button
+?	- SelectedItem == COM5
