@@ -1,11 +1,14 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 using System.IO.Ports;
 
 
 public partial class Connector : Node{
 	[Export]
 	public Timer timer;
+	[Export]
+	public Timer timer_sync_packages;
 	private SerialPort _targetPort;
 	
 	
@@ -148,7 +151,6 @@ public partial class Connector : Node{
 			string[] data_split = data.Split(',');
 			foreach(string entry in data_split){
 				GD.Print("    |" + entry);
-			GD.Print("");
 			}
 			// Session.LatestPacket = data;
 			// Session.LastPacketLength = data.Length;
@@ -195,13 +197,21 @@ public partial class Connector : Node{
 		else if(transformed_data_0==1){
 			// Session.SerialConnectionInitialized = true;
 			GD.Print("  master node requested Sync.");
-			// StartInitialization();
+			GD.Print("  starting sync timer.");
+			GD.Print(timer_sync_packages);
+			
+			for(int i=0; i<7; i++){
+				GD.Print(">>>test" + i);
+				SendSyncPackage(i);
+				timer_sync_packages.Start(); // quasi = StartInitialization();
+				while(timer_sync_packages.TimeLeft>0){}
+			}
+			
 			return;
 		}
 		else if(transformed_data_0==2){
 			// Session.SerialConnectionInitialized = true;
 			GD.Print("  master node reported netself-repairs.");
-			// StartInitialization();
 			return;
 		}
 		else if(transformed_data_0==3){
@@ -263,6 +273,10 @@ public partial class Connector : Node{
 					break;
 				case 5:
 					GD.Print("    thats 4 Drinks!");
+					if(newState==1){
+						GD.Print("Sending: " + "13,00,00" + " (= make it stop open door)");
+						_targetPort.WriteLine(">	" + "13,00,00"); //stop asking to open compartment. 0 is ignored to just use it as joker
+					}
 					break;
 				case 6:
 					GD.Print("    thats Telephone!");
@@ -276,6 +290,33 @@ public partial class Connector : Node{
 			}
 		}
 		GD.Print("");
+	}
+
+
+	private Dictionary<int,string> MESSAGE_TEMPLATES = new Dictionary<int, string>{
+		{0,"01,00,00"},
+		{1,"02,00,00"},
+		{2,"03,00,00"},
+		{3,"04,00,00"},
+		{4,"05,00,00"},
+		{5,"13,00,00"},
+		{6,"21,00,00"},
+		{7,"29,00,02"},	
+	};
+
+	private void SendSyncPackage(int i){
+	
+		string message = MESSAGE_TEMPLATES[i];
+		GD.Print("Sending: " + message);
+		_targetPort.WriteLine(">" + message);
+		timer_sync_packages.Start();
+	}
+
+
+	private void _on_send_package_button_down(){
+		GD.Print("Sending: " + "13,01,00" + " (= 4Drinks solved)");
+		_targetPort.WriteLine(">" + "13,01,00");
+		return;
 	}
 
 
