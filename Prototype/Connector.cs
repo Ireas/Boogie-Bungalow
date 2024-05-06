@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.IO.Ports;
 
@@ -10,147 +11,101 @@ public partial class Connector : Node{
 	[Export]
 	public Timer timer_sync_packages;
 	private SerialPort _targetPort;
+    
+	string path_logfile = Path.Combine(
+		System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData), 
+		"Boogie-Bungalow/logfile.txt"
+	);
 	
 	
 	public override void _Ready(){
-		GD.Print("Hello from C# to Godot :)");
-		GD.Print("Also hello from PC!");
-		GD.Print("");
+		File.Delete(path_logfile);
+		Log("Hello from C# to Godot :)");
+		Log("Also hello from PC!");
+		Log("");
 	}
 
 	// display all port names to the GD console.
 	private void _on_search_coms_button_down(){
 		string[] ports = SerialPort.GetPortNames();
-		GD.Print("== PORT LIST ==");
-		GD.Print("The following serial ports were found:");
+		Log("== PORT LIST ==");
+		Log("The following serial ports were found:");
 		foreach(string port in ports){
-			GD.Print("  " + port);
+			Log("  " + port);
 		}
-		GD.Print("");
+		Log("");
 	}
 
 	
-
-	// APROACH EVENT-DRIVEN
-	// try connect to the COM5.
 	private void _on_connect_com_5_button_down(){
 		_targetPort = new SerialPort();
 		_targetPort.PortName = "COM5";
 		_targetPort.BaudRate = 115200;
-		_targetPort.DataReceived += new SerialDataReceivedEventHandler(WaitForACK);
 
-		GD.Print("== OPEN PORT ==");
-		GD.Print("created serialPort:");
-		GD.Print("PortName:" + _targetPort.PortName + ", BaudRate:" + _targetPort.BaudRate);
-		GD.Print("Port.DateRecieved: WaitForACK");
+		Log("== OPEN PORT ==");
+		Log("created serialPort:");
+		Log("PortName:" + _targetPort.PortName + ", BaudRate:" + _targetPort.BaudRate);
 		try{
-			GD.Print("trying to open port...");
+			Log("trying to open port...");
 			_targetPort.Open();
-			GD.Print("targeted Port opened successfully!");
-			GD.Print("");
+			Log("targeted Port opened successfully!");
+			Log("");
 
-			GD.Print("trying to send initial \"00,00,01\" command...");
+			Log("trying to send initial \"00,00,01\" command...");
 			_targetPort.WriteLine(">" + "00,00,01");
-			GD.Print("command send successfully!");
-			GD.Print("");
-		}
-		catch(Exception e){
-			GD.Print("exception occured: " + e.Message);
-		}
-	}
+			Log("command send successfully!");
+			Log("");
 
-	
-	// APROACH PRIMITIVE WHILE
-	private void _on_connect_com_5_while_button_down(){
-		_targetPort = new SerialPort();
-		_targetPort.PortName = "COM5";
-		_targetPort.BaudRate = 115200;
-
-		GD.Print("== OPEN PORT ==");
-		GD.Print("created serialPort:");
-		GD.Print("PortName:" + _targetPort.PortName + ", BaudRate:" + _targetPort.BaudRate);
-		GD.Print("Port.DateRecieved:");
-		try{
-			GD.Print("trying to open port...");
-			_targetPort.Open();
-			GD.Print("targeted Port opened successfully!");
-			GD.Print("");
-
-			GD.Print("trying to send initial \"00,00,01\" command...");
-			_targetPort.WriteLine(">" + "00,00,01");
-			GD.Print("command send successfully!");
-			GD.Print("");
-
-			GD.Print(">>>while loop for ACK");
+			Log(">>>while loop for ACK");
 			bool ACKrecieved = false;
 			timer.Start();
 			while(!ACKrecieved && timer.TimeLeft>0){
 				if(_targetPort.BytesToRead>0 && _targetPort.ReadChar()=='8'){
-					GD.Print("  recieved the following '8': " + _targetPort.ReadChar() + "  (should be 56, right?)");
-					GD.Print("  ACK received from Master... Now Waiting for Master to ask for SYNC");
-					GD.Print("");
+					Log("  recieved characater 56 (which equals '8')");
+					Log("  ACK received from Master... Now Waiting for Master to ask for SYNC");
+					Log("");
 					ACKrecieved = true;
 					_targetPort.DataReceived+= ProcessRecievedData;
 				}
 				else{
-					GD.Print("  ACK not yet received");
+					Log("  ACK not yet received");
 				}
 			}
 
 			if(!ACKrecieved){
-				GD.Print("ACK wait timeout");
+				Log("ACK wait timeout");
 				return;
 			}
-
-			
 		}
 		catch(Exception e){
-			GD.Print("exception occured: " + e.Message);
+			Log("exception occured: " + e.Message);
 		}
 	}
 
-	private void WaitForACK(object sender, SerialDataReceivedEventArgs args){
-		GD.Print(">>>>ACK-TEST");
-		if(_targetPort.BytesToRead==0){
-			GD.Print("  no bytes to read from targeted port!");
-			return;
-		}
-
-		int _readChar = _targetPort.ReadChar(); // Quesce la fuck? (int)'8'=56 => 56=='8' means
-		if(_readChar!='8'){
-			GD.Print("  unexpected char recieved: " + _readChar);
-			return;
-		}
-
-		GD.Print("  expected ACK recieved:" + _readChar + "  (should be 56 because 56=='8')");
-		GD.Print("");
-		GD.Print("== PROCESS DATA ==");
-		GD.Print("unsubscribe from WaitForACK");
-		_targetPort.DataReceived-= WaitForACK;
-		GD.Print("subscribe to ProcessRecievedData");
-		_targetPort.DataReceived+= ProcessRecievedData;
-		GD.Print("");
+	bool deferred_activated = false;
+	private void _on_connect_com_5_deferred_button_down(){
+		deferred_activated  = true;
+		_on_connect_com_5_button_down();
 	}
-
 
 	private void ProcessRecievedData(object sender, SerialDataReceivedEventArgs args){
-		GD.Print(">>>>data recieved!");
+		Log(">>>>data recieved!");
 
 		try{
 			if(_targetPort.BytesToRead==0){
-				GD.Print("  no bytes to read from targeted port!");
+				Log("  no bytes to read from targeted port!");
 				return;
 			}
 			if(_targetPort.BytesToRead<28){
-				GD.Print("  unexpected char recieved! " + _targetPort.ReadChar());
+				Log("  unexpected char recieved! " + _targetPort.ReadChar());
 				return;
 			}
 
 			string data = _targetPort.ReadLine();
-			GD.Print("  got package: \"" + data + "\"");
+			Log("  got package: \"" + data + "\"");
 			string[] data_split = data.Split(',');
 			foreach(string entry in data_split){
-				GD.Print("    |" + entry);
+				Log("    |" + entry);
 			}
 			// Session.LatestPacket = data;
 			// Session.LastPacketLength = data.Length;
@@ -159,10 +114,10 @@ public partial class Connector : Node{
 			processBuffer(data_split);
 		}
 		catch(Exception e){
-			GD.Print("exception occured: " + e.Message);
-			GD.Print("+1 currupt package");
+			Log("exception occured: " + e.Message);
+			Log("+1 currupt package");
 		}
-		GD.Print("");
+		Log("");
 	}
 
 
@@ -176,120 +131,129 @@ public partial class Connector : Node{
 		// [3] solved
 		// [4] state
 
-		GD.Print("  processing package:");
+		Log("  processing package:");
 		uint transformed_data_0;
 		if(!uint.TryParse(data[0].Substring(1), out transformed_data_0)){
-			GD.Print("  first bit was not understood: " + transformed_data_0);
+			Log("  first bit was not understood: " + transformed_data_0);
 			return;
 		}
-		GD.Print("  successfully found substring " + transformed_data_0 + " in "  + data[0]);
+		Log("  successfully found substring " + transformed_data_0 + " in "  + data[0]);
 
 		
 		if(transformed_data_0>=11 && transformed_data_0<=17){
-			GD.Print("  laggy connection with node " + (transformed_data_0-10).ToString() + " detected. It was forced to auto-restart");
+			Log("  laggy connection with node " + (transformed_data_0-10).ToString() + " detected. It was forced to auto-restart");
 			return;
 		}
 		else if(transformed_data_0>=70 && transformed_data_0<=120){
-			GD.Print("  master Node set the Network channel to " + transformed_data_0.ToString());
+			Log("  master Node set the Network channel to " + transformed_data_0.ToString());
 			//Session.NetChannel = (int)output;
 			return;
 		}
 		else if(transformed_data_0==1){
 			// Session.SerialConnectionInitialized = true;
-			GD.Print("  master node requested Sync.");
-			GD.Print("  starting sync timer.");
-			GD.Print(timer_sync_packages);
+			Log("  master node requested Sync.");
+			Log("  starting syncing.");
 			
 			for(int i=0; i<7; i++){
-				GD.Print(">>>test" + i);
+				Log(">>>SYNC " + i);
+				
+				Log("  CallDeferred? => " + deferred_activated);
+				if(deferred_activated)
+					timer_sync_packages.CallDeferred("start", 1); //expected godots pascal case in call deferred
+				else
+					timer_sync_packages.Start(1);
+
+				Log("  SYNC waiting started");
+				while(timer.TimeLeft>0){
+					Log("    waiting..." + timer.TimeLeft);
+				}
+				Log("  SEND SYNC " + i);
 				SendSyncPackage(i);
-				timer_sync_packages.Start(); // quasi = StartInitialization();
-				while(timer_sync_packages.TimeLeft>0){}
 			}
 			
 			return;
 		}
 		else if(transformed_data_0==2){
 			// Session.SerialConnectionInitialized = true;
-			GD.Print("  master node reported netself-repairs.");
+			Log("  master node reported netself-repairs.");
 			return;
 		}
 		else if(transformed_data_0==3){
-			GD.Print("  master node reported netself-repairs (lag detected and cleaned).");
+			Log("  master node reported netself-repairs (lag detected and cleaned).");
 			return;
 		}
 		else if(transformed_data_0==4){
-			GD.Print("  master node reported recieved a network reset request.");
+			Log("  master node reported recieved a network reset request.");
 			return;
 		}
 		else if(transformed_data_0==5){
-			GD.Print("  master node reported node resync.");
+			Log("  master node reported node resync.");
 			return;  
 		}
 		else if(transformed_data_0==6){
-			GD.Print("  master node reported that sync was successful. Current session recovered.");
+			Log("  master node reported that sync was successful. Current session recovered.");
 			return;
 		}
 		else if(transformed_data_0==7){
-			GD.Print("  master node reported that sync failed. new game state.");
+			Log("  master node reported that sync failed. new game state.");
 			return;
 		}
 		else if(transformed_data_0==8){
-			GD.Print("  master node recieved a reset request.");
+			Log("  master node recieved a reset request.");
 			return;
 		}
 		else{
-			GD.Print("  something else was requested: " + transformed_data_0);
+			Log("  something else was requested: " + transformed_data_0);
 		}
 
 		if(transformed_data_0<=3000){
-			GD.Print("  idk what to do with >8 and <=3000");
+			Log("  idk what to do with >8 and <=3000");
 			return;
 		}
 		
-		GD.Print("  riddle information! >3000");
+		Log("  riddle information! >3000");
 		int index;
 		for(int i=1; i<=4*7; i+=4){
-			index = i/4; //0,1,2,3,4,5,6
+			index = i/4; //0,1,2,3,4,5,6,7
 			uint delay = uint.Parse(data[i + 1]);
 			bool newSolved = (float.Parse(data[i + 2]) == 1) ? true : false;
 			int newState = int.Parse(data[i + 3]);
-			GD.Print("    current index: " + index + "-> " + delay + " " + newSolved + " " + newState);
+			Log("    current index: " + index + "-> " + delay + " " + newSolved + " " + newState);
 			switch(index){
 				case 0:
-					GD.Print("    thats Separee!");
+					Log("    thats Separee!");
 					break;
 				case 1:
-					GD.Print("    thats Stoptanz!");
+					Log("    thats Stoptanz!");
 					break;
 				case 2:
-					GD.Print("    thats Sparkaestchen!");
+					Log("    thats Sparkaestchen!");
 					break;
 				case 3:
-					GD.Print("    thats Jukebox!");
+					Log("    thats Jukebox!");
 					break;
 				case 4:
-					GD.Print("    thats Wasserhahn!");
+					Log("    thats Wasserhahn!");
 					break;
 				case 5:
-					GD.Print("    thats 4 Drinks!");
+					Log("    thats 4 Drinks!");
 					if(newState==1){
-						GD.Print("Sending: " + "13,00,00" + " (= make it stop open door)");
+						Log("Sending: " + "13,00,00" + " (= make it stop open door)");
 						_targetPort.WriteLine(">	" + "13,00,00"); //stop asking to open compartment. 0 is ignored to just use it as joker
 					}
 					break;
 				case 6:
-					GD.Print("    thats Telephone!");
+					Log("    thats Telephone!");
 					break;
 				case 7:
-					GD.Print("    thats Sexdungeon!");
+					Log("    thats Sexdungeon!");
 					break;
 				default:
-					GD.Print("    thats undefined Behaviour!");
+					Log("    thats undefined Behaviour!");
 					break;
 			}
 		}
-		GD.Print("");
+		Log("");
 	}
 
 
@@ -305,30 +269,33 @@ public partial class Connector : Node{
 	};
 
 	private void SendSyncPackage(int i){
-	
 		string message = MESSAGE_TEMPLATES[i];
-		GD.Print("Sending: " + message);
+		Log("    Sending: " + message);
 		_targetPort.WriteLine(">" + message);
-		timer_sync_packages.Start();
 	}
 
 
 	private void _on_send_package_button_down(){
-		GD.Print("Sending: " + "13,01,00" + " (= 4Drinks solved)");
+		Log("Sending: " + "13,01,00" + " (= 4Drinks solved)");
 		_targetPort.WriteLine(">" + "13,01,00");
 		return;
 	}
 
 
 	private void _on_disconnect_com_button_down(){
-		GD.Print("== CLOSE COM ==");
+		Log("== CLOSE COM ==");
 		if(_targetPort==null || !_targetPort.IsOpen){
-			GD.Print("targeted port not open");
+			Log("targeted port not open");
 			return;
 		}
-		GD.Print("target port will now close...");
+		Log("target port will now close...");
 		_targetPort.Close();
-		GD.Print("target port closed successfully");
-		GD.Print("");
+		Log("target port closed successfully");
+		Log("");
+	}
+
+	private void Log(string message){
+		GD.Print(message);
+		File.AppendAllText(path_logfile, message+"\n");
 	}
 }

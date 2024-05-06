@@ -45,11 +45,11 @@ text = "Search All Coms"
 
 [node name="ConnectCOM5" type="Button" parent="Panel/VBoxContainer"]
 layout_mode = 2
-text = "Connect to COM5"
+text = "Connect to COM5 (while-loop)"
 
-[node name="ConnectCOM5While" type="Button" parent="Panel/VBoxContainer"]
+[node name="ConnectCOM5_deferred" type="Button" parent="Panel/VBoxContainer"]
 layout_mode = 2
-text = "Connect to COM5 (While-Loop)"
+text = "Connect to COM5 (call deferred)"
 
 [node name="Send Package" type="Button" parent="Panel/VBoxContainer"]
 layout_mode = 2
@@ -64,18 +64,18 @@ text = "Disconnect"
 [node name="Connector" type="Node" parent="." node_paths=PackedStringArray("timer", "timer_sync_packages")]
 script = ExtResource("1_xpmhx")
 timer = NodePath("ACKTimerMax")
-timer_sync_packages = NodePath("TimerDelaySync")
+timer_sync_packages = NodePath("TimerSync")
 
 [node name="ACKTimerMax" type="Timer" parent="Connector"]
 wait_time = 30.0
 one_shot = true
 
-[node name="TimerDelaySync" type="Timer" parent="Connector"]
+[node name="TimerSync" type="Timer" parent="Connector"]
 one_shot = true
 
 [connection signal="button_down" from="Panel/MusicButton" to="Panel/MusicButton" method="_on_button_down"]
 [connection signal="button_down" from="Panel/VBoxContainer/SearchCOMs" to="Connector" method="_on_search_coms_button_down"]
 [connection signal="button_down" from="Panel/VBoxContainer/ConnectCOM5" to="Connector" method="_on_connect_com_5_button_down"]
-[connection signal="button_down" from="Panel/VBoxContainer/ConnectCOM5While" to="Connector" method="_on_connect_com_5_while_button_down"]
+[connection signal="button_down" from="Panel/VBoxContainer/ConnectCOM5_deferred" to="Connector" method="_on_connect_com_5_deferred_button_down"]
 [connection signal="button_down" from="Panel/VBoxContainer/Send Package" to="Connector" method="_on_send_package_button_down"]
 [connection signal="button_down" from="Panel/VBoxContainer/DisconnectCOM" to="Connector" method="_on_disconnect_com_button_down"]
