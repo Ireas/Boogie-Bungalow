@@ -7,9 +7,14 @@ using System.IO.Ports;
 
 public partial class Connector : Node{
 	[Export]
-	public Timer timer;
+	public Godot.Timer timer;
 	[Export]
-	public Timer timer_sync_packages;
+	public Godot.Timer timer_sync_packages;
+	[Export]
+	public Godot.Timer timer_background_worker;
+
+	private bool use_backgroundworker = false;
+
 	private SerialPort _targetPort;
     
 	string path_logfile = Path.Combine(
@@ -88,6 +93,10 @@ public partial class Connector : Node{
 		_on_connect_com_5_button_down();
 	}
 
+
+	
+
+
 	private void ProcessRecievedData(object sender, SerialDataReceivedEventArgs args){
 		Log(">>>>data recieved!");
 
@@ -154,21 +163,26 @@ public partial class Connector : Node{
 			Log("  master node requested Sync.");
 			Log("  starting syncing.");
 			
-			for(int i=0; i<7; i++){
-				Log(">>>SYNC " + i);
-				
-				Log("  CallDeferred? => " + deferred_activated);
-				if(deferred_activated)
-					timer_sync_packages.CallDeferred("start", 1); //expected godots pascal case in call deferred
-				else
-					timer_sync_packages.Start(1);
+			if(use_backgroundworker){
+				sync = true;
+			}
+			else{
+				for(int i=0; i<7; i++){
+					Log(">>>SYNC " + i);
 
-				Log("  SYNC waiting started");
-				while(timer.TimeLeft>0){
-					Log("    waiting..." + timer.TimeLeft);
+					Log("  CallDeferred? => " + deferred_activated);
+					if(deferred_activated)
+						timer_sync_packages.CallDeferred("start", 1); //expected godots pascal case in call deferred
+					else
+						timer_sync_packages.Start(1);
+
+					Log("  SYNC waiting started");
+					while(timer_sync_packages.TimeLeft>0){
+						Log("    waiting..." + timer_sync_packages.TimeLeft);
+					}
+					Log("  SEND SYNC " + i);
+					SendSyncPackage(i);
 				}
-				Log("  SEND SYNC " + i);
-				SendSyncPackage(i);
 			}
 			
 			return;
@@ -239,7 +253,7 @@ public partial class Connector : Node{
 					Log("    thats 4 Drinks!");
 					if(newState==1){
 						Log("Sending: " + "13,00,00" + " (= make it stop open door)");
-						_targetPort.WriteLine(">	" + "13,00,00"); //stop asking to open compartment. 0 is ignored to just use it as joker
+						_targetPort.WriteLine(">" + "13,00,00"); //stop asking to open compartment. 0 is ignored to just use it as joker
 					}
 					break;
 				case 6:
@@ -288,6 +302,9 @@ public partial class Connector : Node{
 			Log("targeted port not open");
 			return;
 		}
+		Log("stopping background worker...");
+		timer_background_worker.Stop();
+		Log("stop successful...");
 		Log("target port will now close...");
 		_targetPort.Close();
 		Log("target port closed successfully");
@@ -297,5 +314,79 @@ public partial class Connector : Node{
 	private void Log(string message){
 		GD.Print(message);
 		File.AppendAllText(path_logfile, message+"\n");
+	}
+
+
+
+
+	private bool sync = false;
+
+	private void _on_connect_com_5_background_button_down(){
+		use_backgroundworker = true;
+		
+
+		_targetPort = new SerialPort();
+		_targetPort.PortName = "COM5";
+		_targetPort.BaudRate = 115200;
+
+		Log("== OPEN PORT ==");
+		Log("created serialPort:");
+		Log("PortName:" + _targetPort.PortName + ", BaudRate:" + _targetPort.BaudRate);
+
+		
+		Log("== START BACKGROUNDTIMER ==");
+		timer_background_worker.Start();
+		Log("sucessful backgroundtimer start!:");
+		try{
+			Log("trying to open port...");
+			_targetPort.Open();
+			Log("targeted Port opened successfully!");
+			Log("");
+
+			Log("trying to send initial \"00,00,01\" command...");
+			_targetPort.WriteLine(">" + "00,00,01");
+			Log("command send successfully!");
+			Log("");
+
+			Log(">>>while loop for ACK");
+			bool ACKrecieved = false;
+			timer.Start();
+			while(!ACKrecieved && timer.TimeLeft>0){
+				if(_targetPort.BytesToRead>0 && _targetPort.ReadChar()=='8'){
+					Log("  recieved characater 56 (which equals '8')");
+					Log("  ACK received from Master... Now Waiting for Master to ask for SYNC");
+					Log("");
+					ACKrecieved = true;
+					_targetPort.DataReceived+= ProcessRecievedData;
+				}
+				else{
+					Log("  ACK not yet received");
+				}
+			}
+
+			if(!ACKrecieved){
+				Log("ACK wait timeout");
+				return;
+			}
+		}
+		catch(Exception e){
+			Log("exception occured: " + e.Message);
+		}
+	}
+
+	private int sync_counter = 0;
+	private void _on_background_worker_timeout(){
+		Log("//Background Timer Tick//");
+		if(sync){
+			string message = MESSAGE_TEMPLATES[sync_counter];
+			Log("    BKG: SYNC Sending: " + message);
+			_targetPort.WriteLine(">" + message);
+
+			sync_counter++;
+			if(sync_counter==8){
+				sync = false;
+			}
+		}
+		return;
 	}
 }
