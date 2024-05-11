@@ -57,7 +57,15 @@ text = "Connect to COM5 (Background Worker)"
 
 [node name="Send Package" type="Button" parent="Panel/VBoxContainer"]
 layout_mode = 2
-text = "Send Package Solve 4Drinks"
+text = "Send Package 13,01,00"
+
+[node name="Send Package Alternative" type="Button" parent="Panel/VBoxContainer"]
+layout_mode = 2
+text = "Send Package 13,00,01 "
+
+[node name="Send Package Combined" type="Button" parent="Panel/VBoxContainer"]
+layout_mode = 2
+text = "Send Package 13,01,01 "
 
 [node name="DisconnectCOM" type="Button" parent="Panel/VBoxContainer"]
 layout_mode = 2
@@ -65,11 +73,10 @@ text = "Disconnect"
 
 [node name="MusicPlayer" type="AudioStreamPlayer" parent="."]
 
-[node name="Connector" type="Node" parent="." node_paths=PackedStringArray("timer", "timer_sync_packages", "timer_background_worker")]
+[node name="Connector" type="Node" parent="." node_paths=PackedStringArray("timer", "timer_sync_packages")]
 script = ExtResource("1_xpmhx")
 timer = NodePath("ACKTimerMax")
 timer_sync_packages = NodePath("TimerSync")
-timer_background_worker = NodePath("BackgroundWorker")
 
 [node name="ACKTimerMax" type="Timer" parent="Connector"]
 wait_time = 20.0
@@ -87,5 +94,7 @@ wait_time = 0.5
 [connection signal="button_down" from="Panel/VBoxContainer/ConnectCOM5_deferred" to="Connector" method="_on_connect_com_5_deferred_button_down"]
 [connection signal="button_down" from="Panel/VBoxContainer/ConnectCOM5_background" to="Connector" method="_on_connect_com_5_background_button_down"]
 [connection signal="button_down" from="Panel/VBoxContainer/Send Package" to="Connector" method="_on_send_package_button_down"]
+[connection signal="button_down" from="Panel/VBoxContainer/Send Package Alternative" to="Connector" method="_on_send_package_alternative_button_down"]
+[connection signal="button_down" from="Panel/VBoxContainer/Send Package Combined" to="Connector" method="_on_send_package_combined_button_down"]
 [connection signal="button_down" from="Panel/VBoxContainer/DisconnectCOM" to="Connector" method="_on_disconnect_com_button_down"]
 [connection signal="timeout" from="Connector/BackgroundWorker" to="Connector" method="_on_background_worker_timeout"]

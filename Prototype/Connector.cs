@@ -10,10 +10,8 @@ public partial class Connector : Node{
 	public Godot.Timer timer;
 	[Export]
 	public Godot.Timer timer_sync_packages;
-	[Export]
-	public Godot.Timer timer_background_worker;
 
-	private bool use_backgroundworker = false;
+	private bool syncing = false;
 
 	private SerialPort _targetPort;
     
@@ -113,9 +111,6 @@ public partial class Connector : Node{
 			string data = _targetPort.ReadLine();
 			Log("  got package: \"" + data + "\"");
 			string[] data_split = data.Split(',');
-			foreach(string entry in data_split){
-				Log("    |" + entry);
-			}
 			// Session.LatestPacket = data;
 			// Session.LastPacketLength = data.Length;
 			// Session.LatestPacket.Remove(Session.LastPacketLength - 1);
@@ -143,7 +138,7 @@ public partial class Connector : Node{
 		Log("  processing package:");
 		uint transformed_data_0;
 		if(!uint.TryParse(data[0].Substring(1), out transformed_data_0)){
-			Log("  first bit was not understood: " + transformed_data_0);
+			Log("  first bit was not understood, returning: " + transformed_data_0);
 			return;
 		}
 		Log("  successfully found substring " + transformed_data_0 + " in "  + data[0]);
@@ -161,28 +156,26 @@ public partial class Connector : Node{
 		else if(transformed_data_0==1){
 			// Session.SerialConnectionInitialized = true;
 			Log("  master node requested Sync.");
-			Log("  starting syncing.");
-			
-			if(use_backgroundworker){
-				sync = true;
+			if(syncing){
+				Log("  already syncing.");
+				return;
 			}
-			else{
-				for(int i=0; i<7; i++){
-					Log(">>>SYNC " + i);
-
+			Log("  starting syncing.");
+			syncing = true;
+			
+			for(int i=0; i<7; i++){
+				Log(">>>SYNC " + i);
+				if(timer_sync_packages.TimeLeft<=0.0){
 					Log("  CallDeferred? => " + deferred_activated);
 					if(deferred_activated)
-						timer_sync_packages.CallDeferred("start", 1); //expected godots pascal case in call deferred
-					else
-						timer_sync_packages.Start(1);
-
-					Log("  SYNC waiting started");
-					while(timer_sync_packages.TimeLeft>0){
-						Log("    waiting..." + timer_sync_packages.TimeLeft);
-					}
-					Log("  SEND SYNC " + i);
-					SendSyncPackage(i);
+							timer_sync_packages.CallDeferred("start", 1); //expected godots pascal case in call deferred
+						else
+							timer_sync_packages.Start(1);
 				}
+				Log("  SYNC waiting started (1 second)");
+				while(timer_sync_packages.TimeLeft>0){}
+				Log("  SEND SYNC " + i);
+				SendSyncPackage(i);
 			}
 			
 			return;
@@ -252,6 +245,12 @@ public partial class Connector : Node{
 				case 5:
 					Log("    thats 4 Drinks!");
 					if(newState==1){
+						Log("HAHA, State is now 1");
+						Log("Sending: " + "13,00,00" + " (= make it stop open door)");
+						_targetPort.WriteLine(">" + "13,00,00"); //stop asking to open compartment. 0 is ignored to just use it as joker
+					}
+					if(newSolved){
+						Log("HAHA, Solved it true!");
 						Log("Sending: " + "13,00,00" + " (= make it stop open door)");
 						_targetPort.WriteLine(">" + "13,00,00"); //stop asking to open compartment. 0 is ignored to just use it as joker
 					}
@@ -295,6 +294,19 @@ public partial class Connector : Node{
 		return;
 	}
 
+	private void _on_send_package_alternative_button_down(){
+		Log("Sending: " + "13,00,01" + " (= 4Drinks state set to solved)");
+		_targetPort.WriteLine(">" + "13,00,01");
+		return;
+	}
+
+	private void _on_send_package_combined_button_down(){
+		Log("Sending: " + "13,01,01" + " (= 4Drinks state and solved combined)");
+		_targetPort.WriteLine(">" + "13,01,01");
+		return;
+	}
+
+
 
 	private void _on_disconnect_com_button_down(){
 		Log("== CLOSE COM ==");
@@ -302,8 +314,6 @@ public partial class Connector : Node{
 			Log("targeted port not open");
 			return;
 		}
-		Log("stopping background worker...");
-		timer_background_worker.Stop();
 		Log("stop successful...");
 		Log("target port will now close...");
 		_targetPort.Close();
@@ -314,79 +324,5 @@ public partial class Connector : Node{
 	private void Log(string message){
 		GD.Print(message);
 		File.AppendAllText(path_logfile, message+"\n");
-	}
-
-
-
-
-	private bool sync = false;
-
-	private void _on_connect_com_5_background_button_down(){
-		use_backgroundworker = true;
-		
-
-		_targetPort = new SerialPort();
-		_targetPort.PortName = "COM5";
-		_targetPort.BaudRate = 115200;
-
-		Log("== OPEN PORT ==");
-		Log("created serialPort:");
-		Log("PortName:" + _targetPort.PortName + ", BaudRate:" + _targetPort.BaudRate);
-
-		
-		Log("== START BACKGROUNDTIMER ==");
-		timer_background_worker.Start();
-		Log("sucessful backgroundtimer start!:");
-		try{
-			Log("trying to open port...");
-			_targetPort.Open();
-			Log("targeted Port opened successfully!");
-			Log("");
-
-			Log("trying to send initial \"00,00,01\" command...");
-			_targetPort.WriteLine(">" + "00,00,01");
-			Log("command send successfully!");
-			Log("");
-
-			Log(">>>while loop for ACK");
-			bool ACKrecieved = false;
-			timer.Start();
-			while(!ACKrecieved && timer.TimeLeft>0){
-				if(_targetPort.BytesToRead>0 && _targetPort.ReadChar()=='8'){
-					Log("  recieved characater 56 (which equals '8')");
-					Log("  ACK received from Master... Now Waiting for Master to ask for SYNC");
-					Log("");
-					ACKrecieved = true;
-					_targetPort.DataReceived+= ProcessRecievedData;
-				}
-				else{
-					Log("  ACK not yet received");
-				}
-			}
-
-			if(!ACKrecieved){
-				Log("ACK wait timeout");
-				return;
-			}
-		}
-		catch(Exception e){
-			Log("exception occured: " + e.Message);
-		}
-	}
-
-	private int sync_counter = 0;
-	private void _on_background_worker_timeout(){
-		Log("//Background Timer Tick//");
-		if(sync){
-			string message = MESSAGE_TEMPLATES[sync_counter];
-			Log("    BKG: SYNC Sending: " + message);
-			_targetPort.WriteLine(">" + message);
-
-			sync_counter++;
-			if(sync_counter==8){
-				sync = false;
-			}
-		}
-		return;
 	}
 }
