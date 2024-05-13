@@ -1,0 +1,140 @@
+program start
+ - load settings
+ - run new MAIN SCREEN
+
+
+main screen
+ - check music
+ - prepare timers (run "clock_tick", "backgroundworker_tick", "music_change_tick" func every second)
+!- serialPort
+ - load GAME SESSION
+ - image for each riddle
+ - bindings for timers and labels
+
+!- MainScreen_Shown(): 
+	init music tracks -> prepare audio & start BackgroundWorker
+	exit App if not found
+ - StartInitialization(): 
+	COMLog start
+	sync true
+	calls ConnectMode
+?- ConnectingMode(): 
+	set AVGdelayCOM on arbitrary low value
+!- SendPacket():
+	Wrapper for SendCommand -> fills in current time, COMlog, bool to value
+!- SendCommand():
+	sends formatted string to AruduiCOM starting with ">"	
+ - ArduinoCom_DataReceived():
+	try read package from Arduino (29 numbers)
+	save to last LastPacket -> processBuffer
+ - processBuffer():
+	[millis Master] [id_i][millis_i]]solved_i][state_i] 
+?	SerialConnectionActive = true
+	check [0] millis for lag
+	check [0] for Network change
+	check [0] for different commands (selfrepairs, request sync, reset, recovered
+	check [1-28] for states
+		> set AVGdelayCOM
+		> custom behaviour per riddle
+		> set solved and state
+
+!- GameMasterLaunchedRiddle():
+	if session is started -> LaunchRoutineForButton()
+	else error
+!- LaunchRoutineForButton():
+	check for spam and negate it
+	custom behaviour per riddle depending on the button tag
+?- LaunchRoutineForButton_ForServiceTeam():
+	unused alternative function
+	
+?- Truncate():
+	reduce dateTimeFOrmat	
+
+
+!- OpenCom():
+	SetupArduino as new SerialPort (PortName=COM5, BaudRate=115200), open 
+	send initial command ("00,00,01") & wait for aknowladgement -> SerialConnectionInitialized = true
+	then add ArduinoCom_DataRecieved to action or check if arduinoCom==null
+	
+ - refreshCOM_Click():
+?	SerialConnectionActive = false;
+	COMportsList.SelectedItem = null & COMportsList.DataSource = SerialPort.GetPortNames()
+ - COMstate_TextChanged():
+	update label
+
+ - masterNodeHealth_TextChanged():
+	update connection ping 
+ - COMLog_TextChanged():
+	update Log Text
+!- button_SendCustomPacket_Click()
+	read custom command & verification -> SendCommand()
+
+
+
+
+
+ - BackgroundWorker_Tick(): 
+	call updateGrid()
+	delayed music start update
+	moneygun
+	sync all riddles
+	if no SerialConnectionActive: reset riddles & lost connection & No SerialConnectionInitialized (3 tries)
+ - updateGrid():
+	Refresh dataGridRiddles
+	update Connection & choose image & print ping in ms	
+ - Clock_Tick():
+	update timer
+?	prevPktCount==TotalPackets -> SerialConnectionActive=false
+	
+	
+?- button1_Click(): "Reset"
+	if not connection -> rest SendCommand("00,00,02")
+!- button2_Click(): "Reset"
+	if session has started -> start new gamesession SendCommand("00,00,01")
+	if session has not started & ArduinoCom found & ArduinoCom is open -> SendCommand("00,00,01") <=> "Masternode"
+!- button3_Click(): "Connect"
+	OpenCOM()
+ 	Restart COM
+!- button4_Click(): "Restart Master Node"
+ 	SendCommand("00,00,01")
+!- button22_Click(): "Stopptanz Start"
+	GameMasterLaunchedRiddle()
+	trafficLight_dance Enabled/Stop = false
+?- button29_Click(): "Stopptanz Start"
+	SendCommand("13,00,32")
+
+
+ - startButton_Click():
+	check Arduino
+	start timer
+	HasStarted = true	
+?- PauseSession_Click():
+	pauses the game
+ - DancingMoves_dance1_Click(): "separee dance figures"
+	send command for dance move
+ - Music_XXX_Click(): "change music manually"
+	change music track
+
+x- PlaySong()
+x- Resume()
+x- Pause()
+x- playMusic_Click()
+x- pauseMusic_Click
+
+ - FadeAtStart_secs_ValueChanged():
+	Wait before start 	
+
+
+
+game session
+ - setup statistics for nerds
+?- last2millis (2 most recent time values)
+!- define RIDDLEs and their indicies
+
+
+RIDDLE
+?- AVGdelayCOM
+!- Name, Solved (y/n), State
+!- NetworkID
+?- SolvedBy/SolvedAt
+!- Constructor Riddle(RIDDLE_NAME, REMOTE_NODE_ID, INIT_STATE)
