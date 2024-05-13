@@ -6,30 +6,95 @@ using System.IO.Ports;
 
 
 public partial class Connector : Node{
-	[Export]
-	public Godot.Timer timer;
-	[Export]
-	public Godot.Timer timer_sync_packages;
+	//==========  GODOT INSPECTOR NODES
+	[Export] public Godot.Timer timer_ack;
+	[Export] public Godot.Timer timer_sync_packages;
 
-	private bool syncing = false;
 
-	private SerialPort _targetPort;
-    
-	string path_logfile = Path.Combine(
+
+	//==========  CONSTANTS
+	public float SYNC_PACK_DELAY = 1f;
+   
+	// store logfile as application data (Windows: %Appdata%/Roaming/Boogie-Bungalow)
+	string PATH_LOGFILE = Path.Combine(
 		System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData), 
 		"Boogie-Bungalow/logfile.txt"
 	);
 	
+	enum COMMANDS{
+		SYSTEM_INITIALIZE,
+		DRINKS_SOLVE,
+		DRINKS_STOP_OPENING,
+		STOPPTANZ_INIT,
+		STOPPTANZ_DANCE,
+		STOPPTANZ_STOP,
+		STOPPTANZ_SOLVE,
+		SPARKASTEN_OPEN,
+		SPARKASTEN_STOP_OPENING,
+		WASSERHAHN_ENABLE,
+		WASSERHAHN_OPEN,
+		WASSERHAHN_STOP_OPENING,
+		SCHICHTPLAN_OPEN,
+		SEPAREE_ROT,
+		SEPAREE_GRUEN,
+		SEPAREE_BLAU,
+		SEPAREE_STOP_OPENING,
+		TELEPHONE_STOP_RINGING,
+		DUNGEON_MAKE_PINK,
+	}
+
+	private Dictionary<int,string> SYNC_PACKS = new Dictionary<int, string>{
+		{0, "01,00,00"},
+		{1, "02,00,00"},
+		{2, "03,00,00"},
+		{3, "04,00,00"},
+		{4, "05,00,00"},
+		{5, "13,00,00"},
+		{6, "21,00,00"},
+		{7, "29,00,02"},	
+	};
+
+	private Dictionary<COMMANDS,string> PACKS = new Dictionary<COMMANDS, string>{
+		{COMMANDS.SYSTEM_INITIALIZE, 		"00,00,01"},
+		{COMMANDS.DRINKS_SOLVE, 			"13,01,00"},
+		{COMMANDS.DRINKS_STOP_OPENING, 		"13,00,00"},
+		{COMMANDS.STOPPTANZ_INIT, 			"02,00,03"},
+		{COMMANDS.STOPPTANZ_DANCE, 			"02,00,01"},
+		{COMMANDS.STOPPTANZ_STOP, 			"02,00,02"},
+		{COMMANDS.STOPPTANZ_SOLVE, 			"02,01,00"},
+		{COMMANDS.SPARKASTEN_OPEN, 			"03,00,01"},
+		{COMMANDS.SPARKASTEN_STOP_OPENING, 	"03,00,00"},
+		{COMMANDS.WASSERHAHN_ENABLE,		"05,00,01"},
+		{COMMANDS.WASSERHAHN_OPEN, 			"05,00,02"},
+		{COMMANDS.WASSERHAHN_STOP_OPENING,	"05,00,00"},
+		{COMMANDS.SCHICHTPLAN_OPEN, 		"05,00,03"},
+		{COMMANDS.SEPAREE_ROT, 				"01,00,01"},
+		{COMMANDS.SEPAREE_GRUEN, 			"01,00,02"},
+		{COMMANDS.SEPAREE_BLAU, 			"01,00,03"},
+		{COMMANDS.SEPAREE_STOP_OPENING, 	"01,00,00"},
+		{COMMANDS.TELEPHONE_STOP_RINGING, 	"21,00,00"},
+		{COMMANDS.DUNGEON_MAKE_PINK, 		"29,00,02"},
+	}; 
+
 	
+
+	//==========  VARIABLES
+	private bool syncing = false;
+	private SerialPort _arduinoMaster;
+
+
+
+	//==========  PREPARATION
+	//>> on program start call godots ready function automatically 
 	public override void _Ready(){
-		File.Delete(path_logfile);
+		File.Delete(PATH_LOGFILE);
 		Log("Hello from C# to Godot :)");
 		Log("Also hello from PC!");
 		Log("");
 	}
 
-	// display all port names to the GD console.
-	private void _on_search_coms_button_down(){
+	//>> display all port names to the GD console.
+	private void SearchAllComs(){
 		string[] ports = SerialPort.GetPortNames();
 		Log("== PORT LIST ==");
 		Log("The following serial ports were found:");
@@ -39,81 +104,122 @@ public partial class Connector : Node{
 		Log("");
 	}
 
-	
-	private void _on_connect_com_5_button_down(){
-		_targetPort = new SerialPort();
-		_targetPort.PortName = "COM5";
-		_targetPort.BaudRate = 115200;
+	//>> prints to console and logs (multithreading not supported yet)
+	private void Log(string message){
+		GD.Print(message);
+		File.AppendAllText(PATH_LOGFILE, message+"\n");
+	}
 
-		Log("== OPEN PORT ==");
-		Log("created serialPort:");
-		Log("PortName:" + _targetPort.PortName + ", BaudRate:" + _targetPort.BaudRate);
+	//>> sends pack to arduino master
+	private void SendCommand(COMMANDS _command){
+		Log(">>>> sending command: " + _command);
 		try{
-			Log("trying to open port...");
-			_targetPort.Open();
-			Log("targeted Port opened successfully!");
-			Log("");
-
-			Log("trying to send initial \"00,00,01\" command...");
-			_targetPort.WriteLine(">" + "00,00,01");
-			Log("command send successfully!");
-			Log("");
-
-			Log(">>>while loop for ACK");
-			bool ACKrecieved = false;
-			timer.Start();
-			while(!ACKrecieved && timer.TimeLeft>0){
-				if(_targetPort.BytesToRead>0 && _targetPort.ReadChar()=='8'){
-					Log("  recieved characater 56 (which equals '8')");
-					Log("  ACK received from Master... Now Waiting for Master to ask for SYNC");
-					Log("");
-					ACKrecieved = true;
-					_targetPort.DataReceived+= ProcessRecievedData;
-				}
-				else{
-					Log("  ACK not yet received");
-				}
-			}
-
-			if(!ACKrecieved){
-				Log("ACK wait timeout");
-				return;
-			}
+			_arduinoMaster.WriteLine(">" + PACKS[_command]);
 		}
 		catch(Exception e){
 			Log("exception occured: " + e.Message);
 		}
 	}
 
-	bool deferred_activated = false;
-	private void _on_connect_com_5_deferred_button_down(){
-		deferred_activated  = true;
-		_on_connect_com_5_button_down();
+	//>> initializes serial port 
+	private bool InitializeArduinoMaster(){
+		_arduinoMaster = new SerialPort();
+		_arduinoMaster.PortName = "COM5";
+		_arduinoMaster.BaudRate = 115200;
+		
+		Log("==  OPEN PORT  ==");
+		Log("PortName:" + _arduinoMaster.PortName + " - BaudRate:" + _arduinoMaster.BaudRate);
+		Log("trying to open port...");
+		try{
+			_arduinoMaster.Open();
+			Log("targeted Port opened successfully!");
+		}
+		catch(Exception e){
+			Log("exception occured: " + e.Message);
+			return false;
+		}
+
+		Log("");
+		return true;
+	}
+
+	//>> initialize serial port with arduino hardware
+	private bool SynchroniseHardware(){
+		Log("==  INITIIALIZE SYSTEM  ==");
+		
+		try{
+			SendCommand(COMMANDS.SYSTEM_INITIALIZE);
+
+			Log(">>>while loop for confirmation");
+			bool _ackRecieved = false;
+			timer_ack.Start();
+
+			while(!_ackRecieved && timer_ack.TimeLeft>0){
+				if(_arduinoMaster.BytesToRead>0 && _arduinoMaster.ReadChar()=='8'){
+					Log("  recieved characater 56 (which equals '8')");
+					Log("  ACK received from Master... Now Waiting for Master to ask for SYNC");
+					Log("");
+					_ackRecieved = true;
+					_arduinoMaster.DataReceived+= ProcessRecievedData;
+				}
+				else{
+					Log(".");
+				}
+			}
+		}
+		catch(Exception e){
+			Log("exception occured: " + e.Message);
+			return false;
+		}
+
+		return true;
+	}
+
+	private void SendSyncPackage(int i){
+		Log(">>>> sending pack: " + SYNC_PACKS[i]);
+		_arduinoMaster.WriteLine(">" + SYNC_PACKS[i]);
 	}
 
 
-	
+	//==========  START THE CONTROLLER
+	public void Start(){
+		//>> open serial port to arduino master
+		bool _initialisationSuccessfully = InitializeArduinoMaster();
+		if(!_initialisationSuccessfully){
+			return;
+		}
+
+		//>> synchronise with hardware 
+		bool _synchroniseSuccesfully = SynchroniseHardware();
+		if(!_synchroniseSuccesfully){
+			return;
+		}
 
 
+		return;
+	}
+
+
+	//==========  PROCESS INCOMING DATA
 	private void ProcessRecievedData(object sender, SerialDataReceivedEventArgs args){
-		Log(">>>>data recieved!");
+		Log("==  PROCESSING INPUT  ==");
+		Log("data recieved!");
 
 		try{
-			if(_targetPort.BytesToRead==0){
-				Log("  no bytes to read from targeted port!");
-				return;
-			}
-			if(_targetPort.BytesToRead<28){
-				Log("  unexpected char recieved! " + _targetPort.ReadChar());
+			if(_arduinoMaster.BytesToRead==0){
+				Log("no bytes to read from targeted port!");
 				return;
 			}
 
-			string data = _targetPort.ReadLine();
-			Log("  got package: \"" + data + "\"");
+			string data = _arduinoMaster.ReadLine();
+			Log(">>got package: \"" + data + "\"");
+
+			if(_arduinoMaster.BytesToRead<28){
+				Log("unexpected char recieved! " + _arduinoMaster.ReadChar());
+				return;
+			}
+
 			string[] data_split = data.Split(',');
-			// Session.LatestPacket = data;
-			// Session.LastPacketLength = data.Length;
-			// Session.LatestPacket.Remove(Session.LastPacketLength - 1);
 
 			processBuffer(data_split);
 		}
@@ -121,15 +227,15 @@ public partial class Connector : Node{
 			Log("exception occured: " + e.Message);
 			Log("+1 currupt package");
 		}
-		Log("");
-	}
 
+		Log("");
+		return;
+	}
 
 	private void processBuffer(string[] data){
 		//the information coming is a string with 29 numbers separated by coma, being:
 		// [0] millis of master node
-
-		// then, for each riddle (order 1,2,3,4,5,12,22)... So, 7 times:
+		// then, for each riddle (order 1,2,3,-,5,13,21)... So, 7 times:
 		// [1] id
 		// [2] millis
 		// [3] solved
@@ -166,11 +272,7 @@ public partial class Connector : Node{
 			for(int i=0; i<7; i++){
 				Log(">>>SYNC " + i);
 				if(timer_sync_packages.TimeLeft<=0.0){
-					Log("  CallDeferred? => " + deferred_activated);
-					if(deferred_activated)
-							timer_sync_packages.CallDeferred("start", 1); //expected godots pascal case in call deferred
-						else
-							timer_sync_packages.Start(1);
+					timer_sync_packages.CallDeferred("start", SYNC_PACK_DELAY);
 				}
 				Log("  SYNC waiting started (1 second)");
 				while(timer_sync_packages.TimeLeft>0){}
@@ -229,37 +331,45 @@ public partial class Connector : Node{
 			switch(index){
 				case 0:
 					Log("    thats Separee!");
+					if(newState==7){
+						SendCommand(COMMANDS.SEPAREE_STOP_OPENING);
+					}
 					break;
 				case 1:
 					Log("    thats Stoptanz!");
 					break;
 				case 2:
-					Log("    thats Sparkaestchen!");
+					Log("    thats Sparkasten!");
+					if(newState==3){
+						SendCommand(COMMANDS.SPARKASTEN_STOP_OPENING);
+					}
 					break;
 				case 3:
 					Log("    thats Jukebox!");
 					break;
 				case 4:
-					Log("    thats Wasserhahn!");
+					Log("    thats Wasserhahn/Arbeitsplan!");
+					if(newState==8 || newState==9){
+						SendCommand(COMMANDS.WASSERHAHN_STOP_OPENING);
+					}
 					break;
 				case 5:
 					Log("    thats 4 Drinks!");
-					if(newState==1){
-						Log("HAHA, State is now 1");
-						Log("Sending: " + "13,00,00" + " (= make it stop open door)");
-						_targetPort.WriteLine(">" + "13,00,00"); //stop asking to open compartment. 0 is ignored to just use it as joker
-					}
 					if(newSolved){
-						Log("HAHA, Solved it true!");
-						Log("Sending: " + "13,00,00" + " (= make it stop open door)");
-						_targetPort.WriteLine(">" + "13,00,00"); //stop asking to open compartment. 0 is ignored to just use it as joker
+						SendCommand(COMMANDS.DRINKS_STOP_OPENING);
 					}
 					break;
 				case 6:
 					Log("    thats Telephone!");
+					if(newState>2){
+						SendCommand(COMMANDS.TELEPHONE_STOP_RINGING);
+					}
 					break;
 				case 7:
 					Log("    thats Sexdungeon!");
+					if(newState==0){
+						SendCommand(COMMANDS.DUNGEON_MAKE_PINK);
+					}
 					break;
 				default:
 					Log("    thats undefined Behaviour!");
@@ -270,59 +380,37 @@ public partial class Connector : Node{
 	}
 
 
-	private Dictionary<int,string> MESSAGE_TEMPLATES = new Dictionary<int, string>{
-		{0,"01,00,00"},
-		{1,"02,00,00"},
-		{2,"03,00,00"},
-		{3,"04,00,00"},
-		{4,"05,00,00"},
-		{5,"13,00,00"},
-		{6,"21,00,00"},
-		{7,"29,00,02"},	
-	};
+	private void Disconnect(){
+		Log("==  DISCONNECTING  ==");
+		Log("closing coms");
+		try{
+			if(_arduinoMaster==null || !_arduinoMaster.IsOpen){
+				Log("targeted port not open");
+				return;
+			}	
 
-	private void SendSyncPackage(int i){
-		string message = MESSAGE_TEMPLATES[i];
-		Log("    Sending: " + message);
-		_targetPort.WriteLine(">" + message);
-	}
-
-
-	private void _on_send_package_button_down(){
-		Log("Sending: " + "13,01,00" + " (= 4Drinks solved)");
-		_targetPort.WriteLine(">" + "13,01,00");
-		return;
-	}
-
-	private void _on_send_package_alternative_button_down(){
-		Log("Sending: " + "13,00,01" + " (= 4Drinks state set to solved)");
-		_targetPort.WriteLine(">" + "13,00,01");
-		return;
-	}
-
-	private void _on_send_package_combined_button_down(){
-		Log("Sending: " + "13,01,01" + " (= 4Drinks state and solved combined)");
-		_targetPort.WriteLine(">" + "13,01,01");
-		return;
-	}
-
-
-
-	private void _on_disconnect_com_button_down(){
-		Log("== CLOSE COM ==");
-		if(_targetPort==null || !_targetPort.IsOpen){
-			Log("targeted port not open");
-			return;
+			_arduinoMaster.Close();
+			Log("target port closed successfully");
 		}
-		Log("stop successful...");
-		Log("target port will now close...");
-		_targetPort.Close();
-		Log("target port closed successfully");
+		catch(Exception e){
+			Log("Expection " + e);
+		}
 		Log("");
+		return;
 	}
 
-	private void Log(string message){
-		GD.Print(message);
-		File.AppendAllText(path_logfile, message+"\n");
-	}
+
+	//==========  BUTTONS
+	public void DinksSolve(){SendCommand(COMMANDS.DRINKS_SOLVE);}
+	public void StopptanzInit(){SendCommand(COMMANDS.STOPPTANZ_INIT);}
+	public void StopptanzDance(){SendCommand(COMMANDS.STOPPTANZ_DANCE);}
+	public void StopptanzStop(){SendCommand(COMMANDS.STOPPTANZ_STOP);}
+	public void StopptanzSolve(){SendCommand(COMMANDS.STOPPTANZ_SOLVE);}
+	public void SparkastenOpen(){SendCommand(COMMANDS.SPARKASTEN_OPEN);}
+	public void WasserhahnEnable(){SendCommand(COMMANDS.WASSERHAHN_ENABLE);}
+	public void WasserhahnOpen(){SendCommand(COMMANDS.WASSERHAHN_OPEN);}
+	public void SchichtplanOpen(){SendCommand(COMMANDS.SCHICHTPLAN_OPEN);}
+	public void SepareeRot(){SendCommand(COMMANDS.SEPAREE_ROT);}
+	public void SepareeGruen(){SendCommand(COMMANDS.SEPAREE_GRUEN);}
+	public void SepareeBlau(){SendCommand(COMMANDS.SEPAREE_BLAU);}
 }

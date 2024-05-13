@@ -37,4 +37,7 @@ func _on_button_down():
 			music_player.playing = true
 	else:
 		music_player.playing = false
-		
+
+
+func SexdungeonOpen():
+	pass # Replace with function body.

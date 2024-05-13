@@ -43,39 +43,99 @@ offset_bottom = 202.0
 layout_mode = 2
 text = "Search All Coms"
 
-[node name="ConnectCOM5" type="Button" parent="Panel/VBoxContainer"]
-layout_mode = 2
-text = "Connect to COM5 (while-loop)"
-
 [node name="ConnectCOM5_deferred" type="Button" parent="Panel/VBoxContainer"]
 layout_mode = 2
 text = "Connect to COM5 (call deferred)"
-
-[node name="ConnectCOM5_background" type="Button" parent="Panel/VBoxContainer"]
-layout_mode = 2
-text = "Connect to COM5 (Background Worker)"
-
-[node name="Send Package" type="Button" parent="Panel/VBoxContainer"]
-layout_mode = 2
-text = "Send Package 13,01,00"
-
-[node name="Send Package Alternative" type="Button" parent="Panel/VBoxContainer"]
-layout_mode = 2
-text = "Send Package 13,00,01 "
-
-[node name="Send Package Combined" type="Button" parent="Panel/VBoxContainer"]
-layout_mode = 2
-text = "Send Package 13,01,01 "
 
 [node name="DisconnectCOM" type="Button" parent="Panel/VBoxContainer"]
 layout_mode = 2
 text = "Disconnect"
 
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel"]
+layout_mode = 0
+offset_left = -19.0
+offset_top = 347.0
+offset_right = 1181.0
+offset_bottom = 481.0
+
+[node name="ButtonDrinksSolve" type="Button" parent="Panel/HBoxContainer"]
+layout_mode = 2
+text = "DRINKS
+Solve
+(13,01,00)"
+
+[node name="ButtonStopptanzInit" type="Button" parent="Panel/HBoxContainer"]
+layout_mode = 2
+text = "STOPPTANZ
+Init
+(02,00,03)"
+
+[node name="ButtonStopptanzDance" type="Button" parent="Panel/HBoxContainer"]
+layout_mode = 2
+text = "STOPPTANZ
+Dance
+(02,00,01)"
+
+[node name="ButtonStopptanzStop" type="Button" parent="Panel/HBoxContainer"]
+layout_mode = 2
+text = "STOPPTANZ
+Stop
+(02,00,02)"
+
+[node name="ButtonStopptanzStop2" type="Button" parent="Panel/HBoxContainer"]
+layout_mode = 2
+text = "STOPPTANZ
+Solve
+(02,01,00)
+"
+
+[node name="ButtonSparkastenOpen" type="Button" parent="Panel/HBoxContainer"]
+layout_mode = 2
+text = "SPARKASTEN
+Open
+(03,00,01)"
+
+[node name="ButtonWasserhahnEnable" type="Button" parent="Panel/HBoxContainer"]
+layout_mode = 2
+text = "WASSERHAHN
+Enable
+(05,00,01)"
+
+[node name="ButtonWasserhahnOpen" type="Button" parent="Panel/HBoxContainer"]
+layout_mode = 2
+text = "Wasserhahn
+Open
+(05,00,02)"
+
+[node name="ButtonSchichtplanOpen" type="Button" parent="Panel/HBoxContainer"]
+layout_mode = 2
+text = "Schichtplan
+Open
+(05,00,03)"
+
+[node name="ButtonSepareeRot" type="Button" parent="Panel/HBoxContainer"]
+layout_mode = 2
+text = "Separee
+Rot
+(01,00,01)"
+
+[node name="ButtonSepareeGrün" type="Button" parent="Panel/HBoxContainer"]
+layout_mode = 2
+text = "Separee
+Grün
+(01,00,02)"
+
+[node name="ButtonSepareeBlau" type="Button" parent="Panel/HBoxContainer"]
+layout_mode = 2
+text = "Separee
+Blau
+(01,00,03)"
+
 [node name="MusicPlayer" type="AudioStreamPlayer" parent="."]
 
-[node name="Connector" type="Node" parent="." node_paths=PackedStringArray("timer", "timer_sync_packages")]
+[node name="Connector" type="Node" parent="." node_paths=PackedStringArray("timer_ack", "timer_sync_packages")]
 script = ExtResource("1_xpmhx")
-timer = NodePath("ACKTimerMax")
+timer_ack = NodePath("ACKTimerMax")
 timer_sync_packages = NodePath("TimerSync")
 
 [node name="ACKTimerMax" type="Timer" parent="Connector"]
@@ -89,12 +149,19 @@ one_shot = true
 wait_time = 0.5
 
 [connection signal="button_down" from="Panel/MusicButton" to="Panel/MusicButton" method="_on_button_down"]
-[connection signal="button_down" from="Panel/VBoxContainer/SearchCOMs" to="Connector" method="_on_search_coms_button_down"]
-[connection signal="button_down" from="Panel/VBoxContainer/ConnectCOM5" to="Connector" method="_on_connect_com_5_button_down"]
-[connection signal="button_down" from="Panel/VBoxContainer/ConnectCOM5_deferred" to="Connector" method="_on_connect_com_5_deferred_button_down"]
-[connection signal="button_down" from="Panel/VBoxContainer/ConnectCOM5_background" to="Connector" method="_on_connect_com_5_background_button_down"]
-[connection signal="button_down" from="Panel/VBoxContainer/Send Package" to="Connector" method="_on_send_package_button_down"]
-[connection signal="button_down" from="Panel/VBoxContainer/Send Package Alternative" to="Connector" method="_on_send_package_alternative_button_down"]
-[connection signal="button_down" from="Panel/VBoxContainer/Send Package Combined" to="Connector" method="_on_send_package_combined_button_down"]
-[connection signal="button_down" from="Panel/VBoxContainer/DisconnectCOM" to="Connector" method="_on_disconnect_com_button_down"]
+[connection signal="button_down" from="Panel/VBoxContainer/SearchCOMs" to="Connector" method="SearchAllComs"]
+[connection signal="button_down" from="Panel/VBoxContainer/ConnectCOM5_deferred" to="Connector" method="Start"]
+[connection signal="button_down" from="Panel/VBoxContainer/DisconnectCOM" to="Connector" method="Disconnect"]
+[connection signal="button_down" from="Panel/HBoxContainer/ButtonDrinksSolve" to="Connector" method="DinksSolve"]
+[connection signal="button_down" from="Panel/HBoxContainer/ButtonStopptanzInit" to="Connector" method="StopptanzInit"]
+[connection signal="button_down" from="Panel/HBoxContainer/ButtonStopptanzDance" to="Connector" method="StopptanzDance"]
+[connection signal="button_down" from="Panel/HBoxContainer/ButtonStopptanzStop" to="Connector" method="StopptanzStop"]
+[connection signal="button_down" from="Panel/HBoxContainer/ButtonStopptanzStop2" to="Connector" method="StopptanzSolve"]
+[connection signal="button_down" from="Panel/HBoxContainer/ButtonSparkastenOpen" to="Connector" method="SparkastenOpen"]
+[connection signal="button_down" from="Panel/HBoxContainer/ButtonWasserhahnEnable" to="Connector" method="WasserhahnEnable"]
+[connection signal="button_down" from="Panel/HBoxContainer/ButtonWasserhahnOpen" to="Connector" method="WasserhahnOpen"]
+[connection signal="button_down" from="Panel/HBoxContainer/ButtonSchichtplanOpen" to="Connector" method="SchichtplanOpen"]
+[connection signal="button_down" from="Panel/HBoxContainer/ButtonSepareeRot" to="Connector" method="SepareeRot"]
+[connection signal="button_down" from="Panel/HBoxContainer/ButtonSepareeGrün" to="Connector" method="SepareeGruen"]
+[connection signal="button_down" from="Panel/HBoxContainer/ButtonSepareeBlau" to="Connector" method="SepareeBlau"]
 [connection signal="timeout" from="Connector/BackgroundWorker" to="Connector" method="_on_background_worker_timeout"]

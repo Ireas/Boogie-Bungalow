@@ -1,6 +1,7 @@
+Button
+HBoxContainer
 Timer
 VBoxContainer
 Node
 AudioStreamPlayer
-Button
 Panel
