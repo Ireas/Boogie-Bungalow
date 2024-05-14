@@ -206,21 +206,16 @@ public partial class Connector : Node{
 		Log("data recieved!");
 
 		try{
-			if(_arduinoMaster.BytesToRead==0){
-				Log("no bytes to read from targeted port!");
+			if(_arduinoMaster.BytesToRead<28){
+				Log("but <28 bytes included :(");
 				return;
 			}
 
 			string data = _arduinoMaster.ReadLine();
 			Log(">>got package: \"" + data + "\"");
 
-			if(_arduinoMaster.BytesToRead<28){
-				Log("unexpected char recieved! " + _arduinoMaster.ReadChar());
-				return;
-			}
 
 			string[] data_split = data.Split(',');
-
 			processBuffer(data_split);
 		}
 		catch(Exception e){
