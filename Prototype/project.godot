@@ -11,12 +11,16 @@ config_version=5
 [application]
 
 config/name="Boogie-Bungalow"
-run/main_scene="res://test_universe.tscn"
+run/main_scene="res://boogie_bungalow.tscn"
 config/use_custom_user_dir=true
 config/features=PackedStringArray("4.2", "C#", "GL Compatibility")
 boot_splash/show_image=false
 boot_splash/fullsize=false
 config/icon="res://icon.svg"
+
+[autoload]
+
+Globals="*res://scripts/globals.gd"
 
 [dotnet]
 

@@ -1,0 +1,219 @@
+[gd_scene load_steps=9 format=3 uid="uid://vwdey52kj1k1"]
+
+[ext_resource type="Script" path="res://play_music.gd" id="1_e0xfp"]
+[ext_resource type="Script" path="res://Connector.cs" id="2_5v0y2"]
+[ext_resource type="PackedScene" uid="uid://b4hnw86vtwrkm" path="res://scripts/buttons/button_stopptanz.tscn" id="2_aytyp"]
+[ext_resource type="Script" path="res://scripts/communication.gd" id="3_0m7np"]
+[ext_resource type="Script" path="res://scripts/music_player.gd" id="3_kv775"]
+[ext_resource type="PackedScene" uid="uid://gn0w2vmdjw23" path="res://scripts/buttons/button_sextalk.tscn" id="3_x8c2q"]
+[ext_resource type="Script" path="res://scripts/buttons/button_sextalk.gd" id="4_e25on"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_y3q11"]
+bg_color = Color(0.6763, 0.535819, 0.76293, 1)
+
+[node name="TestUniverse" type="Node"]
+
+[node name="Panel" type="Panel" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxFlat_y3q11")
+
+[node name="Connect" type="Button" parent="Panel"]
+layout_mode = 2
+offset_left = 1.0
+offset_top = 1.0
+offset_right = 227.0
+offset_bottom = 32.0
+text = "Connect to COM5"
+
+[node name="DebugSection" type="VBoxContainer" parent="Panel"]
+layout_mode = 0
+offset_left = 948.0
+offset_top = 1.0
+offset_right = 1154.0
+offset_bottom = 180.0
+metadata/_edit_group_ = true
+
+[node name="MusicButton" type="Button" parent="Panel/DebugSection"]
+layout_mode = 2
+text = "Play Music"
+script = ExtResource("1_e0xfp")
+
+[node name="SearchCOMs" type="Button" parent="Panel/DebugSection"]
+layout_mode = 2
+text = "Search All Coms"
+
+[node name="DisconnectCOM" type="Button" parent="Panel/DebugSection"]
+layout_mode = 2
+text = "Disconnect"
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="Panel"]
+layout_mode = 0
+offset_left = 475.0
+offset_top = 92.0
+offset_right = 908.0
+offset_bottom = 576.0
+
+[node name="Stopptanz" type="HBoxContainer" parent="Panel/VBoxContainer2"]
+layout_mode = 2
+
+[node name="ButtonStopptanzInit" parent="Panel/VBoxContainer2/Stopptanz" instance=ExtResource("2_aytyp")]
+layout_mode = 2
+
+[node name="ButtonStopptanzDance" parent="Panel/VBoxContainer2/Stopptanz" instance=ExtResource("2_aytyp")]
+layout_mode = 2
+text = "Stoptanz
+Dance"
+task = 1
+
+[node name="ButtonStopptanzStop" parent="Panel/VBoxContainer2/Stopptanz" instance=ExtResource("2_aytyp")]
+layout_mode = 2
+text = "Stoptanz
+Stop"
+task = 2
+
+[node name="ButtonStopptanzSolve" parent="Panel/VBoxContainer2/Stopptanz" instance=ExtResource("2_aytyp")]
+layout_mode = 2
+text = "Stoptanz
+Solve"
+task = 3
+
+[node name="Sextalk" type="HBoxContainer" parent="Panel/VBoxContainer2"]
+layout_mode = 2
+
+[node name="ButtonSextalk" parent="Panel/VBoxContainer2/Sextalk" instance=ExtResource("3_x8c2q")]
+layout_mode = 2
+text = "Sextalk
+Enable"
+script = ExtResource("4_e25on")
+
+[node name="ButtonSextalk2" parent="Panel/VBoxContainer2/Sextalk" instance=ExtResource("3_x8c2q")]
+layout_mode = 2
+text = "Sextalk
+Open"
+script = ExtResource("4_e25on")
+task = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel"]
+layout_mode = 0
+offset_left = -3.0
+offset_top = 87.0
+offset_right = 412.0
+offset_bottom = 649.0
+metadata/_edit_group_ = true
+
+[node name="ButtonDrinksSolve" type="Button" parent="Panel/VBoxContainer"]
+layout_mode = 2
+text = "DRINKS: Solve(13,01,00)"
+alignment = 0
+
+[node name="ButtonStopptanzInit" type="Button" parent="Panel/VBoxContainer"]
+layout_mode = 2
+text = "STOPPTANZ: Init(02,00,03)"
+alignment = 0
+
+[node name="ButtonStopptanzDance" type="Button" parent="Panel/VBoxContainer"]
+layout_mode = 2
+text = "STOPPTANZ: Dance(02,00,01)"
+alignment = 0
+
+[node name="ButtonStopptanzStop" type="Button" parent="Panel/VBoxContainer"]
+layout_mode = 2
+text = "STOPPTANZ: Stop(02,00,02)"
+alignment = 0
+
+[node name="ButtonStopptanzSolve" type="Button" parent="Panel/VBoxContainer"]
+layout_mode = 2
+text = "STOPPTANZ: Solve(02,01,00)
+"
+alignment = 0
+
+[node name="ButtonSparkastenOpen" type="Button" parent="Panel/VBoxContainer"]
+layout_mode = 2
+text = "SPARKASTEN: Open(03,00,01)"
+alignment = 0
+
+[node name="ButtonWasserhahnEnable" type="Button" parent="Panel/VBoxContainer"]
+layout_mode = 2
+text = "WASSERHAHN: Enable(05,00,01)"
+alignment = 0
+
+[node name="ButtonWasserhahnOpen" type="Button" parent="Panel/VBoxContainer"]
+layout_mode = 2
+text = "WASSERHAHN:Open(05,00,02)"
+alignment = 0
+
+[node name="ButtonSchichtplanOpen" type="Button" parent="Panel/VBoxContainer"]
+layout_mode = 2
+text = "SCHICHTPLAN:Open(05,00,03)"
+alignment = 0
+
+[node name="ButtonSepareeRot" type="Button" parent="Panel/VBoxContainer"]
+layout_mode = 2
+text = "SEPAREE: Rot(01,00,01)"
+alignment = 0
+
+[node name="ButtonSepareeGrün" type="Button" parent="Panel/VBoxContainer"]
+layout_mode = 2
+text = "SEPAREE: Grün(01,00,02)"
+alignment = 0
+
+[node name="ButtonSepareeBlau" type="Button" parent="Panel/VBoxContainer"]
+layout_mode = 2
+text = "SEPAREE: Blau(01,00,03)"
+alignment = 0
+
+[node name="ButtonSepareeBlau2" type="Button" parent="Panel/VBoxContainer"]
+layout_mode = 2
+text = "SEPAREE: Solve(??,??,??)"
+alignment = 0
+
+[node name="ButtonSepareeBlau3" type="Button" parent="Panel/VBoxContainer"]
+layout_mode = 2
+text = "SEPAREE: Weiß(??,??,??)"
+alignment = 0
+
+[node name="Communication" type="Node" parent="Panel"]
+script = ExtResource("3_0m7np")
+
+[node name="MusicPlayer" type="AudioStreamPlayer" parent="."]
+script = ExtResource("3_kv775")
+
+[node name="Connector" type="Node" parent="." node_paths=PackedStringArray("timer_ack", "timer_sync_packages")]
+script = ExtResource("2_5v0y2")
+timer_ack = NodePath("ACKTimerMax")
+timer_sync_packages = NodePath("TimerSync")
+
+[node name="ACKTimerMax" type="Timer" parent="Connector"]
+wait_time = 20.0
+one_shot = true
+
+[node name="TimerSync" type="Timer" parent="Connector"]
+one_shot = true
+
+[node name="BackgroundWorker" type="Timer" parent="Connector"]
+wait_time = 0.5
+
+[connection signal="button_down" from="Panel/Connect" to="Connector" method="Start"]
+[connection signal="button_down" from="Panel/DebugSection/MusicButton" to="Panel/DebugSection/MusicButton" method="_on_button_down"]
+[connection signal="button_down" from="Panel/DebugSection/SearchCOMs" to="Connector" method="SearchAllComs"]
+[connection signal="button_down" from="Panel/DebugSection/DisconnectCOM" to="Connector" method="Disconnect"]
+[connection signal="button_down" from="Panel/VBoxContainer/ButtonDrinksSolve" to="Connector" method="DinksSolve"]
+[connection signal="button_down" from="Panel/VBoxContainer/ButtonStopptanzInit" to="Connector" method="StopptanzInit"]
+[connection signal="button_down" from="Panel/VBoxContainer/ButtonStopptanzDance" to="Connector" method="StopptanzDance"]
+[connection signal="button_down" from="Panel/VBoxContainer/ButtonStopptanzStop" to="Connector" method="StopptanzStop"]
+[connection signal="button_down" from="Panel/VBoxContainer/ButtonStopptanzSolve" to="Connector" method="StopptanzSolve"]
+[connection signal="button_down" from="Panel/VBoxContainer/ButtonSparkastenOpen" to="Connector" method="SparkastenOpen"]
+[connection signal="button_down" from="Panel/VBoxContainer/ButtonWasserhahnEnable" to="Connector" method="WasserhahnEnable"]
+[connection signal="button_down" from="Panel/VBoxContainer/ButtonWasserhahnOpen" to="Connector" method="WasserhahnOpen"]
+[connection signal="button_down" from="Panel/VBoxContainer/ButtonSchichtplanOpen" to="Connector" method="SchichtplanOpen"]
+[connection signal="button_down" from="Panel/VBoxContainer/ButtonSepareeRot" to="Connector" method="SepareeRot"]
+[connection signal="button_down" from="Panel/VBoxContainer/ButtonSepareeGrün" to="Connector" method="SepareeGruen"]
+[connection signal="button_down" from="Panel/VBoxContainer/ButtonSepareeBlau" to="Connector" method="SepareeBlau"]
+[connection signal="send_command" from="Panel/Communication" to="Connector" method="_on_custom_button_trigger_communication"]
+[connection signal="timeout" from="Connector/BackgroundWorker" to="Connector" method="_on_background_worker_timeout"]

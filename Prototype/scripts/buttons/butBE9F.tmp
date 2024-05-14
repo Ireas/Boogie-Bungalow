@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://b4hnw86vtwrkm"]
+
+[ext_resource type="Script" path="res://scripts/buttons/button_stopptanz.gd" id="1_i70qk"]
+
+[node name="ButtonStopptanz" type="Button"]
+text = "Stoptanz
+Init"
+script = ExtResource("1_i70qk")

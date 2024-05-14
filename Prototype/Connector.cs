@@ -13,7 +13,7 @@ public partial class Connector : Node{
 
 
 	//==========  CONSTANTS
-	public float SYNC_PACK_DELAY = 1f;
+	public float SYNC_PACK_DELAY = 0.5f;
    
 	// store logfile as application data (Windows: %Appdata%/Roaming/Boogie-Bungalow)
 	string PATH_LOGFILE = Path.Combine(
@@ -21,28 +21,49 @@ public partial class Connector : Node{
 		"Boogie-Bungalow/logfile.txt"
 	);
 	
-	enum COMMANDS{
-		SYSTEM_INITIALIZE,
-		DRINKS_SOLVE,
-		DRINKS_STOP_OPENING,
-		STOPPTANZ_INIT,
-		STOPPTANZ_DANCE,
-		STOPPTANZ_STOP,
-		STOPPTANZ_SOLVE,
-		SPARKASTEN_OPEN,
-		SPARKASTEN_STOP_OPENING,
-		WASSERHAHN_ENABLE,
-		WASSERHAHN_OPEN,
-		WASSERHAHN_STOP_OPENING,
-		SCHICHTPLAN_OPEN,
-		SEPAREE_ROT,
-		SEPAREE_GRUEN,
-		SEPAREE_BLAU,
-		SEPAREE_STOP_OPENING,
-		TELEPHONE_STOP_RINGING,
-		DUNGEON_MAKE_PINK,
+	public enum COMMANDS{
+		SYSTEM_INITIALIZE 		= 0,
+		DRINKS_SOLVE 			= 10,
+		DRINKS_STOP_OPENING 	= 11,
+		STOPPTANZ_INITIALIZE	= 20,
+		STOPPTANZ_DANCE			= 21,
+		STOPPTANZ_STOP			= 22,
+		STOPPTANZ_SOLVE			= 23,
+		SPARKASTEN_OPEN			= 30,		
+		SPARKASTEN_STOP_OPENING = 31,
+		SEXTALK_ENABLE 			= 40,
+		SEXTALK_OPEN			= 41,
+		SEXTALK_STOP_OPENING 	= 42,
+		SCHICHTPLAN_OPEN		= 50,
+		SEPAREE_ROT				= 60,
+		SEPAREE_GRUEN			= 61,
+		SEPAREE_BLAU			= 62,
+		SEPAREE_STOP_OPENING	= 63,
+		TELEPHONE_STOP_RINGING	= 70,
 	}
 
+	private readonly Dictionary<COMMANDS,string> PACKS = new Dictionary<COMMANDS, string>{
+		{COMMANDS.SYSTEM_INITIALIZE, 		"00,00,01"},
+		{COMMANDS.DRINKS_SOLVE, 			"13,01,00"},
+		{COMMANDS.DRINKS_STOP_OPENING, 		"13,00,00"},
+		{COMMANDS.STOPPTANZ_INITIALIZE, 	"02,00,03"},
+		{COMMANDS.STOPPTANZ_DANCE, 			"02,00,01"},
+		{COMMANDS.STOPPTANZ_STOP, 			"02,00,02"},
+		{COMMANDS.STOPPTANZ_SOLVE, 			"02,01,00"},
+		{COMMANDS.SPARKASTEN_OPEN, 			"03,00,01"},
+		{COMMANDS.SPARKASTEN_STOP_OPENING, 	"03,00,00"},
+		{COMMANDS.SEXTALK_ENABLE,			"05,00,01"},
+		{COMMANDS.SEXTALK_OPEN, 			"05,00,02"},
+		{COMMANDS.SEXTALK_STOP_OPENING,		"05,00,00"},
+		{COMMANDS.SCHICHTPLAN_OPEN, 		"05,00,03"},
+		{COMMANDS.SEPAREE_ROT, 				"01,00,01"},
+		{COMMANDS.SEPAREE_GRUEN, 			"01,00,02"},
+		{COMMANDS.SEPAREE_BLAU, 			"01,00,03"},
+		{COMMANDS.SEPAREE_STOP_OPENING, 	"01,00,00"},
+		{COMMANDS.TELEPHONE_STOP_RINGING, 	"21,00,00"},
+	}; 
+
+	
 	private Dictionary<int,string> SYNC_PACKS = new Dictionary<int, string>{
 		{0, "01,00,00"},
 		{1, "02,00,00"},
@@ -53,30 +74,6 @@ public partial class Connector : Node{
 		{6, "21,00,00"},
 		{7, "29,00,02"},	
 	};
-
-	private Dictionary<COMMANDS,string> PACKS = new Dictionary<COMMANDS, string>{
-		{COMMANDS.SYSTEM_INITIALIZE, 		"00,00,01"},
-		{COMMANDS.DRINKS_SOLVE, 			"13,01,00"},
-		{COMMANDS.DRINKS_STOP_OPENING, 		"13,00,00"},
-		{COMMANDS.STOPPTANZ_INIT, 			"02,00,03"},
-		{COMMANDS.STOPPTANZ_DANCE, 			"02,00,01"},
-		{COMMANDS.STOPPTANZ_STOP, 			"02,00,02"},
-		{COMMANDS.STOPPTANZ_SOLVE, 			"02,01,00"},
-		{COMMANDS.SPARKASTEN_OPEN, 			"03,00,01"},
-		{COMMANDS.SPARKASTEN_STOP_OPENING, 	"03,00,00"},
-		{COMMANDS.WASSERHAHN_ENABLE,		"05,00,01"},
-		{COMMANDS.WASSERHAHN_OPEN, 			"05,00,02"},
-		{COMMANDS.WASSERHAHN_STOP_OPENING,	"05,00,00"},
-		{COMMANDS.SCHICHTPLAN_OPEN, 		"05,00,03"},
-		{COMMANDS.SEPAREE_ROT, 				"01,00,01"},
-		{COMMANDS.SEPAREE_GRUEN, 			"01,00,02"},
-		{COMMANDS.SEPAREE_BLAU, 			"01,00,03"},
-		{COMMANDS.SEPAREE_STOP_OPENING, 	"01,00,00"},
-		{COMMANDS.TELEPHONE_STOP_RINGING, 	"21,00,00"},
-		{COMMANDS.DUNGEON_MAKE_PINK, 		"29,00,02"},
-	}; 
-
-	
 
 	//==========  VARIABLES
 	private bool syncing = false;
@@ -94,7 +91,7 @@ public partial class Connector : Node{
 	}
 
 	//>> display all port names to the GD console.
-	private void SearchAllComs(){
+	public void SearchAllComs(){
 		string[] ports = SerialPort.GetPortNames();
 		Log("== PORT LIST ==");
 		Log("The following serial ports were found:");
@@ -295,11 +292,24 @@ public partial class Connector : Node{
 			return;  
 		}
 		else if(transformed_data_0==6){
-			Log("  master node reported that sync was successful. Current session recovered.");
+			Log("  master node reported that sync was successful.");
 			return;
 		}
 		else if(transformed_data_0==7){
-			Log("  master node reported that sync failed. new game state.");
+			Log("  master node reported that sync failed.");
+			Log("  try again...");
+			
+			for(int i=0; i<7; i++){
+				Log(">>>SYNC " + i);
+				if(timer_sync_packages.TimeLeft<=0.0){
+					timer_sync_packages.CallDeferred("start", SYNC_PACK_DELAY);
+				}
+				Log("  SYNC waiting started (1 second)");
+				while(timer_sync_packages.TimeLeft>0){}
+				Log("  SEND SYNC " + i);
+				SendSyncPackage(i);
+			}
+
 			return;
 		}
 		else if(transformed_data_0==8){
@@ -343,9 +353,9 @@ public partial class Connector : Node{
 					Log("    thats Jukebox!");
 					break;
 				case 4:
-					Log("    thats Wasserhahn/Arbeitsplan!");
-					if(newState==8 || newState==9){
-						SendCommand(COMMANDS.WASSERHAHN_STOP_OPENING);
+					Log("    thats SEXTALK/Arbeitsplan!");
+					if(newState==2){
+						SendCommand(COMMANDS.SEXTALK_STOP_OPENING);
 					}
 					break;
 				case 5:
@@ -362,9 +372,9 @@ public partial class Connector : Node{
 					break;
 				case 7:
 					Log("    thats Sexdungeon!");
-					if(newState==0){
-						SendCommand(COMMANDS.DUNGEON_MAKE_PINK);
-					}
+					// if(newState==0){
+					// 	SendCommand(COMMANDS.DUNGEON_MAKE_PINK);
+					// }
 					break;
 				default:
 					Log("    thats undefined Behaviour!");
@@ -397,15 +407,22 @@ public partial class Connector : Node{
 
 	//==========  BUTTONS
 	public void DinksSolve(){SendCommand(COMMANDS.DRINKS_SOLVE);}
-	public void StopptanzInit(){SendCommand(COMMANDS.STOPPTANZ_INIT);}
+	public void StopptanzInit(){SendCommand(COMMANDS.STOPPTANZ_INITIALIZE);}
 	public void StopptanzDance(){SendCommand(COMMANDS.STOPPTANZ_DANCE);}
 	public void StopptanzStop(){SendCommand(COMMANDS.STOPPTANZ_STOP);}
 	public void StopptanzSolve(){SendCommand(COMMANDS.STOPPTANZ_SOLVE);}
 	public void SparkastenOpen(){SendCommand(COMMANDS.SPARKASTEN_OPEN);}
-	public void WasserhahnEnable(){SendCommand(COMMANDS.WASSERHAHN_ENABLE);}
-	public void WasserhahnOpen(){SendCommand(COMMANDS.WASSERHAHN_OPEN);}
+	public void SEXTALKEnable(){SendCommand(COMMANDS.SEXTALK_ENABLE);}
+	public void SEXTALKOpen(){SendCommand(COMMANDS.SEXTALK_OPEN);}
 	public void SchichtplanOpen(){SendCommand(COMMANDS.SCHICHTPLAN_OPEN);}
 	public void SepareeRot(){SendCommand(COMMANDS.SEPAREE_ROT);}
 	public void SepareeGruen(){SendCommand(COMMANDS.SEPAREE_GRUEN);}
 	public void SepareeBlau(){SendCommand(COMMANDS.SEPAREE_BLAU);}
+
+
+
+	public void _on_custom_button_trigger_communication(int i){
+		GD.Print("C# got: " + i.ToString());
+		SendCommand( (COMMANDS)i );
+	}
 }
