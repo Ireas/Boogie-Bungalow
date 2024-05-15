@@ -1,4 +1,5 @@
 extends AudioStreamPlayer
+class_name MusicPlayer
 
 var DIRECTORY_MUSIC_TRACKS : String = "user://Musik/"
 var DICT_MUSIC_TRACKS : Dictionary = {
