@@ -10,3 +10,14 @@ signal music_continue()
 signal music_pause()
 
 
+
+signal update_ping(
+	ping_4drinks:int, 
+	ping_stopptanz:int, 
+	ping_sparkasten:int, 
+	ping_telefon:int,
+	ping_wasserhahn:int,
+	ping_sexdungeon:int, 
+	ping_schichtplan:int, 
+	ping_separee:int
+)	

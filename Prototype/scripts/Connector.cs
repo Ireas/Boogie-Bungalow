@@ -3,6 +3,7 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 using System.IO.Ports;
+using System.Reflection;
 
 
 public partial class Connector : Node{
@@ -84,7 +85,7 @@ public partial class Connector : Node{
 	//==========  VARIABLES
 	private bool syncing = false;
 	private SerialPort _arduinoMaster;
-
+	private Node _globals;
 
 
 	//==========  PREPARATION
@@ -94,6 +95,14 @@ public partial class Connector : Node{
 		Log("Hello from C# to Godot :)");
 		Log("Also hello from PC!");
 		Log("");
+
+		try{
+			_globals = GetNode<Node>("/root/Globals");
+		}
+		catch(Exception e){
+			Log("exception occured: " + e.Message);
+		}
+		_globals.EmitSignal("update_ping", 0, 0, 0, 0, 0, 0, 0, 0);
 	}
 
 	//>> display all port names to the GD console.
@@ -333,6 +342,16 @@ public partial class Connector : Node{
 		
 		Log("  riddle information! >3000");
 		int index;
+
+		int Ping4Dinks = -1;
+		int PingStopptanz = -1;
+		int PingSparkasten = -1;
+		int PingTelefon = -1;
+		int PingWasserhahn = -1;
+		int PingSexdungeon = -1; 
+		int PingSchichtplan = -1; 
+		int PingSeparee = -1; 
+
 		for(int i=1; i<=4*7; i+=4){
 			index = i/4; //0,1,2,3,4,5,6,7
 			uint delay = uint.Parse(data[i + 1]);
@@ -342,42 +361,50 @@ public partial class Connector : Node{
 			switch(index){
 				case 0:
 					Log("    thats Separee!");
+					PingSeparee = (int)delay;
 					if(newState==7){
 						SendCommand(COMMANDS.SEPAREE_STOP_OPENING);
 					}
 					break;
 				case 1:
 					Log("    thats Stoptanz!");
+					PingStopptanz = (int)delay;
 					break;
 				case 2:
 					Log("    thats Sparkasten!");
+					PingSparkasten = (int)delay;
 					if(newState==3){
 						SendCommand(COMMANDS.SPARKASTEN_STOP_OPENING);
 					}
 					break;
 				case 3:
-					Log("    thats Jukebox!");
+					Log("    thats Jukebox!???");
 					break;
 				case 4:
 					Log("    thats SEXTALK/Arbeitsplan!");
+					PingSchichtplan = (int)delay;
+					PingWasserhahn = (int)delay;
 					if(newState==2){
 						SendCommand(COMMANDS.SCHICHTPLAN_STOP_OPENING);
 					}
 					break;
 				case 5:
 					Log("    thats 4 Drinks!");
+					Ping4Dinks = (int)delay;
 					if(newSolved){
 						SendCommand(COMMANDS.DRINKS_STOP_OPENING);
 					}
 					break;
 				case 6:
 					Log("    thats Telephone!");
+					PingTelefon = (int)delay;
 					if(newState>2){
 						SendCommand(COMMANDS.TELEPHONE_STOP_RINGING);
 					}
 					break;
 				case 7:
 					Log("    thats Sexdungeon!");
+					PingSexdungeon = (int)delay;
 					// if(newState==0){
 					// 	SendCommand(COMMANDS.DUNGEON_MAKE_PINK);
 					// }
@@ -387,6 +414,7 @@ public partial class Connector : Node{
 					break;
 			}
 		}
+		_globals.EmitSignal("update_ping", Ping4Dinks, PingStopptanz, PingSparkasten, PingTelefon, PingWasserhahn, PingSexdungeon, PingSchichtplan, PingSeparee);
 		Log("");
 	}
 
