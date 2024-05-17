@@ -7,4 +7,3 @@ func show_debug_panel():
 
 func hide_debug_panel():
 	debug_panel.visible = false
-	

@@ -14,12 +14,12 @@ func update_ui(
 	ping_separee:int
 ):
 	var pings : String = ""
-	pings+= "4Drinks: " + str(ping_4drinks) + " | "
-	pings+= "Stopptanz: " + str(ping_stopptanz) + " | "
-	pings+= "Sparkasten: " + str(ping_sparkasten) + " | "
-	pings+= "Telefon: " + str(ping_telefon) + " \n "
-	pings+= "Wasserhahn: " + str(ping_wasserhahn) + " | "
-	pings+= "Sexdungeon: " + str(ping_sexdungeon) + " | "
-	pings+= "Schichtplan: " + str(ping_schichtplan) + " | "
+	pings+= "4Drinks: " + str(ping_4drinks) + "\n"
+	pings+= "Stopptanz: " + str(ping_stopptanz) + "\n"
+	pings+= "Sparkasten: " + str(ping_sparkasten) + "\n"
+	pings+= "Telefon: " + str(ping_telefon) + "\n"
+	pings+= "Wasserhahn: " + str(ping_wasserhahn) + "\n"
+	pings+= "Sexdungeon: " + str(ping_sexdungeon) + "\n"
+	pings+= "Schichtplan: " + str(ping_schichtplan) + "\n"
 	pings+= "Separee: " + str(ping_separee)
 	text = pings

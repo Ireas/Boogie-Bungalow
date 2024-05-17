@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://vwdey52kj1k1"]
+[gd_scene load_steps=15 format=3 uid="uid://vwdey52kj1k1"]
 
 [ext_resource type="Script" path="res://button_stopptanz.gd" id="1_4rhus"]
 [ext_resource type="Script" path="res://scripts/debug_button.gd" id="1_kmyvi"]
@@ -9,12 +9,16 @@
 [ext_resource type="Script" path="res://scripts/game_manager.gd" id="5_sybtb"]
 [ext_resource type="AudioStream" uid="uid://da1lgcrm6er5g" path="res://Rather Be.mp3" id="5_vwwau"]
 [ext_resource type="AudioStream" uid="uid://bxxdhj1ba57jp" path="res://RatherBeAlternative.mp3" id="6_st2s6"]
+[ext_resource type="Texture2D" uid="uid://b5gxmcsvju566" path="res://heart-svgrepo-com.svg" id="10_jqrgx"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_y3q11"]
 bg_color = Color(0.6763, 0.535819, 0.76293, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_oihui"]
-bg_color = Color(0.937851, 0.71102, 0.060123, 1)
+bg_color = Color(0.712602, 0.226999, 0.537806, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1kbyv"]
+bg_color = Color(0.471805, 0.372696, 0.486083, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ih225"]
 bg_color = Color(0.906734, 0.875297, 0.948961, 1)
@@ -34,201 +38,12 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_y3q11")
 [node name="Debug" type="Button" parent="Panel" node_paths=PackedStringArray("debug_panel")]
 layout_mode = 2
 offset_left = 1093.0
-offset_top = 577.0
+offset_top = 595.0
 offset_right = 1151.0
-offset_bottom = 608.0
+offset_bottom = 626.0
 text = "Debug"
 script = ExtResource("1_kmyvi")
 debug_panel = NodePath("../../DebugWindow")
-
-[node name="Main" type="VBoxContainer" parent="Panel"]
-layout_mode = 0
-offset_top = -4.0
-offset_right = 957.0
-offset_bottom = 645.0
-metadata/_edit_group_ = true
-
-[node name="MainButtons" type="HBoxContainer" parent="Panel/Main"]
-layout_mode = 2
-alignment = 1
-
-[node name="Connect" type="Button" parent="Panel/Main/MainButtons"]
-layout_mode = 2
-text = "FIRST OF ALL! Connect to COM5"
-
-[node name="Start" type="Button" parent="Panel/Main/MainButtons"]
-layout_mode = 2
-text = "Start the Timer and Game"
-
-[node name="Separator1" type="PanelContainer" parent="Panel/Main"]
-custom_minimum_size = Vector2(0, 5)
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_oihui")
-
-[node name="4Drinks" type="Label" parent="Panel/Main"]
-layout_mode = 2
-text = "4Drinks"
-horizontal_alignment = 1
-
-[node name="4DrinksButtons" type="HBoxContainer" parent="Panel/Main"]
-layout_mode = 2
-alignment = 1
-
-[node name="ButtonDrinksSolve" type="Button" parent="Panel/Main/4DrinksButtons"]
-layout_mode = 2
-text = "DRINKS: Solve(13,01,00)"
-alignment = 0
-
-[node name="Separator2" type="PanelContainer" parent="Panel/Main"]
-custom_minimum_size = Vector2(0, 5)
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_oihui")
-
-[node name="Stopptanz" type="Label" parent="Panel/Main"]
-layout_mode = 2
-text = "Stopptanz"
-horizontal_alignment = 1
-
-[node name="StopptanzButtons" type="HBoxContainer" parent="Panel/Main"]
-layout_mode = 2
-alignment = 1
-
-[node name="ButtonStopptanzInit" type="Button" parent="Panel/Main/StopptanzButtons"]
-layout_mode = 2
-text = "STOPPTANZ: Init(02,00,03)"
-alignment = 0
-
-[node name="ButtonStopptanzDance" type="Button" parent="Panel/Main/StopptanzButtons"]
-layout_mode = 2
-text = "STOPPTANZ: Dance(02,00,01)"
-alignment = 0
-script = ExtResource("1_4rhus")
-command = 1
-
-[node name="ButtonStopptanzStop" type="Button" parent="Panel/Main/StopptanzButtons"]
-layout_mode = 2
-text = "STOPPTANZ: Stop(02,00,02)"
-alignment = 0
-script = ExtResource("1_4rhus")
-
-[node name="ButtonStopptanzSolve" type="Button" parent="Panel/Main/StopptanzButtons"]
-layout_mode = 2
-text = "STOPPTANZ: Solve(02,01,00)
-"
-alignment = 0
-
-[node name="Separator3" type="PanelContainer" parent="Panel/Main"]
-custom_minimum_size = Vector2(0, 5)
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_oihui")
-
-[node name="Sparkasten" type="Label" parent="Panel/Main"]
-layout_mode = 2
-text = "Sparkkasten"
-horizontal_alignment = 1
-
-[node name="SparkastenButtons" type="HBoxContainer" parent="Panel/Main"]
-layout_mode = 2
-alignment = 1
-
-[node name="ButtonSparkastenOpen" type="Button" parent="Panel/Main/SparkastenButtons"]
-layout_mode = 2
-text = "SPARKASTEN: Open(03,00,01)"
-alignment = 0
-
-[node name="Separator4" type="PanelContainer" parent="Panel/Main"]
-custom_minimum_size = Vector2(0, 5)
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_oihui")
-
-[node name="Sextalk" type="Label" parent="Panel/Main"]
-layout_mode = 2
-text = "Sextalk"
-horizontal_alignment = 1
-
-[node name="SextalkButtons" type="HBoxContainer" parent="Panel/Main"]
-layout_mode = 2
-alignment = 1
-
-[node name="ButtonWasserhahnEnable" type="Button" parent="Panel/Main/SextalkButtons"]
-layout_mode = 2
-text = "WASSERHAHN: Enable(05,00,01)"
-alignment = 0
-
-[node name="ButtonWasserhahnOpen" type="Button" parent="Panel/Main/SextalkButtons"]
-layout_mode = 2
-text = "WASSERHAHN:Open(05,00,02)"
-alignment = 0
-
-[node name="Separator5" type="PanelContainer" parent="Panel/Main"]
-custom_minimum_size = Vector2(0, 5)
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_oihui")
-
-[node name="Schichtplan" type="Label" parent="Panel/Main"]
-layout_mode = 2
-text = "Schichtplan"
-horizontal_alignment = 1
-
-[node name="SchichtplanButtons" type="HBoxContainer" parent="Panel/Main"]
-layout_mode = 2
-alignment = 1
-
-[node name="ButtonSchichtplanOpen" type="Button" parent="Panel/Main/SchichtplanButtons"]
-layout_mode = 2
-text = "SCHICHTPLAN:Open(05,00,03)"
-alignment = 0
-
-[node name="Separator6" type="PanelContainer" parent="Panel/Main"]
-custom_minimum_size = Vector2(0, 5)
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_oihui")
-
-[node name="Separee" type="Label" parent="Panel/Main"]
-layout_mode = 2
-text = "Separee"
-horizontal_alignment = 1
-
-[node name="ButtonLena" type="Button" parent="Panel/Main"]
-layout_mode = 2
-text = "!!SEPAREE LENA INTERMEDIATE!!"
-
-[node name="ButtonLena2" type="Button" parent="Panel/Main"]
-layout_mode = 2
-text = "!!SEPAREE LENA INTERMEDIATE SHORT VERSION!!"
-
-[node name="SepareeButtons" type="HBoxContainer" parent="Panel/Main"]
-layout_mode = 2
-alignment = 1
-
-[node name="ButtonSepareeRot" type="Button" parent="Panel/Main/SepareeButtons"]
-layout_mode = 2
-text = "SEPAREE: Rot(01,00,01)"
-alignment = 0
-
-[node name="ButtonSepareeGrün" type="Button" parent="Panel/Main/SepareeButtons"]
-layout_mode = 2
-text = "SEPAREE: Grün(01,00,02)"
-alignment = 0
-
-[node name="ButtonSepareeBlau" type="Button" parent="Panel/Main/SepareeButtons"]
-layout_mode = 2
-text = "SEPAREE: Blau(01,00,03)"
-alignment = 0
-
-[node name="ButtonSepareeSolve" type="Button" parent="Panel/Main/SepareeButtons"]
-layout_mode = 2
-text = "SEPAREE: Solve(01,01,00)"
-alignment = 0
-
-[node name="SepareeButtons2" type="HBoxContainer" parent="Panel/Main"]
-layout_mode = 2
-alignment = 1
-
-[node name="ButtonSepareeWeiß" type="Button" parent="Panel/Main/SepareeButtons2"]
-layout_mode = 2
-text = "SEPAREE: Weiß(01,00,06)"
-alignment = 0
 
 [node name="Stopwatch" type="Node" parent="Panel" node_paths=PackedStringArray("label", "timer")]
 script = ExtResource("1_qovry")
@@ -236,24 +51,534 @@ label = NodePath("StopwatchLabel")
 timer = NodePath("Timer")
 
 [node name="StopwatchLabel" type="Label" parent="Panel/Stopwatch"]
-offset_left = 975.0
-offset_top = 214.0
-offset_right = 1152.0
-offset_bottom = 257.0
+offset_left = 919.0
+offset_top = 14.0
+offset_right = 1096.0
+offset_bottom = 57.0
 text = "Stopwatch"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Timer" type="Timer" parent="Panel/Stopwatch"]
 
+[node name="Controller" type="VBoxContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 852.0
+grow_vertical = 2
+theme_override_constants/separation = 5
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel/Controller"]
+layout_mode = 2
+theme_override_constants/margin_left = 200
+theme_override_constants/margin_right = 200
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/Controller/MarginContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="Connect" type="Button" parent="Panel/Controller/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Connect to COM5"
+
+[node name="Start" type="Button" parent="Panel/Controller/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Start the Timer and Game"
+
+[node name="Drinks" type="VBoxContainer" parent="Panel/Controller"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Separator" type="PanelContainer" parent="Panel/Controller/Drinks"]
+custom_minimum_size = Vector2(0, 5)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_oihui")
+
+[node name="Panel" type="Panel" parent="Panel/Controller/Drinks"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_1kbyv")
+
+[node name="NameMargin" type="MarginContainer" parent="Panel/Controller/Drinks/Panel"]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 51.0
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+
+[node name="Name" type="Label" parent="Panel/Controller/Drinks/Panel/NameMargin"]
+layout_mode = 2
+text = "Drinks"
+
+[node name="Button Margin" type="MarginContainer" parent="Panel/Controller/Drinks/Panel"]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 100.0
+grow_vertical = 2
+theme_override_constants/margin_left = 200
+
+[node name="Buttons" type="HBoxContainer" parent="Panel/Controller/Drinks/Panel/Button Margin"]
+layout_mode = 2
+
+[node name="ButtonDrinksSolve" type="Button" parent="Panel/Controller/Drinks/Panel/Button Margin/Buttons"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Bartür
+Öffnen"
+
+[node name="PingMargin" type="MarginContainer" parent="Panel/Controller/Drinks/Panel"]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -38.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_constants/margin_right = 10
+
+[node name="Ping" type="Label" parent="Panel/Controller/Drinks/Panel/PingMargin"]
+layout_mode = 2
+text = "500"
+horizontal_alignment = 2
+
+[node name="Stopptanz" type="VBoxContainer" parent="Panel/Controller"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Separator" type="PanelContainer" parent="Panel/Controller/Stopptanz"]
+custom_minimum_size = Vector2(0, 5)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_oihui")
+
+[node name="Panel" type="Panel" parent="Panel/Controller/Stopptanz"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_1kbyv")
+
+[node name="NameMargin" type="MarginContainer" parent="Panel/Controller/Stopptanz/Panel"]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 51.0
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+
+[node name="Name" type="Label" parent="Panel/Controller/Stopptanz/Panel/NameMargin"]
+layout_mode = 2
+text = "Stopptanz"
+
+[node name="Button Margin" type="MarginContainer" parent="Panel/Controller/Stopptanz/Panel"]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 100.0
+grow_vertical = 2
+theme_override_constants/margin_left = 200
+
+[node name="Buttons" type="HBoxContainer" parent="Panel/Controller/Stopptanz/Panel/Button Margin"]
+layout_mode = 2
+
+[node name="ButtonStopptanzInit" type="Button" parent="Panel/Controller/Stopptanz/Panel/Button Margin/Buttons"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Stopptanz
+Starten"
+
+[node name="ButtonStopptanzDance" type="Button" parent="Panel/Controller/Stopptanz/Panel/Button Margin/Buttons"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Tanzen!
+(Grün)"
+script = ExtResource("1_4rhus")
+command = 1
+
+[node name="ButtonStopptanzStop" type="Button" parent="Panel/Controller/Stopptanz/Panel/Button Margin/Buttons"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Stopp!
+(Rot)"
+script = ExtResource("1_4rhus")
+
+[node name="ButtonStopptanzSolve" type="Button" parent="Panel/Controller/Stopptanz/Panel/Button Margin/Buttons"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Stopptanz
+Beenden"
+
+[node name="PingMargin" type="MarginContainer" parent="Panel/Controller/Stopptanz/Panel"]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -38.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_constants/margin_right = 10
+
+[node name="Ping" type="Label" parent="Panel/Controller/Stopptanz/Panel/PingMargin"]
+layout_mode = 2
+text = "500"
+horizontal_alignment = 2
+
+[node name="Sparkkasten" type="VBoxContainer" parent="Panel/Controller"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Separator" type="PanelContainer" parent="Panel/Controller/Sparkkasten"]
+custom_minimum_size = Vector2(0, 5)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_oihui")
+
+[node name="Panel" type="Panel" parent="Panel/Controller/Sparkkasten"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_1kbyv")
+
+[node name="NameMargin" type="MarginContainer" parent="Panel/Controller/Sparkkasten/Panel"]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 51.0
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+
+[node name="Name" type="Label" parent="Panel/Controller/Sparkkasten/Panel/NameMargin"]
+layout_mode = 2
+text = "Sparkasten"
+
+[node name="Button Margin" type="MarginContainer" parent="Panel/Controller/Sparkkasten/Panel"]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 100.0
+grow_vertical = 2
+theme_override_constants/margin_left = 200
+
+[node name="Buttons" type="HBoxContainer" parent="Panel/Controller/Sparkkasten/Panel/Button Margin"]
+layout_mode = 2
+
+[node name="ButtonSparkastenOpen" type="Button" parent="Panel/Controller/Sparkkasten/Panel/Button Margin/Buttons"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Sparkasten
+Öffnen"
+
+[node name="PingMargin" type="MarginContainer" parent="Panel/Controller/Sparkkasten/Panel"]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -38.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_constants/margin_right = 10
+
+[node name="Ping" type="Label" parent="Panel/Controller/Sparkkasten/Panel/PingMargin"]
+layout_mode = 2
+text = "500"
+horizontal_alignment = 2
+
+[node name="Sexdungeon" type="VBoxContainer" parent="Panel/Controller"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Separator" type="PanelContainer" parent="Panel/Controller/Sexdungeon"]
+custom_minimum_size = Vector2(0, 5)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_oihui")
+
+[node name="Panel" type="Panel" parent="Panel/Controller/Sexdungeon"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_1kbyv")
+
+[node name="NameMargin" type="MarginContainer" parent="Panel/Controller/Sexdungeon/Panel"]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 51.0
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+
+[node name="Name" type="Label" parent="Panel/Controller/Sexdungeon/Panel/NameMargin"]
+layout_mode = 2
+text = "Sexdungeon"
+
+[node name="Button Margin" type="MarginContainer" parent="Panel/Controller/Sexdungeon/Panel"]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 100.0
+grow_vertical = 2
+theme_override_constants/margin_left = 200
+
+[node name="Buttons" type="HBoxContainer" parent="Panel/Controller/Sexdungeon/Panel/Button Margin"]
+layout_mode = 2
+
+[node name="ButtonWasserhahnEnable" type="Button" parent="Panel/Controller/Sexdungeon/Panel/Button Margin/Buttons"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Wasserhahn
+Freischalten"
+
+[node name="ButtonWasserhahnOpen" type="Button" parent="Panel/Controller/Sexdungeon/Panel/Button Margin/Buttons"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Sexdungeon
+Öffnen"
+
+[node name="PingMargin" type="MarginContainer" parent="Panel/Controller/Sexdungeon/Panel"]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -38.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_constants/margin_right = 10
+
+[node name="Ping" type="Label" parent="Panel/Controller/Sexdungeon/Panel/PingMargin"]
+layout_mode = 2
+text = "500"
+horizontal_alignment = 2
+
+[node name="Schichtplan" type="VBoxContainer" parent="Panel/Controller"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Separator" type="PanelContainer" parent="Panel/Controller/Schichtplan"]
+custom_minimum_size = Vector2(0, 5)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_oihui")
+
+[node name="Panel" type="Panel" parent="Panel/Controller/Schichtplan"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_1kbyv")
+
+[node name="NameMargin" type="MarginContainer" parent="Panel/Controller/Schichtplan/Panel"]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 51.0
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+
+[node name="Name" type="Label" parent="Panel/Controller/Schichtplan/Panel/NameMargin"]
+layout_mode = 2
+text = "Schichtplan"
+
+[node name="Button Margin" type="MarginContainer" parent="Panel/Controller/Schichtplan/Panel"]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 100.0
+grow_vertical = 2
+theme_override_constants/margin_left = 200
+
+[node name="Buttons" type="HBoxContainer" parent="Panel/Controller/Schichtplan/Panel/Button Margin"]
+layout_mode = 2
+
+[node name="ButtonSchichtplanOpen" type="Button" parent="Panel/Controller/Schichtplan/Panel/Button Margin/Buttons"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Schichtplan
+Lösen"
+
+[node name="PingMargin" type="MarginContainer" parent="Panel/Controller/Schichtplan/Panel"]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -38.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_constants/margin_right = 10
+
+[node name="Ping" type="Label" parent="Panel/Controller/Schichtplan/Panel/PingMargin"]
+layout_mode = 2
+text = "500"
+horizontal_alignment = 2
+
+[node name="LenaTEMP" type="VBoxContainer" parent="Panel/Controller"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Separator" type="PanelContainer" parent="Panel/Controller/LenaTEMP"]
+custom_minimum_size = Vector2(0, 5)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_oihui")
+
+[node name="Panel" type="Panel" parent="Panel/Controller/LenaTEMP"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_1kbyv")
+
+[node name="NameMargin" type="MarginContainer" parent="Panel/Controller/LenaTEMP/Panel"]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 51.0
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+
+[node name="Name" type="Label" parent="Panel/Controller/LenaTEMP/Panel/NameMargin"]
+layout_mode = 2
+text = "Lisas Geburtstag"
+
+[node name="Button Margin" type="MarginContainer" parent="Panel/Controller/LenaTEMP/Panel"]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 100.0
+grow_vertical = 2
+theme_override_constants/margin_left = 200
+
+[node name="Buttons" type="HBoxContainer" parent="Panel/Controller/LenaTEMP/Panel/Button Margin"]
+layout_mode = 2
+
+[node name="ButtonLena" type="Button" parent="Panel/Controller/LenaTEMP/Panel/Button Margin/Buttons"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "Rather Be
+Komplett"
+
+[node name="ButtonLena2" type="Button" parent="Panel/Controller/LenaTEMP/Panel/Button Margin/Buttons"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "Rather Be
+Gekürzt"
+
+[node name="PingMargin" type="MarginContainer" parent="Panel/Controller/LenaTEMP/Panel"]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -38.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_constants/margin_right = 10
+
+[node name="Ping" type="Label" parent="Panel/Controller/LenaTEMP/Panel/PingMargin"]
+layout_mode = 2
+text = "500"
+horizontal_alignment = 2
+
+[node name="Separee" type="VBoxContainer" parent="Panel/Controller"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Separator" type="PanelContainer" parent="Panel/Controller/Separee"]
+custom_minimum_size = Vector2(0, 5)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_oihui")
+
+[node name="Panel" type="Panel" parent="Panel/Controller/Separee"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_1kbyv")
+
+[node name="NameMargin" type="MarginContainer" parent="Panel/Controller/Separee/Panel"]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 51.0
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+
+[node name="Name" type="Label" parent="Panel/Controller/Separee/Panel/NameMargin"]
+layout_mode = 2
+text = "Separee"
+
+[node name="Button Margin" type="MarginContainer" parent="Panel/Controller/Separee/Panel"]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 100.0
+grow_vertical = 2
+theme_override_constants/margin_left = 200
+
+[node name="Buttons" type="HBoxContainer" parent="Panel/Controller/Separee/Panel/Button Margin"]
+layout_mode = 2
+
+[node name="ButtonSepareeRot" type="Button" parent="Panel/Controller/Separee/Panel/Button Margin/Buttons"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Licht 
+Rot"
+
+[node name="ButtonSepareeGrün" type="Button" parent="Panel/Controller/Separee/Panel/Button Margin/Buttons"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Licht
+Grün"
+
+[node name="ButtonSepareeBlau" type="Button" parent="Panel/Controller/Separee/Panel/Button Margin/Buttons"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Licht
+Blau"
+
+[node name="ButtonSepareeSolve" type="Button" parent="Panel/Controller/Separee/Panel/Button Margin/Buttons"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Separee
+Lösen"
+
+[node name="ButtonSepareeWeiß" type="Button" parent="Panel/Controller/Separee/Panel/Button Margin/Buttons"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Licht
+Weiß"
+
+[node name="PingMargin" type="MarginContainer" parent="Panel/Controller/Separee/Panel"]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -38.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_constants/margin_right = 10
+
+[node name="Ping" type="Label" parent="Panel/Controller/Separee/Panel/PingMargin"]
+layout_mode = 2
+text = "500"
+horizontal_alignment = 2
+
 [node name="PingLabel" type="Label" parent="Panel"]
 layout_mode = 0
-offset_top = 577.0
-offset_right = 1025.0
-offset_bottom = 600.0
+offset_left = 900.0
+offset_top = 111.0
+offset_right = 1139.0
+offset_bottom = 486.0
 text = "Pings"
-horizontal_alignment = 1
-vertical_alignment = 1
 script = ExtResource("2_etvvu")
 
 [node name="MusicPlayer" type="AudioStreamPlayer" parent="."]
@@ -312,36 +637,69 @@ text = "Search All Coms"
 layout_mode = 2
 text = "Disconnect"
 
+[node name="PanelContainer" type="PanelContainer" parent="."]
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -12.0
+grow_horizontal = 2
+grow_vertical = 0
+metadata/_edit_group_ = true
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer"]
+layout_mode = 2
+alignment = 2
+
+[node name="Label" type="Label" parent="PanelContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 9
+text = "Made with"
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="PanelContainer/HBoxContainer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+texture = ExtResource("10_jqrgx")
+expand_mode = 3
+
+[node name="Label2" type="Label" parent="PanelContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 9
+text = "for Breakout Göttingen"
+
 [connection signal="button_down" from="Panel/Debug" to="Panel/Debug" method="show_debug_panel"]
-[connection signal="button_down" from="Panel/Main/MainButtons/Connect" to="Connector" method="Start"]
-[connection signal="button_down" from="Panel/Main/MainButtons/Start" to="Panel/Stopwatch" method="start"]
-[connection signal="button_down" from="Panel/Main/MainButtons/Start" to="GameManager" method="start_game"]
-[connection signal="button_down" from="Panel/Main/4DrinksButtons/ButtonDrinksSolve" to="Connector" method="DinksSolve"]
-[connection signal="button_down" from="Panel/Main/StopptanzButtons/ButtonStopptanzInit" to="Connector" method="StopptanzInit"]
-[connection signal="button_down" from="Panel/Main/StopptanzButtons/ButtonStopptanzInit" to="GameManager" method="music_switch_to_stoptanz"]
-[connection signal="button_down" from="Panel/Main/StopptanzButtons/ButtonStopptanzDance" to="Panel/Main/StopptanzButtons/ButtonStopptanzDance" method="do_command"]
-[connection signal="button_down" from="Panel/Main/StopptanzButtons/ButtonStopptanzDance" to="Connector" method="StopptanzDance"]
-[connection signal="button_down" from="Panel/Main/StopptanzButtons/ButtonStopptanzStop" to="Panel/Main/StopptanzButtons/ButtonStopptanzStop" method="do_command"]
-[connection signal="button_down" from="Panel/Main/StopptanzButtons/ButtonStopptanzStop" to="Connector" method="StopptanzStop"]
-[connection signal="button_down" from="Panel/Main/StopptanzButtons/ButtonStopptanzSolve" to="Connector" method="StopptanzSolve"]
-[connection signal="button_down" from="Panel/Main/StopptanzButtons/ButtonStopptanzSolve" to="GameManager" method="music_switch_to_atmo2"]
-[connection signal="button_down" from="Panel/Main/SparkastenButtons/ButtonSparkastenOpen" to="Connector" method="SparkastenOpen"]
-[connection signal="button_down" from="Panel/Main/SextalkButtons/ButtonWasserhahnEnable" to="Connector" method="WasserhahnEnable"]
-[connection signal="button_down" from="Panel/Main/SextalkButtons/ButtonWasserhahnOpen" to="Connector" method="WasserhahnOpen"]
-[connection signal="button_down" from="Panel/Main/SchichtplanButtons/ButtonSchichtplanOpen" to="Connector" method="SchichtplanOpen"]
-[connection signal="button_down" from="Panel/Main/ButtonLena" to="MusicPlayer" method="play_ratherbe"]
-[connection signal="button_down" from="Panel/Main/ButtonLena" to="Connector" method="SepareeRot"]
-[connection signal="button_down" from="Panel/Main/ButtonLena2" to="MusicPlayer" method="play_ratherbe_alt"]
-[connection signal="button_down" from="Panel/Main/ButtonLena2" to="Connector" method="SepareeRot"]
-[connection signal="button_down" from="Panel/Main/SepareeButtons/ButtonSepareeRot" to="Connector" method="SepareeRot"]
-[connection signal="button_down" from="Panel/Main/SepareeButtons/ButtonSepareeRot" to="GameManager" method="music_switch_to_separee"]
-[connection signal="button_down" from="Panel/Main/SepareeButtons/ButtonSepareeGrün" to="Connector" method="SepareeGruen"]
-[connection signal="button_down" from="Panel/Main/SepareeButtons/ButtonSepareeGrün" to="GameManager" method="music_switch_to_separee"]
-[connection signal="button_down" from="Panel/Main/SepareeButtons/ButtonSepareeBlau" to="Connector" method="SepareeBlau"]
-[connection signal="button_down" from="Panel/Main/SepareeButtons/ButtonSepareeBlau" to="GameManager" method="music_switch_to_separee"]
-[connection signal="button_down" from="Panel/Main/SepareeButtons/ButtonSepareeSolve" to="Connector" method="SepareeOpen"]
-[connection signal="button_down" from="Panel/Main/SepareeButtons/ButtonSepareeSolve" to="GameManager" method="music_switch_to_finale"]
-[connection signal="button_down" from="Panel/Main/SepareeButtons2/ButtonSepareeWeiß" to="Connector" method="SepareeWhite"]
+[connection signal="button_down" from="Panel/Controller/MarginContainer/VBoxContainer/Connect" to="Connector" method="Start"]
+[connection signal="button_down" from="Panel/Controller/MarginContainer/VBoxContainer/Start" to="Panel/Stopwatch" method="start"]
+[connection signal="button_down" from="Panel/Controller/MarginContainer/VBoxContainer/Start" to="GameManager" method="start_game"]
+[connection signal="button_down" from="Panel/Controller/Drinks/Panel/Button Margin/Buttons/ButtonDrinksSolve" to="Connector" method="DinksSolve"]
+[connection signal="button_down" from="Panel/Controller/Stopptanz/Panel/Button Margin/Buttons/ButtonStopptanzInit" to="Connector" method="StopptanzInit"]
+[connection signal="button_down" from="Panel/Controller/Stopptanz/Panel/Button Margin/Buttons/ButtonStopptanzInit" to="GameManager" method="music_switch_to_stoptanz"]
+[connection signal="button_down" from="Panel/Controller/Stopptanz/Panel/Button Margin/Buttons/ButtonStopptanzDance" to="Panel/Controller/Stopptanz/Panel/Button Margin/Buttons/ButtonStopptanzDance" method="do_command"]
+[connection signal="button_down" from="Panel/Controller/Stopptanz/Panel/Button Margin/Buttons/ButtonStopptanzDance" to="Connector" method="StopptanzDance"]
+[connection signal="button_down" from="Panel/Controller/Stopptanz/Panel/Button Margin/Buttons/ButtonStopptanzStop" to="Panel/Controller/Stopptanz/Panel/Button Margin/Buttons/ButtonStopptanzStop" method="do_command"]
+[connection signal="button_down" from="Panel/Controller/Stopptanz/Panel/Button Margin/Buttons/ButtonStopptanzStop" to="Connector" method="StopptanzStop"]
+[connection signal="button_down" from="Panel/Controller/Stopptanz/Panel/Button Margin/Buttons/ButtonStopptanzSolve" to="Connector" method="StopptanzSolve"]
+[connection signal="button_down" from="Panel/Controller/Stopptanz/Panel/Button Margin/Buttons/ButtonStopptanzSolve" to="GameManager" method="music_switch_to_atmo2"]
+[connection signal="button_down" from="Panel/Controller/Sparkkasten/Panel/Button Margin/Buttons/ButtonSparkastenOpen" to="Connector" method="SparkastenOpen"]
+[connection signal="button_down" from="Panel/Controller/Sexdungeon/Panel/Button Margin/Buttons/ButtonWasserhahnEnable" to="Connector" method="WasserhahnEnable"]
+[connection signal="button_down" from="Panel/Controller/Sexdungeon/Panel/Button Margin/Buttons/ButtonWasserhahnOpen" to="Connector" method="WasserhahnOpen"]
+[connection signal="button_down" from="Panel/Controller/Schichtplan/Panel/Button Margin/Buttons/ButtonSchichtplanOpen" to="Connector" method="SchichtplanOpen"]
+[connection signal="button_down" from="Panel/Controller/LenaTEMP/Panel/Button Margin/Buttons/ButtonLena" to="MusicPlayer" method="play_ratherbe"]
+[connection signal="button_down" from="Panel/Controller/LenaTEMP/Panel/Button Margin/Buttons/ButtonLena" to="Connector" method="SepareeRot"]
+[connection signal="button_down" from="Panel/Controller/LenaTEMP/Panel/Button Margin/Buttons/ButtonLena2" to="MusicPlayer" method="play_ratherbe_alt"]
+[connection signal="button_down" from="Panel/Controller/LenaTEMP/Panel/Button Margin/Buttons/ButtonLena2" to="Connector" method="SepareeRot"]
+[connection signal="button_down" from="Panel/Controller/Separee/Panel/Button Margin/Buttons/ButtonSepareeRot" to="Connector" method="SepareeRot"]
+[connection signal="button_down" from="Panel/Controller/Separee/Panel/Button Margin/Buttons/ButtonSepareeRot" to="GameManager" method="music_switch_to_separee"]
+[connection signal="button_down" from="Panel/Controller/Separee/Panel/Button Margin/Buttons/ButtonSepareeGrün" to="Connector" method="SepareeGruen"]
+[connection signal="button_down" from="Panel/Controller/Separee/Panel/Button Margin/Buttons/ButtonSepareeGrün" to="GameManager" method="music_switch_to_separee"]
+[connection signal="button_down" from="Panel/Controller/Separee/Panel/Button Margin/Buttons/ButtonSepareeBlau" to="Connector" method="SepareeBlau"]
+[connection signal="button_down" from="Panel/Controller/Separee/Panel/Button Margin/Buttons/ButtonSepareeBlau" to="GameManager" method="music_switch_to_separee"]
+[connection signal="button_down" from="Panel/Controller/Separee/Panel/Button Margin/Buttons/ButtonSepareeSolve" to="Connector" method="SepareeOpen"]
+[connection signal="button_down" from="Panel/Controller/Separee/Panel/Button Margin/Buttons/ButtonSepareeSolve" to="GameManager" method="music_switch_to_finale"]
+[connection signal="button_down" from="Panel/Controller/Separee/Panel/Button Margin/Buttons/ButtonSepareeWeiß" to="Connector" method="SepareeWhite"]
 [connection signal="button_down" from="DebugWindow/Back" to="Panel/Debug" method="hide_debug_panel"]
 [connection signal="button_down" from="DebugWindow/Debug/SearchCOMs" to="Connector" method="SearchAllComs"]
 [connection signal="button_down" from="DebugWindow/Debug/DisconnectCOM" to="Connector" method="Disconnect"]
