@@ -489,4 +489,10 @@ public partial class Connector : Node{
 		SendCommand(COMMANDS.SEPAREE_OPEN);
 	}
 
+
+
+	public void LenaTemp(){
+		color_index = 0;
+		SendCommand(COMMANDS.SEPAREE_ROT);
+	}
 }

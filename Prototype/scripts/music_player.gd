@@ -1,6 +1,15 @@
 extends AudioStreamPlayer
 class_name MusicPlayer
 
+@export var rather_be_file : AudioStream
+@export var rather_be_file_alt : AudioStream
+func play_ratherbe():
+	stream = rather_be_file
+	playing = true
+func play_ratherbe_alt():
+	stream = rather_be_file_alt
+	playing = true
+
 var DIRECTORY_MUSIC_TRACKS : String = "user://Musik/"
 var DICT_MUSIC_TRACKS : Dictionary = {
 	"atmo1" : "atmo1.mp3",
