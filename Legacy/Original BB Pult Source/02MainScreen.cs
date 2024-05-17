@@ -133,7 +133,8 @@ namespace BuggieBungalow_Pult
 
         private void MainScreen_Shown(object sender, EventArgs e)
         {
-            //check that all music files are there
+            //check that all music files are there  +
+            
             bool MusicFileMissing =
                 File.Exists(Path.Combine(MUSIC_ROOT, Tracks.MUSIC_ATMO1)) &&
                 File.Exists(Path.Combine(MUSIC_ROOT, Tracks.MUSIC_ATMO2)) &&

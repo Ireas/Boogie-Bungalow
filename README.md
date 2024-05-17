@@ -1,10 +1,10 @@
 # Boogie-Bungalow
 
 
-## Targeted Features for this Prototype
-- Setup Connection to Master Node 
-- Send custom Package to Master Node
-
-## Planned Features for Future Prototypes
-- 
-
+## Requested Features
+- DELAY BUTTON PRESSES
+- FULL STATE INFORMATION
+- UPDATE INFORMATION SHEET
+- WARNING AND ERROR MESSAGES
+- BETTER LOG
+- BETTER ACK WAIT

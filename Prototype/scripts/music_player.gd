@@ -15,8 +15,8 @@ var dict_loaded_music_tracks : Dictionary = {}
 
 func _ready():
 	Globals.music_play_track.connect(play_track)
-	Globals.music_continue.connect( func(): stream_paused = true )
-	Globals.music_pause.connect( func(): stream_paused = false )
+	Globals.music_pause.connect( func(): stream_paused = true )
+	Globals.music_continue.connect( func(): stream_paused = false )
 
 	if not DirAccess.dir_exists_absolute(DIRECTORY_MUSIC_TRACKS):
 		print("Error: folder \"%s\" not found"%[DIRECTORY_MUSIC_TRACKS])

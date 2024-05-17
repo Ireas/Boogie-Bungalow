@@ -1,5 +1,6 @@
-[gd_scene load_steps=8 format=3 uid="uid://vwdey52kj1k1"]
+[gd_scene load_steps=9 format=3 uid="uid://vwdey52kj1k1"]
 
+[ext_resource type="Script" path="res://button_stopptanz.gd" id="1_4rhus"]
 [ext_resource type="Script" path="res://scripts/stopwatch.gd" id="1_qovry"]
 [ext_resource type="Script" path="res://scripts/Connector.cs" id="2_5v0y2"]
 [ext_resource type="Script" path="res://ping_label.gd" id="2_etvvu"]
@@ -85,11 +86,14 @@ alignment = 0
 layout_mode = 2
 text = "STOPPTANZ: Dance(02,00,01)"
 alignment = 0
+script = ExtResource("1_4rhus")
+command = 1
 
 [node name="ButtonStopptanzStop" type="Button" parent="Panel/Main/StopptanzButtons"]
 layout_mode = 2
 text = "STOPPTANZ: Stop(02,00,02)"
 alignment = 0
+script = ExtResource("1_4rhus")
 
 [node name="ButtonStopptanzSolve" type="Button" parent="Panel/Main/StopptanzButtons"]
 layout_mode = 2
@@ -197,11 +201,6 @@ alignment = 0
 layout_mode = 2
 alignment = 1
 
-[node name="ButtonSepareeYellow" type="Button" parent="Panel/Main/SepareeButtons2"]
-layout_mode = 2
-text = "SEPAREE: Yellow(01,00,05)"
-alignment = 0
-
 [node name="ButtonSepareeWeiß" type="Button" parent="Panel/Main/SepareeButtons2"]
 layout_mode = 2
 text = "SEPAREE: Weiß(01,00,06)"
@@ -274,7 +273,9 @@ music_player = NodePath("../MusicPlayer")
 [connection signal="button_down" from="Panel/Main/4DrinksButtons/ButtonDrinksSolve" to="Connector" method="DinksSolve"]
 [connection signal="button_down" from="Panel/Main/StopptanzButtons/ButtonStopptanzInit" to="Connector" method="StopptanzInit"]
 [connection signal="button_down" from="Panel/Main/StopptanzButtons/ButtonStopptanzInit" to="GameManager" method="music_switch_to_stoptanz"]
+[connection signal="button_down" from="Panel/Main/StopptanzButtons/ButtonStopptanzDance" to="Panel/Main/StopptanzButtons/ButtonStopptanzDance" method="do_command"]
 [connection signal="button_down" from="Panel/Main/StopptanzButtons/ButtonStopptanzDance" to="Connector" method="StopptanzDance"]
+[connection signal="button_down" from="Panel/Main/StopptanzButtons/ButtonStopptanzStop" to="Panel/Main/StopptanzButtons/ButtonStopptanzStop" method="do_command"]
 [connection signal="button_down" from="Panel/Main/StopptanzButtons/ButtonStopptanzStop" to="Connector" method="StopptanzStop"]
 [connection signal="button_down" from="Panel/Main/StopptanzButtons/ButtonStopptanzSolve" to="Connector" method="StopptanzSolve"]
 [connection signal="button_down" from="Panel/Main/StopptanzButtons/ButtonStopptanzSolve" to="GameManager" method="music_switch_to_atmo2"]
@@ -285,10 +286,11 @@ music_player = NodePath("../MusicPlayer")
 [connection signal="button_down" from="Panel/Main/SepareeButtons/ButtonSepareeRot" to="Connector" method="SepareeRot"]
 [connection signal="button_down" from="Panel/Main/SepareeButtons/ButtonSepareeRot" to="GameManager" method="music_switch_to_separee"]
 [connection signal="button_down" from="Panel/Main/SepareeButtons/ButtonSepareeGrün" to="Connector" method="SepareeGruen"]
+[connection signal="button_down" from="Panel/Main/SepareeButtons/ButtonSepareeGrün" to="GameManager" method="music_switch_to_separee"]
 [connection signal="button_down" from="Panel/Main/SepareeButtons/ButtonSepareeBlau" to="Connector" method="SepareeBlau"]
+[connection signal="button_down" from="Panel/Main/SepareeButtons/ButtonSepareeBlau" to="GameManager" method="music_switch_to_separee"]
 [connection signal="button_down" from="Panel/Main/SepareeButtons/ButtonSepareeSolve" to="Connector" method="SepareeOpen"]
 [connection signal="button_down" from="Panel/Main/SepareeButtons/ButtonSepareeSolve" to="GameManager" method="music_switch_to_finale"]
-[connection signal="button_down" from="Panel/Main/SepareeButtons2/ButtonSepareeYellow" to="Connector" method="SepareeYellow"]
 [connection signal="button_down" from="Panel/Main/SepareeButtons2/ButtonSepareeWeiß" to="Connector" method="SepareeWhite"]
 [connection signal="button_down" from="Panel/Debug/SearchCOMs" to="Connector" method="SearchAllComs"]
 [connection signal="button_down" from="Panel/Debug/DisconnectCOM" to="Connector" method="Disconnect"]

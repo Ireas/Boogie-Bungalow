@@ -32,14 +32,13 @@ public partial class Connector : Node{
 		STOPPTANZ_SOLVE,
 		SPARKASTEN_OPEN,		
 		SPARKASTEN_STOP_OPENING,
-		SEXTALK_ENABLE,
-		SEXTALK_OPEN,
+		WASSERHAHN_ENABLE,
+		SEXDUNGEON_OPEN,
 		SCHICHTPLAN_OPEN,
 		SCHICHTPLAN_STOP_OPENING,
 		SEPAREE_ROT,
 		SEPAREE_GRUEN,
 		SEPAREE_BLAU,
-		SEPAREE_YELLOW,
 		SEPAREE_WHITE,
 		SEPAREE_OPEN,
 		SEPAREE_STOP_OPENING,
@@ -56,16 +55,15 @@ public partial class Connector : Node{
 		{COMMANDS.STOPPTANZ_SOLVE, 			"02,01,00"},
 		{COMMANDS.SPARKASTEN_OPEN, 			"03,00,01"},
 		{COMMANDS.SPARKASTEN_STOP_OPENING, 	"03,00,00"},
-		{COMMANDS.SEXTALK_ENABLE,			"05,00,01"},
-		{COMMANDS.SEXTALK_OPEN, 			"05,00,02"},
-		{COMMANDS.SCHICHTPLAN_OPEN, 		"05,00,03"},
+		{COMMANDS.WASSERHAHN_ENABLE,		"05,00,01"},
+		{COMMANDS.SEXDUNGEON_OPEN, 			"05,00,02"},
+		{COMMANDS.SCHICHTPLAN_OPEN, 		"05,00,09"},
 		{COMMANDS.SCHICHTPLAN_STOP_OPENING,	"05,00,00"},
 		{COMMANDS.SEPAREE_ROT, 				"01,00,01"},
 		{COMMANDS.SEPAREE_GRUEN, 			"01,00,02"},
 		{COMMANDS.SEPAREE_BLAU, 			"01,00,03"},
-		{COMMANDS.SEPAREE_YELLOW, 			"01,00,05"},
 		{COMMANDS.SEPAREE_WHITE, 			"01,00,06"},
-		{COMMANDS.SEPAREE_OPEN, 			"01,00,00"},
+		{COMMANDS.SEPAREE_OPEN, 			"01,01,09"},
 		{COMMANDS.SEPAREE_STOP_OPENING, 	"01,00,00"},
 		{COMMANDS.TELEPHONE_STOP_RINGING, 	"21,00,00"},
 	}; 
@@ -102,7 +100,7 @@ public partial class Connector : Node{
 		catch(Exception e){
 			Log("exception occured: " + e.Message);
 		}
-		_globals.EmitSignal("update_ping", 0, 0, 0, 0, 0, 0, 0, 0);
+		_globals.CallDeferred("update_global_ping", 0, 0, 0, 0, 0, 0, 0, 0);
 	}
 
 	//>> display all port names to the GD console.
@@ -353,7 +351,7 @@ public partial class Connector : Node{
 		int PingSeparee = -1; 
 
 		for(int i=1; i<=4*7; i+=4){
-			index = i/4; //0,1,2,3,4,5,6,7
+			index = i/4; //0,1,2,3,4,5,6
 			uint delay = uint.Parse(data[i + 1]);
 			bool newSolved = (float.Parse(data[i + 2]) == 1) ? true : false;
 			int newState = int.Parse(data[i + 3]);
@@ -362,9 +360,12 @@ public partial class Connector : Node{
 				case 0:
 					Log("    thats Separee!");
 					PingSeparee = (int)delay;
-					if(newState==7){
-						SendCommand(COMMANDS.SEPAREE_STOP_OPENING);
+					if(color_index!=-1 && newState==0){
+						ResetPreviousColor();
 					}
+					//if(newState==7){
+					//	SendCommand(COMMANDS.SEPAREE_STOP_OPENING);
+					//}
 					break;
 				case 1:
 					Log("    thats Stoptanz!");
@@ -414,7 +415,8 @@ public partial class Connector : Node{
 					break;
 			}
 		}
-		_globals.EmitSignal("update_ping", Ping4Dinks, PingStopptanz, PingSparkasten, PingTelefon, PingWasserhahn, PingSexdungeon, PingSchichtplan, PingSeparee);
+
+		_globals.CallDeferred("update_global_ping", Ping4Dinks, PingStopptanz, PingSparkasten, PingTelefon, PingWasserhahn, PingSexdungeon, PingSchichtplan, PingSeparee);
 		Log("");
 	}
 
@@ -439,6 +441,26 @@ public partial class Connector : Node{
 	}
 
 
+	private int color_index = -1;
+
+	private void ResetPreviousColor(){
+		switch(color_index){
+			case 0:
+				SendCommand(COMMANDS.SEPAREE_ROT);
+				break;
+			case 1:
+				SendCommand(COMMANDS.SEPAREE_GRUEN);
+				break;
+			case 2:
+				SendCommand(COMMANDS.SEPAREE_BLAU);
+				break;
+			default:
+				Log("    thats also undefined Behaviour!");
+				break;
+				
+			}
+	}
+
 	//==========  BUTTONS
 	public void DinksSolve(){SendCommand(COMMANDS.DRINKS_SOLVE);}
 	public void StopptanzInit(){SendCommand(COMMANDS.STOPPTANZ_INITIALIZE);}
@@ -446,13 +468,25 @@ public partial class Connector : Node{
 	public void StopptanzStop(){SendCommand(COMMANDS.STOPPTANZ_STOP);}
 	public void StopptanzSolve(){SendCommand(COMMANDS.STOPPTANZ_SOLVE);}
 	public void SparkastenOpen(){SendCommand(COMMANDS.SPARKASTEN_OPEN);}
-	public void SEXTALKEnable(){SendCommand(COMMANDS.SEXTALK_ENABLE);}
-	public void SEXTALKOpen(){SendCommand(COMMANDS.SEXTALK_OPEN);}
+	public void WasserhahnEnable(){SendCommand(COMMANDS.WASSERHAHN_ENABLE);}
+	public void WasserhahnOpen(){SendCommand(COMMANDS.SEXDUNGEON_OPEN);}
 	public void SchichtplanOpen(){SendCommand(COMMANDS.SCHICHTPLAN_OPEN);}
-	public void SepareeRot(){SendCommand(COMMANDS.SEPAREE_ROT);}
-	public void SepareeGruen(){SendCommand(COMMANDS.SEPAREE_GRUEN);}
-	public void SepareeBlau(){SendCommand(COMMANDS.SEPAREE_BLAU);}
-	public void SepareeYellow(){SendCommand(COMMANDS.SEPAREE_YELLOW);}
+	public void SepareeRot(){
+		color_index = 0;
+		SendCommand(COMMANDS.SEPAREE_ROT);
+	}
+	public void SepareeGruen(){
+		color_index = 1; 
+		SendCommand(COMMANDS.SEPAREE_GRUEN);
+	}
+	public void SepareeBlau(){
+		color_index = 2;
+		SendCommand(COMMANDS.SEPAREE_BLAU);
+	}
 	public void SepareeWhite(){SendCommand(COMMANDS.SEPAREE_WHITE);}
-	public void SepareeOpen(){SendCommand(COMMANDS.SEPAREE_OPEN);}
+	public async void SepareeOpen(){
+    	await ToSignal(GetTree().CreateTimer(10), "timeout");
+		SendCommand(COMMANDS.SEPAREE_OPEN);
+	}
+
 }
