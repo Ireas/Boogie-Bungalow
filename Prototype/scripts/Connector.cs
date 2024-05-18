@@ -100,7 +100,17 @@ public partial class Connector : Node{
 		catch(Exception e){
 			Log("exception occured: " + e.Message);
 		}
-		_globals.CallDeferred("update_global_ping", 0, 0, 0, 0, 0, 0, 0, 0);
+
+		
+		_globals.CallDeferred("update_riddles", 
+			-1,1,-1,
+			-1,-1,-1,
+			-1,-1,-1,
+			-1,-1,-1,
+			-1,-1,-1,
+			-1,-1,-1,
+			-1,-1,-1
+		);
 	}
 
 	//>> display all port names to the GD console.
@@ -341,14 +351,27 @@ public partial class Connector : Node{
 		Log("  riddle information! >3000");
 		int index;
 
-		int Ping4Dinks = -1;
-		int PingStopptanz = -1;
-		int PingSparkasten = -1;
-		int PingTelefon = -1;
-		int PingWasserhahn = -1;
-		int PingSexdungeon = -1; 
-		int PingSchichtplan = -1; 
-		int PingSeparee = -1; 
+		int DrinksPing = -1;
+		int DrinksSolved = -1;
+		int DrinksState = -1;
+		int StopptanzPing = -1;
+		int StopptanzSolved = -1;
+		int StopptanzState = -1;
+		int SparkastenPing = -1;
+		int SparkastenSolved = -1;
+		int SparkastenState = -1;
+		int TelefonPing = -1;
+		int TelefonSolved = -1;
+		int TelefonState = -1;
+		int SexdungeonSolved = -1;
+		int SexdungeonState = -1;
+		int SexdungeonPing = -1;
+		int SchichtplanPing = -1;
+		int SchichtplanSolved = -1;
+		int SchichtplanState = -1;
+		int SepareePing = -1;
+		int SepareeSolved = -1;
+		int SepareeState = -1;
 
 		for(int i=1; i<=4*7; i+=4){
 			index = i/4; //0,1,2,3,4,5,6
@@ -359,7 +382,9 @@ public partial class Connector : Node{
 			switch(index){
 				case 0:
 					Log("    thats Separee!");
-					PingSeparee = (int)delay;
+					SepareePing = (int)delay;
+					SepareeSolved = newSolved ? 1 : 0;
+					SepareeState = newState;
 					if(color_index!=-1 && newState==0){
 						ResetPreviousColor();
 					}
@@ -369,11 +394,15 @@ public partial class Connector : Node{
 					break;
 				case 1:
 					Log("    thats Stoptanz!");
-					PingStopptanz = (int)delay;
+					StopptanzPing = (int)delay;
+					StopptanzSolved = newSolved ? 1 : 0;
+					StopptanzState = newState;
 					break;
 				case 2:
 					Log("    thats Sparkasten!");
-					PingSparkasten = (int)delay;
+					SparkastenPing = (int)delay;
+					SparkastenSolved = newSolved ? 1 : 0;
+					SparkastenState = newState;
 					if(newState==3){
 						SendCommand(COMMANDS.SPARKASTEN_STOP_OPENING);
 					}
@@ -382,33 +411,37 @@ public partial class Connector : Node{
 					Log("    thats Jukebox!???");
 					break;
 				case 4:
-					Log("    thats SEXTALK/Arbeitsplan!");
-					PingSchichtplan = (int)delay;
-					PingWasserhahn = (int)delay;
+					Log("    thats Arbeitsplan!");
+					SchichtplanPing = (int)delay;
+					SchichtplanSolved = newSolved ? 1 : 0;
+					SchichtplanState = newState;
 					if(newState==2){
 						SendCommand(COMMANDS.SCHICHTPLAN_STOP_OPENING);
 					}
 					break;
 				case 5:
 					Log("    thats 4 Drinks!");
-					Ping4Dinks = (int)delay;
+					DrinksPing = (int)delay;
+					DrinksSolved = newSolved ? 1 : 0;
+					DrinksState = newState;
 					if(newSolved){
 						SendCommand(COMMANDS.DRINKS_STOP_OPENING);
 					}
 					break;
 				case 6:
 					Log("    thats Telephone!");
-					PingTelefon = (int)delay;
+					TelefonPing = (int)delay;
+					TelefonSolved = newSolved ? 1 : 0;
+					TelefonState = newState;
 					if(newState>2){
 						SendCommand(COMMANDS.TELEPHONE_STOP_RINGING);
 					}
 					break;
 				case 7:
 					Log("    thats Sexdungeon!");
-					PingSexdungeon = (int)delay;
-					// if(newState==0){
-					// 	SendCommand(COMMANDS.DUNGEON_MAKE_PINK);
-					// }
+					SexdungeonPing = (int)delay;
+					SexdungeonSolved = newSolved ? 1 : 0;
+					SexdungeonState = newState;
 					break;
 				default:
 					Log("    thats undefined Behaviour!");
@@ -416,7 +449,15 @@ public partial class Connector : Node{
 			}
 		}
 
-		_globals.CallDeferred("update_global_ping", Ping4Dinks, PingStopptanz, PingSparkasten, PingTelefon, PingWasserhahn, PingSexdungeon, PingSchichtplan, PingSeparee);
+		_globals.CallDeferred("update_riddles", 
+			DrinksPing, DrinksSolved, DrinksState,
+			StopptanzPing, StopptanzSolved, StopptanzState,
+			SparkastenPing, SparkastenSolved, SparkastenState,
+			TelefonPing, TelefonSolved, TelefonState,
+			SexdungeonPing, SexdungeonSolved, SexdungeonState,
+			SchichtplanPing, SchichtplanSolved, SchichtplanState,
+			SepareePing, SepareeSolved, SepareeState
+		);
 		Log("");
 	}
 
@@ -466,11 +507,18 @@ public partial class Connector : Node{
 	public void StopptanzInit(){SendCommand(COMMANDS.STOPPTANZ_INITIALIZE);}
 	public void StopptanzDance(){SendCommand(COMMANDS.STOPPTANZ_DANCE);}
 	public void StopptanzStop(){SendCommand(COMMANDS.STOPPTANZ_STOP);}
-	public void StopptanzSolve(){SendCommand(COMMANDS.STOPPTANZ_SOLVE);}
+
+	public async void StopptanzSolve(){
+		SendCommand(COMMANDS.STOPPTANZ_SOLVE);
+    	await ToSignal(GetTree().CreateTimer(1), "timeout");
+		SendCommand(COMMANDS.SPARKASTEN_OPEN);
+	}
+
 	public void SparkastenOpen(){SendCommand(COMMANDS.SPARKASTEN_OPEN);}
 	public void WasserhahnEnable(){SendCommand(COMMANDS.WASSERHAHN_ENABLE);}
 	public void WasserhahnOpen(){SendCommand(COMMANDS.SEXDUNGEON_OPEN);}
 	public void SchichtplanOpen(){SendCommand(COMMANDS.SCHICHTPLAN_OPEN);}
+	
 	public void SepareeRot(){
 		color_index = 0;
 		SendCommand(COMMANDS.SEPAREE_ROT);
@@ -487,12 +535,5 @@ public partial class Connector : Node{
 	public async void SepareeOpen(){
     	await ToSignal(GetTree().CreateTimer(10), "timeout");
 		SendCommand(COMMANDS.SEPAREE_OPEN);
-	}
-
-
-
-	public void LenaTemp(){
-		color_index = 0;
-		SendCommand(COMMANDS.SEPAREE_ROT);
 	}
 }

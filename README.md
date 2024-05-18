@@ -2,12 +2,16 @@
 
 
 ## Requested Features
-- automatic sparkasten
-- telephone buttons
-- automatic white button
-- DELAY BUTTON PRESSES
-- FULL STATE INFORMATION
-- UPDATE INFORMATION SHEET
+- clean code 
+- improve logging (in/out) -> caching
+- better ack wait and automatic reset
+
+- buttons (steuerung | solve | notfall | ping)
+- delay button presses
+
 - WARNING AND ERROR MESSAGES
-- BETTER LOG
-- BETTER ACK WAIT
+
+- UPDATE INFORMATION SHEET
+
+
+## Licence
