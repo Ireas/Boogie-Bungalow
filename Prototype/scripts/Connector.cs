@@ -7,23 +7,22 @@ using System.Reflection;
 
 
 public partial class Connector : Node{
-	//==========  GODOT INSPECTOR NODES
+	//====================  GODOT INSPECTOR NODES
 	[Export] public Godot.Timer timer_ack;
 	[Export] public Godot.Timer timer_sync_packages;
 
 
 
-	//==========  CONSTANTS
-	public float SYNC_PACK_DELAY = 0.5f;
-   
-	// store logfile as application data (Windows: %Appdata%/Roaming/Boogie-Bungalow)
-	string PATH_LOGFILE = Path.Combine(
-		System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData), 
-		"Boogie-Bungalow/logfile.txt"
-	);
+	//====================  CONSTANTS
+	private const float SYNC_PACK_DOWNTIME = 0.5f;
+	private const float ACK_TIMEOUT_MAX = 20f;
+	private const float OPEN_SPARKASTEN_AFTER_STOPPTANZ_DELAY = 1.5f;
+	private const float OPEN_DOOR_AFTER_GAME_FINISH = 8f;
 	
 	public enum COMMANDS{
 		SYSTEM_INITIALIZE,
+		SYSTEM_SOFT_RESET,
+		SYSTEM_HARD_RESET,
 		DRINKS_SOLVE,
 		DRINKS_STOP_OPENING,
 		STOPPTANZ_INITIALIZE,
@@ -32,6 +31,7 @@ public partial class Connector : Node{
 		STOPPTANZ_SOLVE,
 		SPARKASTEN_OPEN,		
 		SPARKASTEN_STOP_OPENING,
+		TELEFON_RING,
 		WASSERHAHN_ENABLE,
 		SEXDUNGEON_OPEN,
 		SCHICHTPLAN_OPEN,
@@ -47,6 +47,8 @@ public partial class Connector : Node{
 
 	private readonly Dictionary<COMMANDS,string> PACKS = new Dictionary<COMMANDS, string>{
 		{COMMANDS.SYSTEM_INITIALIZE, 		"00,00,01"},
+		{COMMANDS.SYSTEM_SOFT_RESET, 		"00,00,02"},
+		{COMMANDS.SYSTEM_HARD_RESET, 		"00,00,01"},
 		{COMMANDS.DRINKS_SOLVE, 			"13,01,00"},
 		{COMMANDS.DRINKS_STOP_OPENING, 		"13,00,00"},
 		{COMMANDS.STOPPTANZ_INITIALIZE, 	"02,00,03"},
@@ -55,6 +57,7 @@ public partial class Connector : Node{
 		{COMMANDS.STOPPTANZ_SOLVE, 			"02,01,00"},
 		{COMMANDS.SPARKASTEN_OPEN, 			"03,00,01"},
 		{COMMANDS.SPARKASTEN_STOP_OPENING, 	"03,00,00"},
+		{COMMANDS.TELEFON_RING,				"21,00,03"},
 		{COMMANDS.WASSERHAHN_ENABLE,		"05,00,01"},
 		{COMMANDS.SEXDUNGEON_OPEN, 			"05,00,02"},
 		{COMMANDS.SCHICHTPLAN_OPEN, 		"05,00,09"},
@@ -80,29 +83,32 @@ public partial class Connector : Node{
 		{7, "29,00,02"},	
 	};
 
-	//==========  VARIABLES
+
+
+	//====================  VARIABLES
 	private bool syncing = false;
 	private SerialPort _arduinoMaster;
-	private Node _globals;
+	private Node _eventBus;
+	private Logger _logger;
+	private int color_index = -1;
 
 
-	//==========  PREPARATION
+
+	//====================  PREPARATION
 	//>> on program start call godots ready function automatically 
 	public override void _Ready(){
-		File.Delete(PATH_LOGFILE);
-		Log("Hello from C# to Godot :)");
-		Log("Also hello from PC!");
-		Log("");
+		_logger = new Logger();
 
+		_logger.Log("Accessing Autoloads", Logger.LogSeverity.VERBOSE);
 		try{
-			_globals = GetNode<Node>("/root/Globals");
+			_eventBus = GetNode<Node>("/root/EventBus");
 		}
 		catch(Exception e){
-			Log("exception occured: " + e.Message);
+			_logger.Log(e.Message, Logger.LogSeverity.ERROR);
 		}
 
 		
-		_globals.CallDeferred("update_riddles", 
+		_eventBus.CallDeferred("update_riddles", 
 			-1,1,-1,
 			-1,-1,-1,
 			-1,-1,-1,
@@ -116,28 +122,20 @@ public partial class Connector : Node{
 	//>> display all port names to the GD console.
 	public void SearchAllComs(){
 		string[] ports = SerialPort.GetPortNames();
-		Log("== PORT LIST ==");
-		Log("The following serial ports were found:");
+		_logger.Log("The following serial ports were found", Logger.LogSeverity.VERBOSE);
 		foreach(string port in ports){
-			Log("  " + port);
+			_logger.Log(" >"+port, Logger.LogSeverity.VERBOSE);
 		}
-		Log("");
-	}
-
-	//>> prints to console and logs (multithreading not supported yet)
-	private void Log(string message){
-		GD.Print(message);
-		File.AppendAllText(PATH_LOGFILE, message+"\n");
 	}
 
 	//>> sends pack to arduino master
 	private void SendCommand(COMMANDS _command){
-		Log(">>>> sending command: " + _command);
+		_logger.Log("Sending Command: " + _command, Logger.LogSeverity.VERBOSE);
 		try{
 			_arduinoMaster.WriteLine(">" + PACKS[_command]);
 		}
 		catch(Exception e){
-			Log("exception occured: " + e.Message);
+			_logger.Log(e.Message, Logger.LogSeverity.ERROR);
 		}
 	}
 
@@ -147,48 +145,38 @@ public partial class Connector : Node{
 		_arduinoMaster.PortName = "COM5";
 		_arduinoMaster.BaudRate = 115200;
 		
-		Log("==  OPEN PORT  ==");
-		Log("PortName:" + _arduinoMaster.PortName + " - BaudRate:" + _arduinoMaster.BaudRate);
-		Log("trying to open port...");
+		_logger.Log("Open Port:" + _arduinoMaster.PortName + " - BaudRate:" + _arduinoMaster.BaudRate, Logger.LogSeverity.VERBOSE);
 		try{
 			_arduinoMaster.Open();
-			Log("targeted Port opened successfully!");
 		}
 		catch(Exception e){
-			Log("exception occured: " + e.Message);
+			_logger.Log(e.Message, Logger.LogSeverity.ERROR);
 			return false;
 		}
 
-		Log("");
 		return true;
 	}
 
 	//>> initialize serial port with arduino hardware
 	private bool SynchroniseHardware(){
-		Log("==  INITIIALIZE SYSTEM  ==");
-		
+		_logger.Log("Initializing System", Logger.LogSeverity.VERBOSE);
 		try{
 			SendCommand(COMMANDS.SYSTEM_INITIALIZE);
 
-			Log(">>>while loop for confirmation");
+			_logger.Log("While Loop for ACK", Logger.LogSeverity.VERBOSE);
 			bool _ackRecieved = false;
-			timer_ack.Start();
+			timer_ack.Start(ACK_TIMEOUT_MAX);
 
 			while(!_ackRecieved && timer_ack.TimeLeft>0){
-				if(_arduinoMaster.BytesToRead>0 && _arduinoMaster.ReadChar()=='8'){
-					Log("  recieved characater 56 (which equals '8')");
-					Log("  ACK received from Master... Now Waiting for Master to ask for SYNC");
-					Log("");
+				if(_arduinoMaster.BytesToRead>0 && _arduinoMaster.ReadChar()==56){
+					_logger.Log("ACK Revieced!", Logger.LogSeverity.VERBOSE);
 					_ackRecieved = true;
 					_arduinoMaster.DataReceived+= ProcessRecievedData;
-				}
-				else{
-					Log(".");
 				}
 			}
 		}
 		catch(Exception e){
-			Log("exception occured: " + e.Message);
+			_logger.Log(e.Message, Logger.LogSeverity.ERROR);
 			return false;
 		}
 
@@ -196,12 +184,14 @@ public partial class Connector : Node{
 	}
 
 	private void SendSyncPackage(int i){
-		Log(">>>> sending pack: " + SYNC_PACKS[i]);
+		_logger.Log("Sending Command: " + SYNC_PACKS[i], Logger.LogSeverity.VERBOSE);
 		_arduinoMaster.WriteLine(">" + SYNC_PACKS[i]);
+		_eventBus.CallDeferred("sync_package_send");
 	}
 
 
-	//==========  START THE CONTROLLER
+
+	//====================  COMMUNICATION CONTROL
 	public void Start(){
 		//>> open serial port to arduino master
 		bool _initialisationSuccessfully = InitializeArduinoMaster();
@@ -218,32 +208,47 @@ public partial class Connector : Node{
 
 		return;
 	}
+	
+	private void Disconnect(){
+		_logger.Log("Closing Port", Logger.LogSeverity.VERBOSE);
+		try{
+			if(_arduinoMaster==null || !_arduinoMaster.IsOpen){
+				_logger.Log("Port is not Open", Logger.LogSeverity.WARNING);
+				return;
+			}	
+
+			_arduinoMaster.Close();
+			_logger.Log("Port Closed", Logger.LogSeverity.VERBOSE);
+		}
+		catch(Exception e){
+			_logger.Log(e.Message, Logger.LogSeverity.ERROR);
+		}
+		return;
+	}
 
 
-	//==========  PROCESS INCOMING DATA
+
+	//====================  PROCESS INCOMING DATA
 	private void ProcessRecievedData(object sender, SerialDataReceivedEventArgs args){
-		Log("==  PROCESSING INPUT  ==");
-		Log("data recieved!");
+		_logger.Log("Data Recieved", Logger.LogSeverity.VERBOSE);
 
 		try{
 			if(_arduinoMaster.BytesToRead<28){
-				Log("but <28 bytes included :(");
+				_logger.Log("Pack Contains <28 Bytes", Logger.LogSeverity.WARNING);
 				return;
 			}
 
 			string data = _arduinoMaster.ReadLine();
-			Log(">>got package: \"" + data + "\"");
+			_logger.Log("Pack READ: " + data, Logger.LogSeverity.VERBOSE);
 
 
 			string[] data_split = data.Split(',');
 			processBuffer(data_split);
 		}
 		catch(Exception e){
-			Log("exception occured: " + e.Message);
-			Log("+1 currupt package");
+			_logger.Log(e.Message, Logger.LogSeverity.WARNING);
 		}
 
-		Log("");
 		return;
 	}
 
@@ -256,234 +261,180 @@ public partial class Connector : Node{
 		// [3] solved
 		// [4] state
 
-		Log("  processing package:");
 		uint transformed_data_0;
 		if(!uint.TryParse(data[0].Substring(1), out transformed_data_0)){
-			Log("  first bit was not understood, returning: " + transformed_data_0);
+			_logger.Log("Ignoring Pack (First Byte not Understood)", Logger.LogSeverity.WARNING);
 			return;
 		}
-		Log("  successfully found substring " + transformed_data_0 + " in "  + data[0]);
 
 		
 		if(transformed_data_0>=11 && transformed_data_0<=17){
-			Log("  laggy connection with node " + (transformed_data_0-10).ToString() + " detected. It was forced to auto-restart");
+			_logger.Log("Laggy Connection with Node " + (transformed_data_0-10).ToString() + " (Auto-Restart is forced)", Logger.LogSeverity.WARNING);
 			return;
 		}
 		else if(transformed_data_0>=70 && transformed_data_0<=120){
-			Log("  master Node set the Network channel to " + transformed_data_0.ToString());
-			//Session.NetChannel = (int)output;
+			_logger.Log("Network Channel set to " + transformed_data_0.ToString(), Logger.LogSeverity.WARNING);
 			return;
 		}
 		else if(transformed_data_0==1){
 			// Session.SerialConnectionInitialized = true;
-			Log("  master node requested Sync.");
+			_logger.Log("Master Node Requested Sync", Logger.LogSeverity.VERBOSE);
 			if(syncing){
-				Log("  already syncing.");
+				_logger.Log("Already Syncing", Logger.LogSeverity.WARNING);
 				return;
 			}
-			Log("  starting syncing.");
 			syncing = true;
 			
 			for(int i=0; i<7; i++){
-				Log(">>>SYNC " + i);
 				if(timer_sync_packages.TimeLeft<=0.0){
-					timer_sync_packages.CallDeferred("start", SYNC_PACK_DELAY);
+					timer_sync_packages.CallDeferred("start", SYNC_PACK_DOWNTIME);
 				}
-				Log("  SYNC waiting started (1 second)");
 				while(timer_sync_packages.TimeLeft>0){}
-				Log("  SEND SYNC " + i);
 				SendSyncPackage(i);
 			}
 			
 			return;
 		}
-		else if(transformed_data_0==2){
-			// Session.SerialConnectionInitialized = true;
-			Log("  master node reported netself-repairs.");
-			return;
-		}
-		else if(transformed_data_0==3){
-			Log("  master node reported netself-repairs (lag detected and cleaned).");
+		else if(transformed_data_0==2 || transformed_data_0==3){
+			_logger.Log("Master Node Netself-Rapair", Logger.LogSeverity.WARNING);
 			return;
 		}
 		else if(transformed_data_0==4){
-			Log("  master node reported recieved a network reset request.");
+			_logger.Log("Master Node Recieved a Network Reset Request", Logger.LogSeverity.WARNING);
 			return;
 		}
 		else if(transformed_data_0==5){
-			Log("  master node reported node resync.");
+			_logger.Log("Master Node Resynced Node", Logger.LogSeverity.WARNING);
 			return;  
 		}
 		else if(transformed_data_0==6){
-			Log("  master node reported that sync was successful.");
+			_logger.Log("Master Node Sync Successful", Logger.LogSeverity.VERBOSE);
+			_eventBus.CallDeferred("sync_successful");
 			return;
 		}
 		else if(transformed_data_0==7){
-			Log("  master node reported that sync failed.");
-			Log("  try again...");
+			_logger.Log("Master Node Sync Failed", Logger.LogSeverity.WARNING);
+			_logger.Log("trying again", Logger.LogSeverity.WARNING);
 			
 			for(int i=0; i<7; i++){
-				Log(">>>SYNC " + i);
 				if(timer_sync_packages.TimeLeft<=0.0){
-					timer_sync_packages.CallDeferred("start", SYNC_PACK_DELAY);
+					timer_sync_packages.CallDeferred("start", SYNC_PACK_DOWNTIME);
 				}
-				Log("  SYNC waiting started (1 second)");
 				while(timer_sync_packages.TimeLeft>0){}
-				Log("  SEND SYNC " + i);
 				SendSyncPackage(i);
 			}
 
 			return;
 		}
 		else if(transformed_data_0==8){
-			Log("  master node recieved a reset request.");
+			_logger.Log("Master Node Recieved a Reset Request", Logger.LogSeverity.VERBOSE);
+			return;
+		}
+		else if(transformed_data_0<=3000){
+			_logger.Log("Undefined Behaviour for " + transformed_data_0.ToString(), Logger.LogSeverity.WARNING);
 			return;
 		}
 		else{
-			Log("  something else was requested: " + transformed_data_0);
-		}
+			int index;
 
-		if(transformed_data_0<=3000){
-			Log("  idk what to do with >8 and <=3000");
-			return;
-		}
-		
-		Log("  riddle information! >3000");
-		int index;
+			int DrinksPing = -1;
+			int DrinksSolved = -1;
+			int DrinksState = -1;
+			int StopptanzPing = -1;
+			int StopptanzSolved = -1;
+			int StopptanzState = -1;
+			int SparkastenPing = -1;
+			int SparkastenSolved = -1;
+			int SparkastenState = -1;
+			int TelefonPing = -1;
+			int TelefonSolved = -1;
+			int TelefonState = -1;
+			int SexdungeonSolved = -1;
+			int SexdungeonState = -1;
+			int SexdungeonPing = -1;
+			int SchichtplanPing = -1;
+			int SchichtplanSolved = -1;
+			int SchichtplanState = -1;
+			int SepareePing = -1;
+			int SepareeSolved = -1;
+			int SepareeState = -1;
 
-		int DrinksPing = -1;
-		int DrinksSolved = -1;
-		int DrinksState = -1;
-		int StopptanzPing = -1;
-		int StopptanzSolved = -1;
-		int StopptanzState = -1;
-		int SparkastenPing = -1;
-		int SparkastenSolved = -1;
-		int SparkastenState = -1;
-		int TelefonPing = -1;
-		int TelefonSolved = -1;
-		int TelefonState = -1;
-		int SexdungeonSolved = -1;
-		int SexdungeonState = -1;
-		int SexdungeonPing = -1;
-		int SchichtplanPing = -1;
-		int SchichtplanSolved = -1;
-		int SchichtplanState = -1;
-		int SepareePing = -1;
-		int SepareeSolved = -1;
-		int SepareeState = -1;
-
-		for(int i=1; i<=4*7; i+=4){
-			index = i/4; //0,1,2,3,4,5,6
-			uint delay = uint.Parse(data[i + 1]);
-			bool newSolved = (float.Parse(data[i + 2]) == 1) ? true : false;
-			int newState = int.Parse(data[i + 3]);
-			Log("    current index: " + index + "-> " + delay + " " + newSolved + " " + newState);
-			switch(index){
-				case 0:
-					Log("    thats Separee!");
-					SepareePing = (int)delay;
-					SepareeSolved = newSolved ? 1 : 0;
-					SepareeState = newState;
-					if(color_index!=-1 && newState==0){
-						ResetPreviousColor();
-					}
-					//if(newState==7){
-					//	SendCommand(COMMANDS.SEPAREE_STOP_OPENING);
-					//}
-					break;
-				case 1:
-					Log("    thats Stoptanz!");
-					StopptanzPing = (int)delay;
-					StopptanzSolved = newSolved ? 1 : 0;
-					StopptanzState = newState;
-					break;
-				case 2:
-					Log("    thats Sparkasten!");
-					SparkastenPing = (int)delay;
-					SparkastenSolved = newSolved ? 1 : 0;
-					SparkastenState = newState;
-					if(newState==3){
-						SendCommand(COMMANDS.SPARKASTEN_STOP_OPENING);
-					}
-					break;
-				case 3:
-					Log("    thats Jukebox!???");
-					break;
-				case 4:
-					Log("    thats Arbeitsplan!");
-					SchichtplanPing = (int)delay;
-					SchichtplanSolved = newSolved ? 1 : 0;
-					SchichtplanState = newState;
-					if(newState==2){
-						SendCommand(COMMANDS.SCHICHTPLAN_STOP_OPENING);
-					}
-					break;
-				case 5:
-					Log("    thats 4 Drinks!");
-					DrinksPing = (int)delay;
-					DrinksSolved = newSolved ? 1 : 0;
-					DrinksState = newState;
-					if(newSolved){
-						SendCommand(COMMANDS.DRINKS_STOP_OPENING);
-					}
-					break;
-				case 6:
-					Log("    thats Telephone!");
-					TelefonPing = (int)delay;
-					TelefonSolved = newSolved ? 1 : 0;
-					TelefonState = newState;
-					if(newState>2){
-						SendCommand(COMMANDS.TELEPHONE_STOP_RINGING);
-					}
-					break;
-				case 7:
-					Log("    thats Sexdungeon!");
-					SexdungeonPing = (int)delay;
-					SexdungeonSolved = newSolved ? 1 : 0;
-					SexdungeonState = newState;
-					break;
-				default:
-					Log("    thats undefined Behaviour!");
-					break;
+			for(int i=1; i<=4*7; i+=4){
+				index = i/4; //0,1,2,3,4,5,6
+				uint delay = uint.Parse(data[i + 1]);
+				bool newSolved = (float.Parse(data[i + 2]) == 1) ? true : false;
+				int newState = int.Parse(data[i + 3]);
+				switch(index){
+					case 0: //Separee
+						SepareePing = (int)delay;
+						SepareeSolved = newSolved ? 1 : 0;
+						SepareeState = newState;
+						if(color_index!=-1 && newState==0){
+							ResetPreviousColor();
+						}
+						//if(newState==7){
+						//	SendCommand(COMMANDS.SEPAREE_STOP_OPENING);
+						//}
+						break;
+					case 1: //Stopptanz
+						StopptanzPing = (int)delay;
+						StopptanzSolved = newSolved ? 1 : 0;
+						StopptanzState = newState;
+						break;
+					case 2: //Sparkasten
+						SparkastenPing = (int)delay;
+						SparkastenSolved = newSolved ? 1 : 0;
+						SparkastenState = newState;
+						if(newState==3){
+							SendCommand(COMMANDS.SPARKASTEN_STOP_OPENING);
+						}
+						break;
+					case 3: //Jukebox
+						break;
+					case 4: //Schichtplan
+						SchichtplanPing = (int)delay;
+						SchichtplanSolved = newSolved ? 1 : 0;
+						SchichtplanState = newState;
+						if(newState==2){
+							SendCommand(COMMANDS.SCHICHTPLAN_STOP_OPENING);
+						}
+						break;
+					case 5: //Drinks
+						DrinksPing = (int)delay;
+						DrinksSolved = newSolved ? 1 : 0;
+						DrinksState = newState;
+						if(newSolved){
+							SendCommand(COMMANDS.DRINKS_STOP_OPENING);
+						}
+						break;
+					case 6: //Telefon
+						TelefonPing = (int)delay;
+						TelefonSolved = newSolved ? 1 : 0;
+						TelefonState = newState;
+						if(newState>2){
+							SendCommand(COMMANDS.TELEPHONE_STOP_RINGING);
+						}
+						break;
+					default: //Undefined
+						_logger.Log("Undefined Behaviour for " + index, Logger.LogSeverity.WARNING);
+						break;
+				}
 			}
-		}
 
-		_globals.CallDeferred("update_riddles", 
-			DrinksPing, DrinksSolved, DrinksState,
-			StopptanzPing, StopptanzSolved, StopptanzState,
-			SparkastenPing, SparkastenSolved, SparkastenState,
-			TelefonPing, TelefonSolved, TelefonState,
-			SexdungeonPing, SexdungeonSolved, SexdungeonState,
-			SchichtplanPing, SchichtplanSolved, SchichtplanState,
-			SepareePing, SepareeSolved, SepareeState
-		);
-		Log("");
+			//update riddles in Godot
+			_eventBus.CallDeferred("update_riddles", 
+				DrinksPing, DrinksSolved, DrinksState,
+				StopptanzPing, StopptanzSolved, StopptanzState,
+				SparkastenPing, SparkastenSolved, SparkastenState,
+				TelefonPing, TelefonSolved, TelefonState,
+				SexdungeonPing, SexdungeonSolved, SexdungeonState,
+				SchichtplanPing, SchichtplanSolved, SchichtplanState,
+				SepareePing, SepareeSolved, SepareeState
+			);
+		}
 	}
 
-
-	private void Disconnect(){
-		Log("==  DISCONNECTING  ==");
-		Log("closing coms");
-		try{
-			if(_arduinoMaster==null || !_arduinoMaster.IsOpen){
-				Log("targeted port not open");
-				return;
-			}	
-
-			_arduinoMaster.Close();
-			Log("target port closed successfully");
-		}
-		catch(Exception e){
-			Log("Expection " + e);
-		}
-		Log("");
-		return;
-	}
-
-
-	private int color_index = -1;
-
+	// if lights go out randomly, reset them to previous color
 	private void ResetPreviousColor(){
 		switch(color_index){
 			case 0:
@@ -496,13 +447,15 @@ public partial class Connector : Node{
 				SendCommand(COMMANDS.SEPAREE_BLAU);
 				break;
 			default:
-				Log("    thats also undefined Behaviour!");
+				_logger.Log("Undefined Separee Color " + color_index, Logger.LogSeverity.WARNING);
 				break;
 				
 			}
 	}
 
-	//==========  BUTTONS
+
+
+	//====================  BUTTONS
 	public void DinksSolve(){SendCommand(COMMANDS.DRINKS_SOLVE);}
 	public void StopptanzInit(){SendCommand(COMMANDS.STOPPTANZ_INITIALIZE);}
 	public void StopptanzDance(){SendCommand(COMMANDS.STOPPTANZ_DANCE);}
@@ -510,11 +463,12 @@ public partial class Connector : Node{
 
 	public async void StopptanzSolve(){
 		SendCommand(COMMANDS.STOPPTANZ_SOLVE);
-    	await ToSignal(GetTree().CreateTimer(1), "timeout");
+    	await ToSignal(GetTree().CreateTimer(OPEN_SPARKASTEN_AFTER_STOPPTANZ_DELAY), "timeout");
 		SendCommand(COMMANDS.SPARKASTEN_OPEN);
 	}
 
 	public void SparkastenOpen(){SendCommand(COMMANDS.SPARKASTEN_OPEN);}
+	public void TelefonRing(){SendCommand(COMMANDS.TELEFON_RING);}
 	public void WasserhahnEnable(){SendCommand(COMMANDS.WASSERHAHN_ENABLE);}
 	public void WasserhahnOpen(){SendCommand(COMMANDS.SEXDUNGEON_OPEN);}
 	public void SchichtplanOpen(){SendCommand(COMMANDS.SCHICHTPLAN_OPEN);}
@@ -533,7 +487,16 @@ public partial class Connector : Node{
 	}
 	public void SepareeWhite(){SendCommand(COMMANDS.SEPAREE_WHITE);}
 	public async void SepareeOpen(){
-    	await ToSignal(GetTree().CreateTimer(10), "timeout");
+    	await ToSignal(GetTree().CreateTimer(OPEN_DOOR_AFTER_GAME_FINISH), "timeout");
 		SendCommand(COMMANDS.SEPAREE_OPEN);
+	}
+
+	public void SystemSoftReset(){
+		_logger.Log("Requst Soft Reset!", Logger.LogSeverity.WARNING);
+		SendCommand(COMMANDS.SYSTEM_SOFT_RESET);
+	}
+	public void SystemHardReset(){
+		_logger.Log("Requst Hard Reset!", Logger.LogSeverity.WARNING);
+		SendCommand(COMMANDS.SYSTEM_HARD_RESET);
 	}
 }

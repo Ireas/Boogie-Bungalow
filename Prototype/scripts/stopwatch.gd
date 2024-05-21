@@ -8,10 +8,9 @@ var minutes : int
 var seconds : int
 
 func _ready():
+	EventBus.session_start.connect( func():timer.start())
 	timer.timeout.connect(_add_second)
-
-func start():
-	timer.start()
+	EventBus.session_finish.connect( func():timer.stop() )
 
 func _add_second():
 	seconds+= 1

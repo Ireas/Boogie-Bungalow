@@ -3,8 +3,8 @@
 [ext_resource type="Script" path="res://modules/game_delayer/game_delayer.gd" id="1_7a05y"]
 
 [node name="GameDelayer" type="MarginContainer" node_paths=PackedStringArray("current_delay_label")]
-offset_right = 218.0
-offset_bottom = 120.0
+offset_right = 181.0
+offset_bottom = 73.0
 script = ExtResource("1_7a05y")
 current_delay_label = NodePath("VBoxContainer/DelayLabel")
 
@@ -16,53 +16,31 @@ layout_mode = 2
 
 [node name="Title" type="Label" parent="VBoxContainer"]
 layout_mode = 2
-text = "Spielstart-Verzögerung:"
+theme_override_font_sizes/font_size = 12
+text = "Spielstart Countdown"
+horizontal_alignment = 1
 
 [node name="DelayLabel" type="Label" parent="VBoxContainer"]
 layout_mode = 2
-text = "90s"
+text = "01:30"
 horizontal_alignment = 1
-
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
-layout_mode = 2
-alignment = 1
-
-[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer"]
-layout_mode = 2
-text = "60s"
-
-[node name="Button2" type="Button" parent="VBoxContainer/HBoxContainer"]
-layout_mode = 2
-text = "90s"
-
-[node name="Button3" type="Button" parent="VBoxContainer/HBoxContainer"]
-layout_mode = 2
-text = "120s"
-
-[node name="Button4" type="Button" parent="VBoxContainer/HBoxContainer"]
-layout_mode = 2
-text = "150s"
-
-[node name="Button5" type="Button" parent="VBoxContainer/HBoxContainer"]
-layout_mode = 2
-text = "180s"
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer"]
 layout_mode = 2
+theme_override_constants/separation = 10
 alignment = 1
 
-[node name="Button2" type="Button" parent="VBoxContainer/HBoxContainer2"]
+[node name="Decrease" type="Button" parent="VBoxContainer/HBoxContainer2"]
 layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 12
 text = "-10s"
 
-[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer2"]
+[node name="Increase" type="Button" parent="VBoxContainer/HBoxContainer2"]
 layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 12
 text = "+10s"
 
-[connection signal="button_down" from="VBoxContainer/HBoxContainer/Button" to="." method="set_delay" binds= [60]]
-[connection signal="button_down" from="VBoxContainer/HBoxContainer/Button2" to="." method="set_delay" binds= [90]]
-[connection signal="button_down" from="VBoxContainer/HBoxContainer/Button3" to="." method="set_delay" binds= [120]]
-[connection signal="button_down" from="VBoxContainer/HBoxContainer/Button4" to="." method="set_delay" binds= [150]]
-[connection signal="button_down" from="VBoxContainer/HBoxContainer/Button5" to="." method="set_delay" binds= [180]]
-[connection signal="button_down" from="VBoxContainer/HBoxContainer2/Button2" to="." method="increase_delay" binds= [-10]]
-[connection signal="button_down" from="VBoxContainer/HBoxContainer2/Button" to="." method="increase_delay" binds= [10]]
+[connection signal="button_down" from="VBoxContainer/HBoxContainer2/Decrease" to="." method="increase_delay" binds= [-10]]
+[connection signal="button_down" from="VBoxContainer/HBoxContainer2/Increase" to="." method="increase_delay" binds= [10]]

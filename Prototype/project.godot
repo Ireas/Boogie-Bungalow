@@ -20,6 +20,8 @@ boot_splash/fullsize=false
 [autoload]
 
 Globals="*res://scripts/globals.gd"
+EventBus="*res://scripts/event_bus.gd"
+PopupManager="*res://scripts/popup_manager.gd"
 
 [dotnet]
 

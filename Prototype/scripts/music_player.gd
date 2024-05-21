@@ -1,6 +1,8 @@
 extends AudioStreamPlayer
 class_name MusicPlayer
 
+@export var animator : AnimationPlayer
+
 var DIRECTORY_MUSIC_TRACKS : String = "user://Musik/"
 var DICT_MUSIC_TRACKS : Dictionary = {
 	"atmo1" : "atmo1.mp3",
@@ -12,12 +14,7 @@ var DICT_MUSIC_TRACKS : Dictionary = {
 
 var dict_loaded_music_tracks : Dictionary = {}
 
-
 func _ready():
-	Globals.music_play_track.connect(play_track)
-	Globals.music_pause.connect( func(): stream_paused = true )
-	Globals.music_continue.connect( func(): stream_paused = false )
-
 	if not DirAccess.dir_exists_absolute(DIRECTORY_MUSIC_TRACKS):
 		print("Error: folder \"%s\" not found"%[DIRECTORY_MUSIC_TRACKS])
 	
@@ -33,11 +30,21 @@ func _ready():
 		dict_loaded_music_tracks[track_name] = mp3_file
 		print("Verbose: music track \"%s\" found"%[track_file_name])
 		
+	EventBus.session_start.connect( func(): play_track("atmo1") )
 	
 func play_track(track_name:String):
 	if not track_name in dict_loaded_music_tracks:
 		print("Warning: music track \"%s\" not found"%[track_name])
 		return
 	
-	stream = dict_loaded_music_tracks[track_name]
-	playing = true
+	# if stream is already playing, then skip command
+	if stream!=dict_loaded_music_tracks[track_name]:
+		animator.play("music_fade_in", -1, 0.35)
+		stream = dict_loaded_music_tracks[track_name]
+		playing = true
+
+func pause():
+	stream_paused = true
+
+func unpause():
+	stream_paused = false

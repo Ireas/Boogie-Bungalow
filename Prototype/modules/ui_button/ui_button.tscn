@@ -1,0 +1,74 @@
+[gd_scene load_steps=4 format=3 uid="uid://djrna64nmdkwm"]
+
+[ext_resource type="Script" path="res://modules/ui_button/ui_button.gd" id="1_0sn4c"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0ggp8"]
+bg_color = Color(1, 1, 1, 0.117647)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_olqrg"]
+bg_color = Color(0, 0, 0, 0.235294)
+
+[node name="CustomButton" type="Panel"]
+custom_minimum_size = Vector2(100, 25)
+offset_right = 100.0
+offset_bottom = 70.0
+size_flags_horizontal = 10
+script = ExtResource("1_0sn4c")
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -41.5
+offset_top = -20.0
+offset_right = 41.5
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="PanelContainer"]
+layout_mode = 2
+expand_mode = 2
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 12
+text = "Text"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="HoverOverlay" type="Panel" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_0ggp8")
+
+[node name="DelayOverlay" type="Panel" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_olqrg")
+
+[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]

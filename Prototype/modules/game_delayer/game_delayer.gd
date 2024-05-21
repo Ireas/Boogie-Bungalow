@@ -3,26 +3,28 @@ class_name GameDelayer
 
 @export var current_delay_label : Label
 var locked : bool = false
+var minutes = 0
+var seconds = 0
 
-var current_delay : int = 90 : 
+var current_delay : int = 150 : 
 	get:
 		return current_delay
 	set(value):
 		current_delay = value if value>0 else 0
 		update_ui()
 
-func set_delay(new_delay:int):
-	if locked:
-		return
-	current_delay = new_delay
-
 func increase_delay(delay_increase:int):
 	if locked:
 		return
 	current_delay+= delay_increase
 
+func _ready():
+	update_ui()
+
 func update_ui():
-	current_delay_label.text = str(current_delay) + "s" 
+	minutes = int(current_delay/60)
+	seconds = int(current_delay%60)
+	current_delay_label.text =  "%02d:%02d"%[minutes,seconds]
 	
 func start_countdown():
 	locked = true

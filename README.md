@@ -1,17 +1,10 @@
 # Boogie-Bungalow
 
 
-## Requested Features
-- clean code 
-- improve logging (in/out) -> caching
-- better ack wait and automatic reset
+## Requested Work
+- clean up code
+- better ack wait + automatic reset on fail and stuff
 
-- buttons (steuerung | solve | notfall | ping)
-- delay button presses
+- feedback and help button
 
-- WARNING AND ERROR MESSAGES
-
-- UPDATE INFORMATION SHEET
-
-
-## Licence
+- update information sheet
