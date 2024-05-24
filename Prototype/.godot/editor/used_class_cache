@@ -1,6 +1,0 @@
-res://icon.svg::1714056149::6b889d078fa758143359bc161bfef966::CompressedTexture2D
-res://play_music.gd::1714115026::d5c9c6fcb73c170236f31036b1f86356::GDScript
-res://test.cs::1714057191::a6e132c5fadd1c117fc70e81b2c1dcc0::CSharpScript
-res://test_universe.tscn::1714116580::1597b9b5ec28790109b54e1ef4916c72::PackedScene,StyleBoxFlat,Node,Panel,Button,AudioStreamPlayer
-res://Music/boogie_woogie.mp3::1714114612::6d4c2a2c8ebc9c18bfa061c3dce8a8fa::AudioStreamMP3
-res://Music/september.mp3::1714114484::288f6c6fc7f3c4244b3300aa6ec9d0b3::AudioStreamMP3

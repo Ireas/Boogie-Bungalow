@@ -1,2 +1,0 @@
-﻿40709
-/home/ireas/Godot/GodotSharp.x86_64

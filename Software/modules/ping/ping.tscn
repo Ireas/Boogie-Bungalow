@@ -1,0 +1,47 @@
+[gd_scene load_steps=7 format=3 uid="uid://bquu7rbldubs"]
+
+[ext_resource type="Script" path="res://modules/ping/ping.gd" id="1_6g33w"]
+[ext_resource type="Texture2D" uid="uid://cpyr0r6w0s5hi" path="res://images/connection.svg" id="2_1f67q"]
+[ext_resource type="Texture2D" uid="uid://c7c63ugys66wd" path="res://images/connection_good.svg" id="2_fhelc"]
+[ext_resource type="Texture2D" uid="uid://d0y4fiwnhqn4i" path="res://images/connection_medium.svg" id="3_vn2ab"]
+[ext_resource type="Texture2D" uid="uid://saw6ige8ktpa" path="res://images/connection_bad.svg" id="4_5y6sj"]
+[ext_resource type="Texture2D" uid="uid://dp43s73e87w7r" path="res://images/connection_no_connection.svg" id="5_qv0da"]
+
+[node name="Ping" type="Control" node_paths=PackedStringArray("ping_label", "texture_frame")]
+layout_mode = 3
+anchors_preset = 0
+size_flags_horizontal = 8
+script = ExtResource("1_6g33w")
+ping_label = NodePath("MarginContainer/HBoxContainer/PingLabel")
+texture_frame = NodePath("MarginContainer/HBoxContainer/TextureFrame")
+texture_good = ExtResource("2_fhelc")
+texture_medium = ExtResource("3_vn2ab")
+texture_bad = ExtResource("4_5y6sj")
+texture_no_connection = ExtResource("5_qv0da")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -55.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+alignment = 2
+
+[node name="PingLabel" type="Label" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+theme_override_font_sizes/font_size = 12
+text = "-1"
+horizontal_alignment = 2
+
+[node name="TextureFrame" type="TextureRect" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+texture = ExtResource("2_1f67q")
+expand_mode = 3

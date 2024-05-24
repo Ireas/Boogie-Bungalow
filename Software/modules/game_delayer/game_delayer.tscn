@@ -1,0 +1,46 @@
+[gd_scene load_steps=2 format=3 uid="uid://di58ejc81rp6a"]
+
+[ext_resource type="Script" path="res://modules/game_delayer/game_delayer.gd" id="1_7a05y"]
+
+[node name="GameDelayer" type="MarginContainer" node_paths=PackedStringArray("current_delay_label")]
+offset_right = 181.0
+offset_bottom = 73.0
+script = ExtResource("1_7a05y")
+current_delay_label = NodePath("VBoxContainer/DelayLabel")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Spielstart Countdown"
+horizontal_alignment = 1
+
+[node name="DelayLabel" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "01:30"
+horizontal_alignment = 1
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="Decrease" type="Button" parent="VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 12
+text = "-10s"
+
+[node name="Increase" type="Button" parent="VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 12
+text = "+10s"
+
+[connection signal="button_down" from="VBoxContainer/HBoxContainer2/Decrease" to="." method="increase_delay" binds= [-10]]
+[connection signal="button_down" from="VBoxContainer/HBoxContainer2/Increase" to="." method="increase_delay" binds= [10]]

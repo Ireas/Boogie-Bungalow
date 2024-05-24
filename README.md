@@ -1,10 +1,8 @@
 # Boogie-Bungalow
+Controller-Software for Boogie-Bungalow Escape Room. 
+Software made with Godot v4.2.2
 
 
-## Targeted Features for this Prototype
-- Setup Connection to Master Node 
-- Send custom Package to Master Node
-
-## Planned Features for Future Prototypes
-- 
-
+## Requests
+- fix green light delay bug
+- create new protocol information sheet

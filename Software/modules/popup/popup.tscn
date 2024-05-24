@@ -1,0 +1,89 @@
+[gd_scene load_steps=4 format=3 uid="uid://dlsda06707000"]
+
+[ext_resource type="Script" path="res://modules/popup/popup.gd" id="1_8gjay"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3itq1"]
+bg_color = Color(0.109804, 0.109804, 0.109804, 0.588235)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3bgq4"]
+bg_color = Color(0.0885599, 0.0885599, 0.0885598, 1)
+
+[node name="Popup" type="Panel" node_paths=PackedStringArray("label")]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_3itq1")
+script = ExtResource("1_8gjay")
+label = NodePath("Panel/MarginContainer/VBoxContainer/Label2")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -375.0
+offset_top = -78.0
+offset_right = 375.0
+offset_bottom = 78.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_3bgq4")
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/MarginContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Warnung!"
+horizontal_alignment = 1
+
+[node name="Label2" type="Label" parent="Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Beschreibung"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = 41.0
+offset_bottom = 66.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 80
+alignment = 1
+metadata/_edit_group_ = true
+
+[node name="Cancel" type="Button" parent="Panel/HBoxContainer"]
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 12
+text = "Abbruch"
+
+[node name="Confirm" type="Button" parent="Panel/HBoxContainer"]
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 12
+text = "Fortsetzen"
+
+[connection signal="button_down" from="Panel/HBoxContainer/Cancel" to="." method="cancel"]
+[connection signal="button_down" from="Panel/HBoxContainer/Confirm" to="." method="confirm"]

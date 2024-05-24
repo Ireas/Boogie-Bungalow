@@ -1,0 +1,11 @@
+extends Node
+
+enum Riddle{
+	DRINKS,
+	STOPPTANZ,
+	SPARKASTEN,
+	TELEFON,
+	SEXDUNGEON,
+	SCHICHTPLAN,
+	SEPAREE,
+}
