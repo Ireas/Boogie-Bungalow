@@ -1,0 +1,15 @@
+RichTextLabel
+MarginContainer
+VBoxContainer
+Label
+Window
+Panel
+TextureRect
+Popup
+Button
+HBoxContainer
+AnimationPlayer
+ProgressBar
+ui_button
+CenterContainer
+PanelContainer

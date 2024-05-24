@@ -1,0 +1,40 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+[application]
+
+config/name="Boogie-Bungalow"
+config/version="1"
+run/main_scene="res://boogie_bungalow.tscn"
+config/use_custom_user_dir=true
+config/features=PackedStringArray("4.2", "C#", "GL Compatibility")
+boot_splash/show_image=false
+boot_splash/fullsize=false
+config/icon="res://images/icon.png"
+config/windows_native_icon="res://images/icon_merged.ico"
+
+[autoload]
+
+Globals="*res://scripts/globals.gd"
+EventBus="*res://scripts/event_bus.gd"
+PopupManager="*res://scripts/popup_manager.gd"
+
+[display]
+
+window/size/resizable=false
+
+[dotnet]
+
+project/assembly_name="boogie_bungalow"
+
+[rendering]
+
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
