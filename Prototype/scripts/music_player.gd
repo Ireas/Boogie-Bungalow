@@ -38,13 +38,18 @@ func play_track(track_name:String):
 		return
 	
 	# if stream is already playing, then skip command
-	if stream!=dict_loaded_music_tracks[track_name]:
-		animator.play("music_fade_in", -1, 0.35)
-		stream = dict_loaded_music_tracks[track_name]
-		playing = true
+	if stream==dict_loaded_music_tracks[track_name]:
+		return
+
+	animator.play("music_fade_out", -1, 0.5)
+	await animator.animation_finished
+	stream = dict_loaded_music_tracks[track_name]
+	animator.play("music_fade_in", -1, 0.35)
+	playing = true
 
 func pause():
 	stream_paused = true
 
 func unpause():
+	await get_tree().create_timer(1.5).timeout # artificial delay because green light lags
 	stream_paused = false

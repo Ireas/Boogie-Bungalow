@@ -1,4 +1,4 @@
-[gd_scene load_steps=43 format=3 uid="uid://vwdey52kj1k1"]
+[gd_scene load_steps=45 format=3 uid="uid://vwdey52kj1k1"]
 
 [ext_resource type="Script" path="res://scripts/debug_button.gd" id="1_kmyvi"]
 [ext_resource type="Script" path="res://scripts/stopwatch.gd" id="1_qovry"]
@@ -17,6 +17,7 @@
 [ext_resource type="Script" path="res://scripts/loading_screen.gd" id="12_0qdlo"]
 [ext_resource type="Script" path="res://scripts/riddle_status.gd" id="13_f673l"]
 [ext_resource type="PackedScene" uid="uid://di58ejc81rp6a" path="res://modules/game_delayer/game_delayer.tscn" id="13_ye3ev"]
+[ext_resource type="Texture2D" uid="uid://35e42mieta0n" path="res://images/boogie_bungalow.jpg" id="14_djpgp"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_8kwq1"]
 
@@ -77,11 +78,11 @@ bg_color = Color(0.906734, 0.875297, 0.948961, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lxgkd"]
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_mblws"]
-texture = ExtResource("1_wndni")
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_5umpl"]
+texture = ExtResource("14_djpgp")
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jc62u"]
-bg_color = Color(0.137255, 0.117647, 0.117647, 1)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_v7sj1"]
+bg_color = Color(0, 0, 0, 0.65098)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_og745"]
 bg_color = Color(0.0295066, 0.0295066, 0.0295065, 1)
@@ -218,13 +219,29 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0, 1),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [-20.0, 0.0]
+"values": [-30.0, 0.0]
+}
+
+[sub_resource type="Animation" id="Animation_ekmhg"]
+resource_name = "music_fade_out"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:volume_db")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, -35.0]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_rpdep"]
 _data = {
 "RESET": SubResource("Animation_004xm"),
-"music_fade_in": SubResource("Animation_q070l")
+"music_fade_in": SubResource("Animation_q070l"),
+"music_fade_out": SubResource("Animation_ekmhg")
 }
 
 [node name="Universe" type="Node"]
@@ -271,12 +288,12 @@ grow_horizontal = 2
 grow_vertical = 0
 theme_override_constants/margin_right = 160
 theme_override_constants/margin_bottom = 100
+metadata/_edit_group_ = true
 
 [node name="Controller" type="VBoxContainer" parent="Main/RiddleButtons"]
 layout_mode = 2
 theme_override_constants/separation = 8
 alignment = 2
-metadata/_edit_group_ = true
 
 [node name="Drinks" type="VBoxContainer" parent="Main/RiddleButtons/Controller"]
 layout_mode = 2
@@ -322,7 +339,7 @@ anchor_bottom = 1.0
 offset_right = 260.0
 grow_vertical = 2
 mouse_filter = 2
-theme_override_constants/margin_left = 500
+theme_override_constants/margin_left = 550
 
 [node name="Buttons" type="HBoxContainer" parent="Main/RiddleButtons/Controller/Drinks/Panel/ButtonMargin2"]
 layout_mode = 2
@@ -341,7 +358,7 @@ anchor_bottom = 1.0
 offset_right = 640.0
 grow_vertical = 2
 mouse_filter = 2
-theme_override_constants/margin_left = 650
+theme_override_constants/margin_left = 730
 
 [node name="Buttons" type="HBoxContainer" parent="Main/RiddleButtons/Controller/Drinks/Panel/ButtonMargin3"]
 layout_mode = 2
@@ -427,7 +444,7 @@ anchor_bottom = 1.0
 offset_right = 260.0
 grow_vertical = 2
 mouse_filter = 2
-theme_override_constants/margin_left = 500
+theme_override_constants/margin_left = 550
 
 [node name="Buttons" type="HBoxContainer" parent="Main/RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin2"]
 layout_mode = 2
@@ -448,7 +465,7 @@ offset_right = 640.0
 offset_bottom = 1.0
 grow_vertical = 2
 mouse_filter = 2
-theme_override_constants/margin_left = 650
+theme_override_constants/margin_left = 730
 
 [node name="Buttons" type="HBoxContainer" parent="Main/RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin3"]
 layout_mode = 2
@@ -507,7 +524,7 @@ anchor_bottom = 1.0
 offset_right = 600.0
 grow_vertical = 2
 mouse_filter = 2
-theme_override_constants/margin_left = 500
+theme_override_constants/margin_left = 550
 
 [node name="Buttons" type="HBoxContainer" parent="Main/RiddleButtons/Controller/Sparkkasten/Panel/ButtonMargin2"]
 layout_mode = 2
@@ -519,7 +536,7 @@ anchor_bottom = 1.0
 offset_right = 740.0
 grow_vertical = 2
 mouse_filter = 2
-theme_override_constants/margin_left = 650
+theme_override_constants/margin_left = 730
 
 [node name="Buttons" type="HBoxContainer" parent="Main/RiddleButtons/Controller/Sparkkasten/Panel/ButtonMargin3"]
 layout_mode = 2
@@ -586,13 +603,16 @@ text = "Wasserhahn
 Aktivieren"
 
 [node name="ButtonMargin2" type="MarginContainer" parent="Main/RiddleButtons/Controller/Telefon/Panel"]
-layout_mode = 2
-offset_left = 160.0
-offset_right = 660.0
-offset_bottom = 50.0
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -25.0
+offset_right = 550.0
+offset_bottom = 25.0
 grow_vertical = 2
 mouse_filter = 2
-theme_override_constants/margin_left = 500
+theme_override_constants/margin_left = 550
 
 [node name="Buttons" type="HBoxContainer" parent="Main/RiddleButtons/Controller/Telefon/Panel/ButtonMargin2"]
 layout_mode = 2
@@ -604,17 +624,11 @@ anchor_bottom = 1.0
 offset_right = 844.0
 grow_vertical = 2
 mouse_filter = 2
-theme_override_constants/margin_left = 650
+theme_override_constants/margin_left = 730
 
 [node name="Buttons" type="HBoxContainer" parent="Main/RiddleButtons/Controller/Telefon/Panel/ButtonMargin3"]
 layout_mode = 2
-
-[node name="ButtonTelefonRing" parent="Main/RiddleButtons/Controller/Telefon/Panel/ButtonMargin3/Buttons" instance=ExtResource("7_2ulun")]
-layout_mode = 2
-
-[node name="Label" parent="Main/RiddleButtons/Controller/Telefon/Panel/ButtonMargin3/Buttons/ButtonTelefonRing" index="1"]
-text = "Telefon
-Klingeln"
+size_flags_horizontal = 0
 
 [node name="ButtonSexdungeonOpen2" parent="Main/RiddleButtons/Controller/Telefon/Panel/ButtonMargin3/Buttons" instance=ExtResource("7_2ulun")]
 layout_mode = 2
@@ -677,7 +691,7 @@ anchor_bottom = 1.0
 offset_right = 600.0
 grow_vertical = 2
 mouse_filter = 2
-theme_override_constants/margin_left = 500
+theme_override_constants/margin_left = 550
 
 [node name="Buttons" type="HBoxContainer" parent="Main/RiddleButtons/Controller/Schichtplan/Panel/ButtonMargin2"]
 layout_mode = 2
@@ -696,7 +710,7 @@ anchor_bottom = 1.0
 offset_right = 640.0
 grow_vertical = 2
 mouse_filter = 2
-theme_override_constants/margin_left = 650
+theme_override_constants/margin_left = 730
 
 [node name="Buttons" type="HBoxContainer" parent="Main/RiddleButtons/Controller/Schichtplan/Panel/ButtonMargin3"]
 layout_mode = 2
@@ -800,7 +814,7 @@ anchor_bottom = 1.0
 offset_right = 600.0
 grow_vertical = 2
 mouse_filter = 2
-theme_override_constants/margin_left = 500
+theme_override_constants/margin_left = 550
 
 [node name="Buttons" type="HBoxContainer" parent="Main/RiddleButtons/Controller/Separee/Panel/ButtonMargin2"]
 layout_mode = 2
@@ -820,7 +834,7 @@ offset_right = 740.0
 grow_vertical = 2
 rotation = 0.000377113
 mouse_filter = 2
-theme_override_constants/margin_left = 650
+theme_override_constants/margin_left = 730
 
 [node name="Buttons" type="HBoxContainer" parent="Main/RiddleButtons/Controller/Separee/Panel/ButtonMargin3"]
 layout_mode = 2
@@ -868,27 +882,27 @@ metadata/_edit_group_ = true
 [node name="atmo1" type="Button" parent="Main/ManualMusic"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
-text = "Atmo1 abspielen"
+text = "Atmo1"
 
 [node name="stopptanz" type="Button" parent="Main/ManualMusic"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
-text = "Stopptanz abspielen"
+text = "Stopptanz"
 
 [node name="atmo2" type="Button" parent="Main/ManualMusic"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
-text = "Atmo2 abspielen"
+text = "Atmo2"
 
 [node name="separee" type="Button" parent="Main/ManualMusic"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
-text = "Separee abspielen"
+text = "Separee"
 
 [node name="finale" type="Button" parent="Main/ManualMusic"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 12
-text = "Finale abspielen"
+text = "Finale"
 
 [node name="GameDelayer" parent="Main" instance=ExtResource("13_ye3ev")]
 layout_mode = 0
@@ -1363,7 +1377,7 @@ vertical_alignment = 1
 
 [node name="Timer" type="Timer" parent="Stopwatch"]
 
-[node name="LoadingScreen" type="Panel" parent="." node_paths=PackedStringArray("animator", "progress_bar")]
+[node name="LoadingScreen" type="Panel" parent="." node_paths=PackedStringArray("animator", "progress_bar", "label_connection")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -1373,6 +1387,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_lxgkd")
 script = ExtResource("12_0qdlo")
 animator = NodePath("AnimationPlayer")
 progress_bar = NodePath("Overlay2/ProgressBar")
+label_connection = NodePath("Overlay2/Label")
 
 [node name="Panel" type="Panel" parent="LoadingScreen"]
 layout_mode = 1
@@ -1381,7 +1396,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxTexture_mblws")
+theme_override_styles/panel = SubResource("StyleBoxTexture_5umpl")
 
 [node name="Overlay" type="Panel" parent="LoadingScreen"]
 layout_mode = 1
@@ -1390,6 +1405,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_v7sj1")
 
 [node name="Label" type="Label" parent="LoadingScreen"]
 layout_mode = 1
@@ -1413,7 +1429,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_jc62u")
 
 [node name="ProgressBar" type="ProgressBar" parent="LoadingScreen/Overlay2"]
 layout_mode = 1
@@ -1444,7 +1459,7 @@ offset_bottom = 50.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_font_sizes/font_size = 20
-text = "Verbindung wird hergestellt..."
+text = "System wird synchronisiert..."
 horizontal_alignment = 1
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="LoadingScreen"]
@@ -1540,7 +1555,6 @@ music_player = NodePath("../MusicPlayer")
 [connection signal="on_press" from="Main/RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin2/Buttons/ButtonStopptanzSolve" to="MusicPlayer" method="play_track" binds= ["atmo2"]]
 [connection signal="on_press" from="Main/RiddleButtons/Controller/Sparkkasten/Panel/ButtonMargin3/Buttons/ButtonSparkastenOpen" to="Connector" method="SparkastenOpen"]
 [connection signal="on_press" from="Main/RiddleButtons/Controller/Telefon/Panel/ButtonMargin/Buttons/ButtonWasserhahnEnable" to="Connector" method="WasserhahnEnable"]
-[connection signal="on_press" from="Main/RiddleButtons/Controller/Telefon/Panel/ButtonMargin3/Buttons/ButtonTelefonRing" to="Connector" method="TelefonRing"]
 [connection signal="on_press" from="Main/RiddleButtons/Controller/Telefon/Panel/ButtonMargin3/Buttons/ButtonSexdungeonOpen2" to="Connector" method="WasserhahnOpen"]
 [connection signal="on_press" from="Main/RiddleButtons/Controller/Schichtplan/Panel/ButtonMargin2/Buttons/ButtonSchichtplanOpen" to="Connector" method="SchichtplanOpen"]
 [connection signal="on_press" from="Main/RiddleButtons/Controller/Separee/Panel/ButtonMargin/Buttons/ButtonSepareeRot" to="Connector" method="SepareeRot"]
@@ -1567,7 +1581,7 @@ music_player = NodePath("../MusicPlayer")
 [connection signal="button_down" from="DebugWindow/Back" to="Main/UtilityButtons/VBoxContainer/Debug" method="hide_debug_panel"]
 [connection signal="button_down" from="DebugWindow/Debug/SearchCOMs" to="Connector" method="SearchAllComs"]
 [connection signal="button_down" from="DebugWindow/Debug/DisconnectCOM" to="Connector" method="Disconnect"]
-[connection signal="start_sync" from="LoadingScreen" to="Connector" method="Start"]
+[connection signal="send_sync_request_to_hardware" from="LoadingScreen" to="Connector" method="Start"]
 [connection signal="light_white" from="GameManager" to="Connector" method="SepareeWhite"]
 
 [editable path="Main/RiddleButtons/Controller/Drinks/Panel/ButtonMargin2/Buttons/ButtonDrinksSolve2"]
@@ -1577,7 +1591,6 @@ music_player = NodePath("../MusicPlayer")
 [editable path="Main/RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin2/Buttons/ButtonStopptanzSolve"]
 [editable path="Main/RiddleButtons/Controller/Sparkkasten/Panel/ButtonMargin3/Buttons/ButtonSparkastenOpen"]
 [editable path="Main/RiddleButtons/Controller/Telefon/Panel/ButtonMargin/Buttons/ButtonWasserhahnEnable"]
-[editable path="Main/RiddleButtons/Controller/Telefon/Panel/ButtonMargin3/Buttons/ButtonTelefonRing"]
 [editable path="Main/RiddleButtons/Controller/Telefon/Panel/ButtonMargin3/Buttons/ButtonSexdungeonOpen2"]
 [editable path="Main/RiddleButtons/Controller/Schichtplan/Panel/ButtonMargin2/Buttons/ButtonSchichtplanOpen"]
 [editable path="Main/RiddleButtons/Controller/Separee/Panel/ButtonMargin/Buttons/ButtonSepareeRot"]

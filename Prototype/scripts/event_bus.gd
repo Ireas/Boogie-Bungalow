@@ -9,8 +9,18 @@ signal button_press()
 
 
 # sync updates
+signal sync_start()
 signal sync_package_send()
 signal sync_successful()
+signal sync_restart()
+
+func emit_sync_package_send():
+	sync_package_send.emit()
+func emit_sync_successful():
+	sync_successful.emit()
+func emit_sync_restart():
+	sync_restart.emit()
+
 
 # riddle status update
 signal update_status_drinks(ping:int, solved:int, state:int)

@@ -6,6 +6,13 @@ using System.IO.Ports;
 using System.Reflection;
 
 
+// sopptanz green slow/fail
+// no reset but if rätselstrom is out, test?
+//help buttons same size would be nice
+// and also include helper hlfe and helpfer feedback button lol
+//debug just new fenster with full status
+
+
 public partial class Connector : Node{
 	//====================  GODOT INSPECTOR NODES
 	[Export] public Godot.Timer timer_ack;
@@ -16,7 +23,7 @@ public partial class Connector : Node{
 	//====================  CONSTANTS
 	private const float SYNC_PACK_DOWNTIME = 0.5f;
 	private const float ACK_TIMEOUT_MAX = 20f;
-	private const float OPEN_SPARKASTEN_AFTER_STOPPTANZ_DELAY = 1.5f;
+	private const float OPEN_SPARKASTEN_AFTER_STOPPTANZ_DELAY = 2.5f;
 	private const float OPEN_DOOR_AFTER_GAME_FINISH = 8f;
 	
 	public enum COMMANDS{
@@ -32,6 +39,7 @@ public partial class Connector : Node{
 		SPARKASTEN_OPEN,		
 		SPARKASTEN_STOP_OPENING,
 		TELEFON_RING,
+		TELEPHONE_STOP_RINGING,
 		WASSERHAHN_ENABLE,
 		SEXDUNGEON_OPEN,
 		SCHICHTPLAN_OPEN,
@@ -42,7 +50,6 @@ public partial class Connector : Node{
 		SEPAREE_WHITE,
 		SEPAREE_OPEN,
 		SEPAREE_STOP_OPENING,
-		TELEPHONE_STOP_RINGING,
 	}
 
 	private readonly Dictionary<COMMANDS,string> PACKS = new Dictionary<COMMANDS, string>{
@@ -57,7 +64,8 @@ public partial class Connector : Node{
 		{COMMANDS.STOPPTANZ_SOLVE, 			"02,01,00"},
 		{COMMANDS.SPARKASTEN_OPEN, 			"03,00,01"},
 		{COMMANDS.SPARKASTEN_STOP_OPENING, 	"03,00,00"},
-		{COMMANDS.TELEFON_RING,				"21,00,03"},
+		{COMMANDS.TELEFON_RING,				"21,00,03"}, //unused
+		{COMMANDS.TELEPHONE_STOP_RINGING, 	"21,00,00"}, //unused
 		{COMMANDS.WASSERHAHN_ENABLE,		"05,00,01"},
 		{COMMANDS.SEXDUNGEON_OPEN, 			"05,00,02"},
 		{COMMANDS.SCHICHTPLAN_OPEN, 		"05,00,09"},
@@ -68,7 +76,6 @@ public partial class Connector : Node{
 		{COMMANDS.SEPAREE_WHITE, 			"01,00,06"},
 		{COMMANDS.SEPAREE_OPEN, 			"01,01,09"},
 		{COMMANDS.SEPAREE_STOP_OPENING, 	"01,00,00"},
-		{COMMANDS.TELEPHONE_STOP_RINGING, 	"21,00,00"},
 	}; 
 
 	
@@ -91,7 +98,7 @@ public partial class Connector : Node{
 	private Node _eventBus;
 	private Logger _logger;
 	private int color_index = -1;
-
+	private bool final_sequence_started = false;
 
 
 	//====================  PREPARATION
@@ -186,13 +193,14 @@ public partial class Connector : Node{
 	private void SendSyncPackage(int i){
 		_logger.Log("Sending Command: " + SYNC_PACKS[i], Logger.LogSeverity.VERBOSE);
 		_arduinoMaster.WriteLine(">" + SYNC_PACKS[i]);
-		_eventBus.CallDeferred("sync_package_send");
+		_eventBus.CallDeferred("emit_sync_package_send");
 	}
 
 
 
 	//====================  COMMUNICATION CONTROL
 	public void Start(){
+		_logger.Log("Sart Initialization", Logger.LogSeverity.VERBOSE);
 		//>> open serial port to arduino master
 		bool _initialisationSuccessfully = InitializeArduinoMaster();
 		if(!_initialisationSuccessfully){
@@ -200,6 +208,7 @@ public partial class Connector : Node{
 		}
 
 		//>> synchronise with hardware 
+		_logger.Log("Sart Synchronization", Logger.LogSeverity.VERBOSE);
 		bool _synchroniseSuccesfully = SynchroniseHardware();
 		if(!_synchroniseSuccesfully){
 			return;
@@ -208,6 +217,7 @@ public partial class Connector : Node{
 
 		return;
 	}
+
 	
 	private void Disconnect(){
 		_logger.Log("Closing Port", Logger.LogSeverity.VERBOSE);
@@ -230,16 +240,14 @@ public partial class Connector : Node{
 
 	//====================  PROCESS INCOMING DATA
 	private void ProcessRecievedData(object sender, SerialDataReceivedEventArgs args){
-		_logger.Log("Data Recieved", Logger.LogSeverity.VERBOSE);
-
 		try{
 			if(_arduinoMaster.BytesToRead<28){
-				_logger.Log("Pack Contains <28 Bytes", Logger.LogSeverity.WARNING);
+				//_logger.Log("Pack Contains <28 Bytes", Logger.LogSeverity.WARNING); ignore spam
 				return;
 			}
 
 			string data = _arduinoMaster.ReadLine();
-			_logger.Log("Pack READ: " + data, Logger.LogSeverity.VERBOSE);
+			_logger.Log("Pack Recieved: " + data, Logger.LogSeverity.VERBOSE);
 
 
 			string[] data_split = data.Split(',');
@@ -274,6 +282,7 @@ public partial class Connector : Node{
 		}
 		else if(transformed_data_0>=70 && transformed_data_0<=120){
 			_logger.Log("Network Channel set to " + transformed_data_0.ToString(), Logger.LogSeverity.WARNING);
+			_eventBus.CallDeferred("emit_sync_successful"); //this will be called every time even if 6 is not send
 			return;
 		}
 		else if(transformed_data_0==1){
@@ -309,7 +318,7 @@ public partial class Connector : Node{
 		}
 		else if(transformed_data_0==6){
 			_logger.Log("Master Node Sync Successful", Logger.LogSeverity.VERBOSE);
-			_eventBus.CallDeferred("sync_successful");
+			_eventBus.CallDeferred("emit_sync_successful");
 			return;
 		}
 		else if(transformed_data_0==7){
@@ -385,7 +394,7 @@ public partial class Connector : Node{
 						SparkastenPing = (int)delay;
 						SparkastenSolved = newSolved ? 1 : 0;
 						SparkastenState = newState;
-						if(newState==3){
+						if(newState>0){ //sparkasten is open then reset so it can be opened again
 							SendCommand(COMMANDS.SPARKASTEN_STOP_OPENING);
 						}
 						break;
@@ -395,7 +404,7 @@ public partial class Connector : Node{
 						SchichtplanPing = (int)delay;
 						SchichtplanSolved = newSolved ? 1 : 0;
 						SchichtplanState = newState;
-						if(newState==2){
+						if(newState==9){
 							SendCommand(COMMANDS.SCHICHTPLAN_STOP_OPENING);
 						}
 						break;
@@ -411,9 +420,6 @@ public partial class Connector : Node{
 						TelefonPing = (int)delay;
 						TelefonSolved = newSolved ? 1 : 0;
 						TelefonState = newState;
-						if(newState>2){
-							SendCommand(COMMANDS.TELEPHONE_STOP_RINGING);
-						}
 						break;
 					default: //Undefined
 						_logger.Log("Undefined Behaviour for " + index, Logger.LogSeverity.WARNING);
@@ -436,6 +442,9 @@ public partial class Connector : Node{
 
 	// if lights go out randomly, reset them to previous color
 	private void ResetPreviousColor(){
+		if(final_sequence_started)
+			return;
+		
 		switch(color_index){
 			case 0:
 				SendCommand(COMMANDS.SEPAREE_ROT);
@@ -468,7 +477,6 @@ public partial class Connector : Node{
 	}
 
 	public void SparkastenOpen(){SendCommand(COMMANDS.SPARKASTEN_OPEN);}
-	public void TelefonRing(){SendCommand(COMMANDS.TELEFON_RING);}
 	public void WasserhahnEnable(){SendCommand(COMMANDS.WASSERHAHN_ENABLE);}
 	public void WasserhahnOpen(){SendCommand(COMMANDS.SEXDUNGEON_OPEN);}
 	public void SchichtplanOpen(){SendCommand(COMMANDS.SCHICHTPLAN_OPEN);}
@@ -487,7 +495,9 @@ public partial class Connector : Node{
 	}
 	public void SepareeWhite(){SendCommand(COMMANDS.SEPAREE_WHITE);}
 	public async void SepareeOpen(){
-    	await ToSignal(GetTree().CreateTimer(OPEN_DOOR_AFTER_GAME_FINISH), "timeout");
+		ResetPreviousColor();
+		final_sequence_started = true;
+		await ToSignal(GetTree().CreateTimer(OPEN_DOOR_AFTER_GAME_FINISH), "timeout");
 		SendCommand(COMMANDS.SEPAREE_OPEN);
 	}
 
