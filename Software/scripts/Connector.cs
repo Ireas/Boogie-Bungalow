@@ -331,6 +331,7 @@ public partial class Connector : Node{
 		}
 		else if(transformed_data_0==6){ // this is not recieved after every successful sync time
 			_logger.Log("Master Node Sync Successful", Logger.LogSeverity.VERBOSE);
+			_eventBus.CallDeferred("emit_sync_successful");
 			return;
 		}
 		else if(transformed_data_0==7){
