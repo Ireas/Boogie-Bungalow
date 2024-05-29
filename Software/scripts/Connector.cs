@@ -187,20 +187,30 @@ public partial class Connector : Node{
 	{
 		_logger.Log("Waiting for Master ACK", Logger.LogSeverity.VERBOSE);
 		bool _ackRecieved = false;
+
 		try
 		{
 			SendCommand(COMMANDS.SYSTEM_INITIALIZE);
 
 			_logger.Log("While Loop for ACK started", Logger.LogSeverity.VERBOSE);
-			timer_ack.Start(ACK_TIMEOUT_MAX);
+			
 
-			while(!_ackRecieved && timer_ack.TimeLeft>0)
+			timer_ack.CallDeferred("start", 0.2);
+			
+			for(int i=0; i<15; i++)
 			{
+				if(timer_ack.TimeLeft<=0.0){
+					timer_ack.CallDeferred("start", 0.2);
+				}
+				while(timer_ack.TimeLeft>0){}
+
+				_logger.Log("Check ACK!", Logger.LogSeverity.VERBOSE);
 				if(_arduinoMaster.BytesToRead>0 && _arduinoMaster.ReadChar()==56)
 				{
 					_logger.Log("ACK Revieced!", Logger.LogSeverity.VERBOSE);
 					_ackRecieved = true;
 					_arduinoMaster.DataReceived+= ProcessRecievedData;
+					break;
 				}
 			}
 		}
