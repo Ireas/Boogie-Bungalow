@@ -1,25 +1,31 @@
-extends Node
+extends Control
 class_name Stopwatch
 
-@export var label : Label
-@export var timer : Timer
-var hours : int
-var minutes : int
-var seconds : int
+# EXPORT
+@export var duration_label : Label
+
+# VARIABLES
+var stop : bool = false
+
 
 func _ready():
-	EventBus.session_start.connect( func():timer.start())
-	timer.timeout.connect(_add_second)
-	EventBus.session_finish.connect( func():timer.stop() )
+	GameManager.new_game_session_started.connect(setup)
+	GameManager.game_session_started.connect(start)
 
-func _add_second():
-	seconds+= 1
-	
-	if(seconds==60):
-		minutes+= 1
-		seconds-= 60
-	if(minutes==60):
-		hours+= 1
-		minutes-= 60
-	
-	label.text = "%02d:%02d:%02d"%[hours,minutes,seconds]
+func setup():
+	GameManager.session.game_duration_changed.connect(update_ui)
+	GameManager.game_session_finished.connect( func(): stop = true )
+	update_ui()
+
+func update_ui():
+	var hours : int = GameManager.session.game_duration/3600
+	var minutes : int = GameManager.session.game_duration/60 - hours * 60
+	var seconds : int = GameManager.session.game_duration%60
+	duration_label.text = "%02d:%02d:%02d"%[hours,minutes,seconds]
+
+func start():
+	while GameManager.session.game_duration<7200: # 2h max
+		await get_tree().create_timer(1).timeout
+		if stop:
+			return
+		GameManager.session.game_duration+= 1

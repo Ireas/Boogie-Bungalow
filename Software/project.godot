@@ -25,10 +25,7 @@ config/windows_native_icon="res://images/icon_merged.ico"
 Globals="*res://scripts/globals.gd"
 EventBus="*res://scripts/event_bus.gd"
 PopupManager="*res://scripts/popup_manager.gd"
-
-[display]
-
-window/size/resizable=false
+GameManager="*res://scripts/game_manager.gd"
 
 [dotnet]
 

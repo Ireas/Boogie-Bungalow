@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 
-// Logger writes messages to local file and Godots Console if needed.  
+// Logger writes messages to local file and Godots Console.  
 public class Logger{
     //====================  CONSTANTS
     public enum LogSeverity{
@@ -15,22 +15,13 @@ public class Logger{
         ERROR,
     }
 
-    private int _amountLogHistorySets = 9; // Stores a set of three log files per session
+    private int NUMBER_OF_LOGS_SAVED = 5; // number of previous sessions which are saved until override
 
-    // store logfile as application data (Windows: %Appdata%/Roaming/Boogie-Bungalow)
-	string PATH_LOGFILE_VERBOSE = Path.Combine(
+    // store logfile in application data folder (Windows: %Appdata%/Roaming/Boogie-Bungalow)
+	string PATH_LOGFILE = Path.Combine(
 		System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData), 
-		"Boogie-Bungalow/logfile_verbose_"
+		"Boogie-Bungalow/log_"
 	);
-    string PATH_LOGFILE_WARNING = Path.Combine(
-		System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData), 
-		"Boogie-Bungalow/logfile_warning_"
-	);
-    string PATH_LOGFILE_ERROR = Path.Combine(
-		System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData), 
-		"Boogie-Bungalow/logfile_error_"
-	);
-
 
 
     //====================  VARIABLES
@@ -40,39 +31,44 @@ public class Logger{
 
 
     //====================  CONSTRUCTOR
-    public Logger(){
-        //rename every logfile and override the oldest one
-        for(int i=_amountLogHistorySets-1; i>=0; i--){
-            try{
-                File.Move(PATH_LOGFILE_VERBOSE + i + ".txt", PATH_LOGFILE_VERBOSE + (i+1) + ".txt", true);
-                File.Move(PATH_LOGFILE_WARNING + i + ".txt", PATH_LOGFILE_WARNING + (i+1) + ".txt", true);
-                File.Move(PATH_LOGFILE_ERROR + i + ".txt", PATH_LOGFILE_ERROR + (i+1) + ".txt", true);
+    public Logger()
+    {
+        // rename every logfile and override the oldest one
+        for(int i=NUMBER_OF_LOGS_SAVED-1; i>=0; i--)
+        {
+            try
+            {
+                File.Move(PATH_LOGFILE+i+".txt", PATH_LOGFILE+(i+1)+".txt", true);
             }
-            catch(Exception _){} //ignore errors if file does not exist yet
+            catch(Exception _){} // ignore errors if file does not exist yet
         }
 
-        // add date and time to all files
-        File.AppendAllText(PATH_LOGFILE_VERBOSE+"0.txt", DateTime.Now.ToString()+"\n");
-		File.AppendAllText(PATH_LOGFILE_WARNING+"0.txt", DateTime.Now.ToString()+"\n");
-		File.AppendAllText(PATH_LOGFILE_ERROR+"0.txt", DateTime.Now.ToString()+"\n");
+        // create new Logfile and add date and time to new files
+        File.AppendAllText(PATH_LOGFILE+"0.txt", DateTime.Now.ToString()+"\n");
     }
 
 
 
     //====================  LOGGING
-    // Log a message directly or store in temporary buffer to negate conflicts
-    public void Log(string message, LogSeverity severity){
-        if(!busy){
-            WriteToFile( (message,severity) );
+    // log a message directly or store in temporary buffer to negate conflicts
+    public void Log(string message, LogSeverity severity)
+    {
+        if(!busy)
+        {
+            WriteToFile( (message, severity) );
         }
-        else{
+        else
+        {
             _buffer.Enqueue( (message, severity) );
         }
     }
 
+
     // format the string depending on severity to make debugging easier
-    private string _formatString(string message, LogSeverity severity){
-        switch(severity){
+    private string _formatString(string message, LogSeverity severity)
+    {
+        switch(severity)
+        {
             case(LogSeverity.VERBOSE):
 		        message = "  >[V]: "+ message;
                 break;
@@ -89,8 +85,10 @@ public class Logger{
         return message;
     }
 
+
     // write formatted string to file and search for next entry
-    private void WriteToFile((string,LogSeverity) input){
+    private void WriteToFile((string,LogSeverity) input)
+    {
         busy = true;
 
         // format message nicely
@@ -100,28 +98,15 @@ public class Logger{
         GD.Print(message);
 
         // write to local file
-        switch(input.Item2){
-            case(LogSeverity.VERBOSE):
-		        File.AppendAllText(PATH_LOGFILE_VERBOSE+"0.txt", message +"\n");
-                break;
-            case(LogSeverity.WARNING):
-		        File.AppendAllText(PATH_LOGFILE_VERBOSE+"0.txt", message +"\n");
-		        File.AppendAllText(PATH_LOGFILE_WARNING+"0.txt", message +"\n");
-                break;
-            case(LogSeverity.ERROR):
-		        File.AppendAllText(PATH_LOGFILE_VERBOSE+"0.txt", message +"\n");
-		        File.AppendAllText(PATH_LOGFILE_WARNING+"0.txt", message +"\n");
-		        File.AppendAllText(PATH_LOGFILE_ERROR+"0.txt", message +"\n");
-                break;
-            default:
-                break;
-        }
+	    File.AppendAllText(PATH_LOGFILE+"0.txt", message +"\n");
 
         // search for next message in buffer
-        if(_buffer.Any()){
+        if(_buffer.Any())
+        {
             WriteToFile(_buffer.Dequeue());
         }
-        else{
+        else
+        {
             busy = false;
         }
     }

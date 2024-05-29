@@ -1,61 +1,58 @@
 extends Node
+class_name LoadingScreen
 
+# EXPORTS
 @export var animator : AnimationPlayer
-@export var background_frame : TextureRect
+@export var background : TextureRect
 @export var progress_bar : ProgressBar
-@export var label_connection : Label
-@export var skip_sync : bool = false
+@export var message_label : Label
 @export var loading_screens : Array[Texture2D]
 
-
+# VARIABLES
 var disabled : bool = false
-var block_finish : bool = false
+var is_fading_out : bool = false
 
-signal send_sync_request_to_hardware()
+# SIGNALS
+signal loading_screen_clicked
 
-func _ready():
-	if skip_sync:
-		queue_free()
-		return
-	
-	# choose a random loading screen backgrond image
+
+func _ready():	
+	_set_random_texture()
+
+
+func set_message(message:String):
+	message_label.text = message
+
+func set_percentage(percentage:float):
+	progress_bar.value = percentage
+
+
+# choose a random loading screen backgrond image
+func _set_random_texture():
 	var selected_texture : Texture2D = loading_screens[RandomNumberGenerator.new().randi_range(0,loading_screens.size()-1)] 
-	background_frame.texture = selected_texture
-	
-	EventBus.sync_package_send.connect( func(): progress_bar.value+= 1 )
-	EventBus.sync_successful.connect( finish_connecting )
-	EventBus.sync_restart.connect( restart_connecting )
-	EventBus.ack_timeout.connect( hint_electricity )
+	background.texture = selected_texture
 
+
+# detect mouse click by user
 func _input(event):
 	if disabled:
 		return
 	
+	# if user presses left mouse click
 	if event is InputEventMouseButton and event.button_index==1:
 		disabled = true
 		animator.play("fade_in")
-		EventBus.sync_start.emit()
-		send_sync_request_to_hardware.emit()
-	
+		loading_screen_clicked.emit()
 
-func finish_connecting():
-	if block_finish:
+# remove loading screen with cool fade out effect
+func delete():
+	if is_fading_out:
 		return
 		
-	block_finish = true
+	is_fading_out = true
 	progress_bar.value = progress_bar.max_value
 	animator.play("fade_out")
 	await animator.animation_finished
 	
 	queue_free()
-
-func hint_electricity():
-	label_connection.text = "Hardware reagiert nicht. Ist der Rätselstrom angeschalten?"
-
-func restart_connecting():
-	if block_finish:
-		return
-		
-	progress_bar.value = 0
-	label_connection.text = "Synchronisation fehlgeschlagen. Erneuter Versuch..."
 	

@@ -1,0 +1,234 @@
+[gd_scene load_steps=17 format=3 uid="uid://srpxcnl8cxwk"]
+
+[ext_resource type="Script" path="res://scripts/loading_screen.gd" id="1_sp5gl"]
+[ext_resource type="Texture2D" uid="uid://bjlfmpvwjq10c" path="res://images/loading_screen_01.png" id="2_wi24c"]
+[ext_resource type="Texture2D" uid="uid://bk7fk38eb7f7e" path="res://images/loading_screen_02.png" id="3_ag0u0"]
+[ext_resource type="Texture2D" uid="uid://bktac3mllw5ra" path="res://images/loading_screen_03.png" id="4_udxvx"]
+[ext_resource type="Texture2D" uid="uid://diy4rhalchhvg" path="res://images/loading_screen_04.png" id="5_8op17"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lxgkd"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_v7sj1"]
+bg_color = Color(0, 0, 0, 0.65098)
+
+[sub_resource type="Gradient" id="Gradient_evydj"]
+offsets = PackedFloat32Array(0, 0.4, 0.6, 1)
+colors = PackedColorArray(0, 0, 0, 0, 0, 0, 0, 0.784314, 0, 0, 0, 0.784314, 0, 0, 0, 0)
+metadata/_snap_enabled = true
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_8g8ih"]
+gradient = SubResource("Gradient_evydj")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_0xk4h"]
+texture = SubResource("GradientTexture1D_8g8ih")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_og745"]
+bg_color = Color(0.0295066, 0.0295066, 0.0295065, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_stfll"]
+bg_color = Color(0.408164, 0.377124, 0.545558, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="Animation" id="Animation_xiwco"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Overlay2:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("InitialLabel:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_nn8iy"]
+resource_name = "fade_in"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Overlay2:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("InitialLabel:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_2w7t5"]
+resource_name = "fade_out"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_hjhhg"]
+_data = {
+"RESET": SubResource("Animation_xiwco"),
+"fade_in": SubResource("Animation_nn8iy"),
+"fade_out": SubResource("Animation_2w7t5")
+}
+
+[node name="LoadingScreen" type="Panel" node_paths=PackedStringArray("animator", "background", "progress_bar", "message_label")]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_lxgkd")
+script = ExtResource("1_sp5gl")
+animator = NodePath("AnimationPlayer")
+background = NodePath("Background")
+progress_bar = NodePath("Overlay2/ProgressBar")
+message_label = NodePath("Overlay2/MessageLabel")
+loading_screens = Array[Texture2D]([ExtResource("2_wi24c"), ExtResource("3_ag0u0"), ExtResource("4_udxvx"), ExtResource("5_8op17")])
+
+[node name="Background" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_wi24c")
+expand_mode = 5
+stretch_mode = 5
+
+[node name="Overlay" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_v7sj1")
+
+[node name="Panel" type="Panel" parent="."]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = 1152.0
+offset_top = -96.0
+offset_right = 200.0
+offset_bottom = 1056.0
+grow_horizontal = 2
+grow_vertical = 2
+rotation = 1.57079
+theme_override_styles/panel = SubResource("StyleBoxTexture_0xk4h")
+
+[node name="InitialLabel" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -21.0
+offset_bottom = 21.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 30
+text = "Klicken um Verbindung herzustellen"
+horizontal_alignment = 1
+
+[node name="Overlay2" type="Panel" parent="."]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ProgressBar" type="ProgressBar" parent="Overlay2"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -230.0
+offset_top = -8.0
+offset_right = 231.0
+offset_bottom = 8.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_og745")
+theme_override_styles/fill = SubResource("StyleBoxFlat_stfll")
+show_percentage = false
+
+[node name="MessageLabel" type="Label" parent="Overlay2"]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = 8.0
+offset_bottom = 50.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 14
+text = "Message"
+horizontal_alignment = 1
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_hjhhg")
+}

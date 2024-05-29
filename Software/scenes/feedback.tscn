@@ -1,0 +1,54 @@
+[gd_scene format=3 uid="uid://bp2vttdv1s8n5"]
+
+[node name="Feedback" type="Window"]
+title = "Feedback"
+initial_position = 1
+size = Vector2i(400, 160)
+visible = false
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "Du hast Feedback, Wünsche oder Fragen?"
+horizontal_alignment = 1
+
+[node name="RichTextLabel" type="RichTextLabel" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/normal_font_size = 11
+bbcode_enabled = true
+text = "Schreib mir [color=violet]@Ireas[/color] gerne direkt über Slack oder Whatsapp!
+"
+fit_content = true
+scroll_active = false
+
+[node name="Label3" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "Ich freue mich über neue Ideen, Verbesserungsvorschläge und Hinweise, was aktuell noch nicht so gut läuft :)"
+autowrap_mode = 3
+
+[node name="RichTextLabel2" type="RichTextLabel" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/normal_font_size = 11
+bbcode_enabled = true
+text = "HINWEIS: Das [color=red]grüne Stopptanzlicht[/color] (und auch die Musik) sind aktuell ca. [color=red]2s verzögert[/color]. Ich arbeite daran, da eine Lösung zu finden!  "
+fit_content = true
+scroll_active = false
+
+[connection signal="close_requested" from="." to="." method="hide"]

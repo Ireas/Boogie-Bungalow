@@ -1,0 +1,312 @@
+[gd_scene load_steps=2 format=3 uid="uid://ckre735enmpg5"]
+
+[ext_resource type="Script" path="res://scripts/riddle_status.gd" id="1_u6dwr"]
+
+[node name="Debug" type="Window"]
+title = "Debug"
+initial_position = 1
+size = Vector2i(330, 170)
+visible = false
+always_on_top = true
+popup_window = true
+
+[node name="RiddleStatus" type="MarginContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_group_ = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="RiddleStatus"]
+layout_mode = 2
+alignment = 1
+
+[node name="Explainer" type="PanelContainer" parent="RiddleStatus/VBoxContainer"]
+layout_mode = 2
+
+[node name="MarginContainer2" type="MarginContainer" parent="RiddleStatus/VBoxContainer/Explainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 100
+
+[node name="Ping" type="Label" parent="RiddleStatus/VBoxContainer/Explainer/MarginContainer2"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "Ping"
+
+[node name="MarginContainer3" type="MarginContainer" parent="RiddleStatus/VBoxContainer/Explainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 200
+
+[node name="Solved" type="Label" parent="RiddleStatus/VBoxContainer/Explainer/MarginContainer3"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "Solved"
+
+[node name="MarginContainer4" type="MarginContainer" parent="RiddleStatus/VBoxContainer/Explainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 250
+
+[node name="State" type="Label" parent="RiddleStatus/VBoxContainer/Explainer/MarginContainer4"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "State"
+
+[node name="Drinks" type="PanelContainer" parent="RiddleStatus/VBoxContainer" node_paths=PackedStringArray("ping_label", "solved_label", "state_label")]
+layout_mode = 2
+script = ExtResource("1_u6dwr")
+ping_label = NodePath("MarginContainer2/Ping")
+solved_label = NodePath("MarginContainer3/Solved")
+state_label = NodePath("MarginContainer4/State")
+
+[node name="MarginContainer" type="MarginContainer" parent="RiddleStatus/VBoxContainer/Drinks"]
+layout_mode = 2
+
+[node name="Name" type="Label" parent="RiddleStatus/VBoxContainer/Drinks/MarginContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "Drinks"
+
+[node name="MarginContainer2" type="MarginContainer" parent="RiddleStatus/VBoxContainer/Drinks"]
+layout_mode = 2
+theme_override_constants/margin_left = 100
+
+[node name="Ping" type="Label" parent="RiddleStatus/VBoxContainer/Drinks/MarginContainer2"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "0000"
+
+[node name="MarginContainer3" type="MarginContainer" parent="RiddleStatus/VBoxContainer/Drinks"]
+layout_mode = 2
+theme_override_constants/margin_left = 200
+
+[node name="Solved" type="Label" parent="RiddleStatus/VBoxContainer/Drinks/MarginContainer3"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "True"
+
+[node name="MarginContainer4" type="MarginContainer" parent="RiddleStatus/VBoxContainer/Drinks"]
+layout_mode = 2
+theme_override_constants/margin_left = 250
+
+[node name="State" type="Label" parent="RiddleStatus/VBoxContainer/Drinks/MarginContainer4"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "00"
+
+[node name="Stopptanz" type="PanelContainer" parent="RiddleStatus/VBoxContainer" node_paths=PackedStringArray("ping_label", "solved_label", "state_label")]
+layout_mode = 2
+script = ExtResource("1_u6dwr")
+riddle = 1
+ping_label = NodePath("MarginContainer2/Ping")
+solved_label = NodePath("MarginContainer3/Solved")
+state_label = NodePath("MarginContainer4/State")
+
+[node name="MarginContainer" type="MarginContainer" parent="RiddleStatus/VBoxContainer/Stopptanz"]
+layout_mode = 2
+
+[node name="Name" type="Label" parent="RiddleStatus/VBoxContainer/Stopptanz/MarginContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "Stopptanz"
+
+[node name="MarginContainer2" type="MarginContainer" parent="RiddleStatus/VBoxContainer/Stopptanz"]
+layout_mode = 2
+theme_override_constants/margin_left = 100
+
+[node name="Ping" type="Label" parent="RiddleStatus/VBoxContainer/Stopptanz/MarginContainer2"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "0000"
+
+[node name="MarginContainer3" type="MarginContainer" parent="RiddleStatus/VBoxContainer/Stopptanz"]
+layout_mode = 2
+theme_override_constants/margin_left = 200
+
+[node name="Solved" type="Label" parent="RiddleStatus/VBoxContainer/Stopptanz/MarginContainer3"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "True"
+
+[node name="MarginContainer4" type="MarginContainer" parent="RiddleStatus/VBoxContainer/Stopptanz"]
+layout_mode = 2
+theme_override_constants/margin_left = 250
+
+[node name="State" type="Label" parent="RiddleStatus/VBoxContainer/Stopptanz/MarginContainer4"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "00"
+
+[node name="Sparkasten" type="PanelContainer" parent="RiddleStatus/VBoxContainer" node_paths=PackedStringArray("ping_label", "solved_label", "state_label")]
+layout_mode = 2
+script = ExtResource("1_u6dwr")
+riddle = 2
+ping_label = NodePath("MarginContainer2/Ping")
+solved_label = NodePath("MarginContainer3/Solved")
+state_label = NodePath("MarginContainer4/State")
+
+[node name="MarginContainer" type="MarginContainer" parent="RiddleStatus/VBoxContainer/Sparkasten"]
+layout_mode = 2
+
+[node name="Name" type="Label" parent="RiddleStatus/VBoxContainer/Sparkasten/MarginContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "Sparkasten"
+
+[node name="MarginContainer2" type="MarginContainer" parent="RiddleStatus/VBoxContainer/Sparkasten"]
+layout_mode = 2
+theme_override_constants/margin_left = 100
+
+[node name="Ping" type="Label" parent="RiddleStatus/VBoxContainer/Sparkasten/MarginContainer2"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "0000"
+
+[node name="MarginContainer3" type="MarginContainer" parent="RiddleStatus/VBoxContainer/Sparkasten"]
+layout_mode = 2
+theme_override_constants/margin_left = 200
+
+[node name="Solved" type="Label" parent="RiddleStatus/VBoxContainer/Sparkasten/MarginContainer3"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "True"
+
+[node name="MarginContainer4" type="MarginContainer" parent="RiddleStatus/VBoxContainer/Sparkasten"]
+layout_mode = 2
+theme_override_constants/margin_left = 250
+
+[node name="State" type="Label" parent="RiddleStatus/VBoxContainer/Sparkasten/MarginContainer4"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "00"
+
+[node name="Telefon" type="PanelContainer" parent="RiddleStatus/VBoxContainer" node_paths=PackedStringArray("ping_label", "solved_label", "state_label")]
+layout_mode = 2
+script = ExtResource("1_u6dwr")
+riddle = 3
+ping_label = NodePath("MarginContainer2/Ping")
+solved_label = NodePath("MarginContainer3/Solved")
+state_label = NodePath("MarginContainer4/State")
+
+[node name="MarginContainer" type="MarginContainer" parent="RiddleStatus/VBoxContainer/Telefon"]
+layout_mode = 2
+
+[node name="Name" type="Label" parent="RiddleStatus/VBoxContainer/Telefon/MarginContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "Telefon"
+
+[node name="MarginContainer2" type="MarginContainer" parent="RiddleStatus/VBoxContainer/Telefon"]
+layout_mode = 2
+theme_override_constants/margin_left = 100
+
+[node name="Ping" type="Label" parent="RiddleStatus/VBoxContainer/Telefon/MarginContainer2"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "0000"
+
+[node name="MarginContainer3" type="MarginContainer" parent="RiddleStatus/VBoxContainer/Telefon"]
+layout_mode = 2
+theme_override_constants/margin_left = 200
+
+[node name="Solved" type="Label" parent="RiddleStatus/VBoxContainer/Telefon/MarginContainer3"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "True"
+
+[node name="MarginContainer4" type="MarginContainer" parent="RiddleStatus/VBoxContainer/Telefon"]
+layout_mode = 2
+theme_override_constants/margin_left = 250
+
+[node name="State" type="Label" parent="RiddleStatus/VBoxContainer/Telefon/MarginContainer4"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "00"
+
+[node name="Schichtplan" type="PanelContainer" parent="RiddleStatus/VBoxContainer" node_paths=PackedStringArray("ping_label", "solved_label", "state_label")]
+layout_mode = 2
+script = ExtResource("1_u6dwr")
+riddle = 5
+ping_label = NodePath("MarginContainer2/Ping")
+solved_label = NodePath("MarginContainer3/Solved")
+state_label = NodePath("MarginContainer4/State")
+
+[node name="MarginContainer" type="MarginContainer" parent="RiddleStatus/VBoxContainer/Schichtplan"]
+layout_mode = 2
+
+[node name="Name" type="Label" parent="RiddleStatus/VBoxContainer/Schichtplan/MarginContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "Schichtplan"
+
+[node name="MarginContainer2" type="MarginContainer" parent="RiddleStatus/VBoxContainer/Schichtplan"]
+layout_mode = 2
+theme_override_constants/margin_left = 100
+
+[node name="Ping" type="Label" parent="RiddleStatus/VBoxContainer/Schichtplan/MarginContainer2"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "0000"
+
+[node name="MarginContainer3" type="MarginContainer" parent="RiddleStatus/VBoxContainer/Schichtplan"]
+layout_mode = 2
+theme_override_constants/margin_left = 200
+
+[node name="Solved" type="Label" parent="RiddleStatus/VBoxContainer/Schichtplan/MarginContainer3"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "True"
+
+[node name="MarginContainer4" type="MarginContainer" parent="RiddleStatus/VBoxContainer/Schichtplan"]
+layout_mode = 2
+theme_override_constants/margin_left = 250
+
+[node name="State" type="Label" parent="RiddleStatus/VBoxContainer/Schichtplan/MarginContainer4"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "00"
+
+[node name="Separee" type="PanelContainer" parent="RiddleStatus/VBoxContainer" node_paths=PackedStringArray("ping_label", "solved_label", "state_label")]
+layout_mode = 2
+script = ExtResource("1_u6dwr")
+riddle = 6
+ping_label = NodePath("MarginContainer2/Ping")
+solved_label = NodePath("MarginContainer3/Solved")
+state_label = NodePath("MarginContainer4/State")
+
+[node name="MarginContainer" type="MarginContainer" parent="RiddleStatus/VBoxContainer/Separee"]
+layout_mode = 2
+
+[node name="Name" type="Label" parent="RiddleStatus/VBoxContainer/Separee/MarginContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "Separee"
+
+[node name="MarginContainer2" type="MarginContainer" parent="RiddleStatus/VBoxContainer/Separee"]
+layout_mode = 2
+theme_override_constants/margin_left = 100
+
+[node name="Ping" type="Label" parent="RiddleStatus/VBoxContainer/Separee/MarginContainer2"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "0000"
+
+[node name="MarginContainer3" type="MarginContainer" parent="RiddleStatus/VBoxContainer/Separee"]
+layout_mode = 2
+theme_override_constants/margin_left = 200
+
+[node name="Solved" type="Label" parent="RiddleStatus/VBoxContainer/Separee/MarginContainer3"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "True"
+
+[node name="MarginContainer4" type="MarginContainer" parent="RiddleStatus/VBoxContainer/Separee"]
+layout_mode = 2
+theme_override_constants/margin_left = 250
+
+[node name="State" type="Label" parent="RiddleStatus/VBoxContainer/Separee/MarginContainer4"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "00"
+
+[connection signal="close_requested" from="." to="." method="hide"]

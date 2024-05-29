@@ -29,15 +29,16 @@ func _ready():
 		mp3_file.data = music_file.get_buffer(music_file.get_length())
 		dict_loaded_music_tracks[track_name] = mp3_file
 		
-	EventBus.session_start.connect( func(): play_track("atmo1") )
+	GameManager.game_session_started.connect( func(): play_track("atmo1", true) )
+	GameManager.new_game_session_started.connect( func(): playing = false )
 	
-func play_track(track_name:String):
+func play_track(track_name:String, force:bool=false):
 	if not track_name in dict_loaded_music_tracks:
 		print(" >>[W]: music track \"%s\" not found"%[track_name])
 		return
 	
 	# if stream is already playing, then skip command
-	if stream==dict_loaded_music_tracks[track_name]:
+	if not force and stream==dict_loaded_music_tracks[track_name]:
 		return
 
 	animator.play("music_fade_out", -1, 0.5)
@@ -46,9 +47,10 @@ func play_track(track_name:String):
 	animator.play("music_fade_in", -1, 0.35)
 	playing = true
 
-func pause():
+func pause(delay:float = 0):
+	await get_tree().create_timer(delay).timeout # artificial delay because green light lags
 	stream_paused = true
 
-func unpause():
-	await get_tree().create_timer(1.5).timeout # artificial delay because green light lags
+func unpause(delay:float = 0):
+	await get_tree().create_timer(delay).timeout # artificial delay because green light lags
 	stream_paused = false

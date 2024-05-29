@@ -4,7 +4,9 @@ signal on_soft_reset()
 signal on_hard_reset()
 
 func _ready():
-	EventBus.session_start.connect( func(): visible=true )
+	GameManager.game_session_started.connect( func(): visible=true )
+	GameManager.game_session_finished.connect( func(): visible=false )
+
 
 func soft_reset():
 	var popup : CustomPopup = PopupManager.generate_popup("Durch einen Soft Reset wird das Netzwerk zurückgesetzt. Schwache Verbindungen können so wiederhergestellt werden.\nDauer ca. 10-20s (Währenddessen ist keine Bedienung möglich! Verbindet sich danach wieder automatisch.)")

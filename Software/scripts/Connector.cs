@@ -6,22 +6,31 @@ using System.IO.Ports;
 using System.Reflection;
 
 // currently green traffic light is slow, original uses same code.... Why?
-
 // no reset but if rätselstrom is out, test?
 
 
 public partial class Connector : Node{
-	//====================  GODOT INSPECTOR NODES
+	//========================================
+	//=====  GODOT INSPECTOR
+	//========================================
 	[Export] public Godot.Timer timer_ack;
 	[Export] public Godot.Timer timer_sync_packages;
 
 
 
-	//====================  CONSTANTS
+
+	//========================================
+	//=====  CONSTANTS
+	//========================================
+	private const string TARGET_PORT_NAME = "COM5";
+	private const int TARGET_PORT_BAUDRATE = 115200;
+
 	private const float SYNC_PACK_DOWNTIME = 0.5f;
 	private const float ACK_TIMEOUT_MAX = 10f;
+	
+	private const float TELEFPHONE_RING_DURATION = 3f;
 	private const float OPEN_SPARKASTEN_AFTER_STOPPTANZ_DELAY = 2.5f;
-	private const float OPEN_DOOR_AFTER_GAME_FINISH = 8f;
+	private const float OPEN_DOOR_AFTER_GAME_FINISH_DELAY = 8f;
 	
 	public enum COMMANDS{
 		SYSTEM_INITIALIZE,
@@ -45,11 +54,13 @@ public partial class Connector : Node{
 		SEPAREE_GRUEN,
 		SEPAREE_BLAU,
 		SEPAREE_WHITE,
+		SEPAREE_LIGHTS_OFF,
 		SEPAREE_OPEN,
 		SEPAREE_STOP_OPENING,
 	}
 
-	private readonly Dictionary<COMMANDS,string> PACKS = new Dictionary<COMMANDS, string>{
+	private readonly Dictionary<COMMANDS,string> PACKS = new Dictionary<COMMANDS, string>
+	{
 		{COMMANDS.SYSTEM_INITIALIZE, 		"00,00,01"},
 		{COMMANDS.SYSTEM_SOFT_RESET, 		"00,00,02"},
 		{COMMANDS.SYSTEM_HARD_RESET, 		"00,00,01"},
@@ -61,8 +72,8 @@ public partial class Connector : Node{
 		{COMMANDS.STOPPTANZ_SOLVE, 			"02,01,00"},
 		{COMMANDS.SPARKASTEN_OPEN, 			"03,00,01"},
 		{COMMANDS.SPARKASTEN_STOP_OPENING, 	"03,00,00"},
-		{COMMANDS.TELEFON_RING,				"21,00,03"}, //unused
-		{COMMANDS.TELEPHONE_STOP_RINGING, 	"21,00,00"}, //unused
+		{COMMANDS.TELEFON_RING,				"21,00,03"},
+		{COMMANDS.TELEPHONE_STOP_RINGING, 	"21,00,00"},
 		{COMMANDS.WASSERHAHN_ENABLE,		"05,00,01"},
 		{COMMANDS.SEXDUNGEON_OPEN, 			"05,00,02"},
 		{COMMANDS.SCHICHTPLAN_OPEN, 		"05,00,09"},
@@ -71,12 +82,14 @@ public partial class Connector : Node{
 		{COMMANDS.SEPAREE_GRUEN, 			"01,00,02"},
 		{COMMANDS.SEPAREE_BLAU, 			"01,00,03"},
 		{COMMANDS.SEPAREE_WHITE, 			"01,00,06"},
+		{COMMANDS.SEPAREE_LIGHTS_OFF, 		"01,00,00"},
 		{COMMANDS.SEPAREE_OPEN, 			"01,01,09"},
-		{COMMANDS.SEPAREE_STOP_OPENING, 	"01,00,00"},
+		{COMMANDS.SEPAREE_STOP_OPENING, 	"01,01,00"},
 	}; 
 
 	
-	private Dictionary<int,string> SYNC_PACKS = new Dictionary<int, string>{
+	private Dictionary<int,string> SYNC_PACKS = new Dictionary<int, string>
+	{
 		{0, "01,00,00"},
 		{1, "02,00,00"},
 		{2, "03,00,00"},
@@ -88,7 +101,8 @@ public partial class Connector : Node{
 	};
 
 
-	private enum SyncState{
+	private enum SyncState
+	{
 		NOT_STARTED,
 		CURRENTLY_SYNCING,
 		CURRENTLY_SYNCING_AGAIN,
@@ -97,31 +111,45 @@ public partial class Connector : Node{
 	}
 
 
-	//====================  VARIABLES
+
+	//========================================
+	//=====  VARIABLES
+	//========================================
 	private SerialPort _arduinoMaster;
-	private Node _eventBus;
 	private Logger _logger;
 	private int color_index = -1;
 	private bool final_sequence_started = false;
 	private SyncState _syncState = SyncState.NOT_STARTED;
 
+	private Node _eventBus;
+	private Node _gameManager;
 
-	//====================  PREPARATION
-	//>> on program start call godots ready function automatically 
-	public override void _Ready(){
+
+	//========================================
+	//=====  PREPARATION
+	//========================================
+	// on program start call godots ready function automatically 
+	public override void _Ready()
+	{
+		// create new Logger with new logfile
 		_logger = new Logger();
 
+		// access Godots autoloads
 		_logger.Log("Accessing Autoloads", Logger.LogSeverity.VERBOSE);
-		try{
+		try
+		{
 			_eventBus = GetNode<Node>("/root/EventBus");
+			_gameManager = GetNode<Node>("/root/GameManager");
+			_gameManager.Set("connector", this);
 		}
-		catch(Exception e){
+		catch(Exception e)
+		{
 			_logger.Log(e.Message, Logger.LogSeverity.ERROR);
 		}
 
-		
+		// set initial riddle information to invalid values
 		_eventBus.CallDeferred("update_riddles", 
-			-1,1,-1,
+			-1,-1,-1,
 			-1,-1,-1,
 			-1,-1,-1,
 			-1,-1,-1,
@@ -131,37 +159,21 @@ public partial class Connector : Node{
 		);
 	}
 
-	//>> display all port names to the GD console.
-	public void SearchAllComs(){
-		string[] ports = SerialPort.GetPortNames();
-		_logger.Log("The following serial ports were found", Logger.LogSeverity.VERBOSE);
-		foreach(string port in ports){
-			_logger.Log(" >"+port, Logger.LogSeverity.VERBOSE);
-		}
-	}
 
-	//>> sends pack to arduino master
-	private void SendCommand(COMMANDS _command){
-		_logger.Log("Sending Command: " + _command, Logger.LogSeverity.VERBOSE);
-		try{
-			_arduinoMaster.WriteLine(">" + PACKS[_command]);
-		}
-		catch(Exception e){
-			_logger.Log(e.Message, Logger.LogSeverity.ERROR);
-		}
-	}
-
-	//>> initializes serial port 
-	private bool InitializeArduinoMaster(){
+	// initializes serial port 
+	private bool OpenMasterPort()
+	{
 		_arduinoMaster = new SerialPort();
-		_arduinoMaster.PortName = "COM5";
-		_arduinoMaster.BaudRate = 115200;
+		_arduinoMaster.PortName = TARGET_PORT_NAME;
+		_arduinoMaster.BaudRate = TARGET_PORT_BAUDRATE;
 		
 		_logger.Log("Open Port:" + _arduinoMaster.PortName + " - BaudRate:" + _arduinoMaster.BaudRate, Logger.LogSeverity.VERBOSE);
-		try{
+		try
+		{
 			_arduinoMaster.Open();
 		}
-		catch(Exception e){
+		catch(Exception e)
+		{
 			_logger.Log(e.Message, Logger.LogSeverity.ERROR);
 			return false;
 		}
@@ -169,88 +181,63 @@ public partial class Connector : Node{
 		return true;
 	}
 
-	//>> initialize serial port with arduino hardware
-	private bool SynchroniseHardware(){
-		_logger.Log("Initializing System", Logger.LogSeverity.VERBOSE);
+
+	// initialize serial port with arduino hardware
+	private bool WaitForMasterACK()
+	{
+		_logger.Log("Waiting for Master ACK", Logger.LogSeverity.VERBOSE);
 		bool _ackRecieved = false;
-		try{
+		try
+		{
 			SendCommand(COMMANDS.SYSTEM_INITIALIZE);
 
 			_logger.Log("While Loop for ACK started", Logger.LogSeverity.VERBOSE);
 			timer_ack.Start(ACK_TIMEOUT_MAX);
 
-			while(!_ackRecieved && timer_ack.TimeLeft>0){
-				if(_arduinoMaster.BytesToRead>0 && _arduinoMaster.ReadChar()==56){
+			while(!_ackRecieved && timer_ack.TimeLeft>0)
+			{
+				if(_arduinoMaster.BytesToRead>0 && _arduinoMaster.ReadChar()==56)
+				{
 					_logger.Log("ACK Revieced!", Logger.LogSeverity.VERBOSE);
 					_ackRecieved = true;
 					_arduinoMaster.DataReceived+= ProcessRecievedData;
 				}
 			}
 		}
-		catch(Exception e){
+		catch(Exception e)
+		{
 			_logger.Log(e.Message, Logger.LogSeverity.ERROR);
 			return false;
 		}
 
-		if(!_ackRecieved){
+		if(!_ackRecieved)
+		{
 			return false;
 		}
 
 		return true;
 	}
 
-	private void SendSyncPackage(int i){
-		_logger.Log("Sending Command: " + SYNC_PACKS[i], Logger.LogSeverity.VERBOSE);
-		_arduinoMaster.WriteLine(">" + SYNC_PACKS[i]);
-		_eventBus.CallDeferred("emit_sync_package_send");
-	}
-
-
-
-	//====================  COMMUNICATION CONTROL
-	public void Start(){
-		_logger.Log("Start Initialization", Logger.LogSeverity.VERBOSE);
-		//>> open serial port to arduino master
-		bool _initialisationSuccessfully = InitializeArduinoMaster();
-		if(!_initialisationSuccessfully){
-			_logger.Log("Initialization Failed", Logger.LogSeverity.ERROR);
-			_eventBus.CallDeferred("emit_ack_timeout");
-			return;
-		}
-
-		//>> synchronise with hardware 
-		_logger.Log("Start Synchronization", Logger.LogSeverity.VERBOSE);
-		bool _synchroniseSuccesfully = SynchroniseHardware();
-		if(!_synchroniseSuccesfully){
-			_logger.Log("Synchronization Failed", Logger.LogSeverity.ERROR);
-			return;
-		}
-
-
-		return;
-	}
-
 	
-	private void Disconnect(){
-		_logger.Log("Closing Port", Logger.LogSeverity.VERBOSE);
-		try{
-			if(_arduinoMaster==null || !_arduinoMaster.IsOpen){
-				_logger.Log("Port is not Open", Logger.LogSeverity.WARNING);
-				return;
-			}	
+	//========================================
+	//=====  COMMUNICATION PROTOCOL
+	//========================================
+	// sends pack to arduino master
+	private void SendCommand(COMMANDS _command)
+	{
+		_logger.Log("Sending Command: " + _command, Logger.LogSeverity.VERBOSE);
 
-			_arduinoMaster.Close();
-			_logger.Log("Port Closed", Logger.LogSeverity.VERBOSE);
+		try
+		{
+			_arduinoMaster.WriteLine(">" + PACKS[_command]);
 		}
-		catch(Exception e){
+		catch(Exception e)
+		{
 			_logger.Log(e.Message, Logger.LogSeverity.ERROR);
 		}
-		return;
 	}
 
 
-
-	//====================  PROCESS INCOMING DATA
 	private void ProcessRecievedData(object sender, SerialDataReceivedEventArgs args){
 		try{
 			if(_arduinoMaster.BytesToRead<28){
@@ -307,12 +294,13 @@ public partial class Connector : Node{
 
 			_syncState = SyncState.CURRENTLY_SYNCING;
 			
-			for(int i=0; i<8; i++){
+			for(int i=0; i<8; i++)
+			{
 				if(timer_sync_packages.TimeLeft<=0.0){
 					timer_sync_packages.CallDeferred("start", SYNC_PACK_DOWNTIME);
 				}
 				while(timer_sync_packages.TimeLeft>0){}
-				SendSyncPackage(i);
+				_arduinoMaster.WriteLine(">" + SYNC_PACKS[i]);
 			}
 			
 			return;
@@ -353,12 +341,14 @@ public partial class Connector : Node{
 			_syncState = SyncState.CURRENTLY_SYNCING_AGAIN;
 			
 
-			for(int i=0; i<8; i++){
-				if(timer_sync_packages.TimeLeft<=0.0){
+			for(int i=0; i<8; i++)
+			{
+				if(timer_sync_packages.TimeLeft<=0.0)
+				{
 					timer_sync_packages.CallDeferred("start", SYNC_PACK_DOWNTIME);
 				}
 				while(timer_sync_packages.TimeLeft>0){}
-				SendSyncPackage(i);
+				_arduinoMaster.WriteLine(">" + SYNC_PACKS[i]);
 			}
 			return;
 		}
@@ -408,9 +398,6 @@ public partial class Connector : Node{
 						if(color_index!=-1 && newState==0){
 							ResetPreviousColor();
 						}
-						//if(newState==7){
-						//	SendCommand(COMMANDS.SEPAREE_STOP_OPENING);
-						//}
 						break;
 					case 1: //Stopptanz
 						StopptanzPing = (int)delay;
@@ -466,13 +453,22 @@ public partial class Connector : Node{
 			);
 		}
 	}
+	
 
-	// if lights go out randomly, reset them to previous color
-	private void ResetPreviousColor(){
-		if(final_sequence_started)
+	//========================================
+	//=====  UTILITY
+	//========================================
+	// reset separee lights to previous color if they turn off randomly
+	private void ResetPreviousColor()
+	{
+		// if final sequence is ongoing, do not reset colors
+		if(final_sequence_started){
 			return;
+		}
 		
-		switch(color_index){
+		// turn on last saved color
+		switch(color_index)
+		{
 			case 0:
 				SendCommand(COMMANDS.SEPAREE_ROT);
 				break;
@@ -484,56 +480,154 @@ public partial class Connector : Node{
 				break;
 			default:
 				_logger.Log("Undefined Separee Color " + color_index, Logger.LogSeverity.WARNING);
+				SendCommand(COMMANDS.SEPAREE_WHITE);
 				break;
-				
-			}
+		}
 	}
 
 
 
-	//====================  BUTTONS
-	public void DinksSolve(){SendCommand(COMMANDS.DRINKS_SOLVE);}
-	public void StopptanzInit(){SendCommand(COMMANDS.STOPPTANZ_INITIALIZE);}
-	public void StopptanzDance(){SendCommand(COMMANDS.STOPPTANZ_DANCE);}
-	public void StopptanzStop(){SendCommand(COMMANDS.STOPPTANZ_STOP);}
+	//========================================
+	//=====  BUTTONS
+	//========================================
+	// Drinks
+	public void DinksSolve(){
+		SendCommand(COMMANDS.DRINKS_SOLVE);
+	}
+	
 
-	public async void StopptanzSolve(){
+	// Stopptanz
+	public void StopptanzInit()
+	{
+		SendCommand(COMMANDS.STOPPTANZ_INITIALIZE);
+	}
+	public void StopptanzDance()
+	{
+		SendCommand(COMMANDS.STOPPTANZ_DANCE);
+	}
+	public void StopptanzStop()
+	{
+		SendCommand(COMMANDS.STOPPTANZ_STOP);
+	}
+	public async void StopptanzSolve()
+	{
 		SendCommand(COMMANDS.STOPPTANZ_SOLVE);
     	await ToSignal(GetTree().CreateTimer(OPEN_SPARKASTEN_AFTER_STOPPTANZ_DELAY), "timeout");
 		SendCommand(COMMANDS.SPARKASTEN_OPEN);
 	}
 
-	public void SparkastenOpen(){SendCommand(COMMANDS.SPARKASTEN_OPEN);}
-	public void WasserhahnEnable(){SendCommand(COMMANDS.WASSERHAHN_ENABLE);}
-	public void WasserhahnOpen(){SendCommand(COMMANDS.SEXDUNGEON_OPEN);}
-	public void SchichtplanOpen(){SendCommand(COMMANDS.SCHICHTPLAN_OPEN);}
-	
-	public void SepareeRot(){
+
+	// Sparkasten
+	public void SparkastenOpen()
+	{
+		SendCommand(COMMANDS.SPARKASTEN_OPEN);
+	}
+
+
+	// Telefon
+	public async void TelefonRing()
+	{
+		SendCommand(COMMANDS.TELEFON_RING);
+		await ToSignal(GetTree().CreateTimer(TELEFPHONE_RING_DURATION), "timeout");
+		SendCommand(COMMANDS.TELEPHONE_STOP_RINGING);
+	}
+
+
+	// Wasserhahn
+	public void WasserhahnEnable()
+	{
+		SendCommand(COMMANDS.WASSERHAHN_ENABLE);
+	}
+	public void WasserhahnOpen()
+	{
+		SendCommand(COMMANDS.SEXDUNGEON_OPEN);
+	}
+
+
+	// Schichtplan
+	public void SchichtplanOpen(){
+		SendCommand(COMMANDS.SCHICHTPLAN_OPEN);
+	}
+
+
+	// Separee
+	public void SepareeRot()
+	{
 		color_index = 0;
 		SendCommand(COMMANDS.SEPAREE_ROT);
 	}
-	public void SepareeGruen(){
+	public void SepareeGruen()
+	{
 		color_index = 1; 
 		SendCommand(COMMANDS.SEPAREE_GRUEN);
 	}
-	public void SepareeBlau(){
+	public void SepareeBlau()
+	{
 		color_index = 2;
 		SendCommand(COMMANDS.SEPAREE_BLAU);
 	}
-	public void SepareeWhite(){SendCommand(COMMANDS.SEPAREE_WHITE);}
-	public async void SepareeOpen(){
+	public void SepareeWhite()
+	{
+		SendCommand(COMMANDS.SEPAREE_WHITE);
+	}
+	public void SepareeLightsOff()
+	{
+		SendCommand(COMMANDS.SEPAREE_LIGHTS_OFF);
+	}
+	public async void SepareeOpen()
+	{
 		ResetPreviousColor();
 		final_sequence_started = true;
-		await ToSignal(GetTree().CreateTimer(OPEN_DOOR_AFTER_GAME_FINISH), "timeout");
+		await ToSignal(GetTree().CreateTimer(OPEN_DOOR_AFTER_GAME_FINISH_DELAY), "timeout");
 		SendCommand(COMMANDS.SEPAREE_OPEN);
 	}
 
-	public void SystemSoftReset(){
+
+	// System
+	public void SystemSoftReset()
+	{
 		_logger.Log("Soft Reset Requested!", Logger.LogSeverity.WARNING);
 		SendCommand(COMMANDS.SYSTEM_SOFT_RESET);
 	}
-	public void SystemHardReset(){
+	public void SystemHardReset()
+	{
 		_logger.Log("Hard Reset Requested!", Logger.LogSeverity.WARNING);
 		SendCommand(COMMANDS.SYSTEM_HARD_RESET);
+	}
+
+
+
+
+	//========================================
+	//=====  UNUSED
+	//========================================
+	// display all port names to the GD console.
+	public void SearchAllComs()
+	{
+		string[] ports = SerialPort.GetPortNames();
+		_logger.Log("The following serial ports were found", Logger.LogSeverity.VERBOSE);
+		foreach(string port in ports){
+			_logger.Log(" >"+port, Logger.LogSeverity.VERBOSE);
+		}
+	}
+
+
+	// close current port if open
+	private void Disconnect()
+	{
+		_logger.Log("Closing Port", Logger.LogSeverity.VERBOSE);
+		try{
+			if(_arduinoMaster==null || !_arduinoMaster.IsOpen){
+				_logger.Log("Port is not Open", Logger.LogSeverity.WARNING);
+				return;
+			}	
+
+			_arduinoMaster.Close();
+			_logger.Log("Port Closed", Logger.LogSeverity.VERBOSE);
+		}
+		catch(Exception e){
+			_logger.Log(e.Message, Logger.LogSeverity.ERROR);
+		}
+		return;
 	}
 }
