@@ -1,6 +1,6 @@
 extends Control
 
-@export var riddle : Globals.Riddle
+@export var riddle : RiddleStatus.Riddle
 
 
 @export var ping_label : Label
@@ -13,19 +13,19 @@ extends Control
 
 
 func _ready():
-	if(riddle==Globals.Riddle.DRINKS):
+	if(riddle==RiddleStatus.Riddle.DRINKS):
 		EventBus.update_status_drinks.connect(set_ping)
-	elif(riddle==Globals.Riddle.STOPPTANZ):
+	elif(riddle==RiddleStatus.Riddle.STOPPTANZ):
 		EventBus.update_status_stopptanz.connect(set_ping)
-	elif(riddle==Globals.Riddle.SPARKASTEN):
+	elif(riddle==RiddleStatus.Riddle.SPARKASTEN):
 		EventBus.update_status_sparkasten.connect(set_ping)
-	elif(riddle==Globals.Riddle.TELEFON):
+	elif(riddle==RiddleStatus.Riddle.TELEFON):
 		EventBus.update_status_telefon.connect(set_ping)
-	elif(riddle==Globals.Riddle.SEXDUNGEON):
+	elif(riddle==RiddleStatus.Riddle.SEXDUNGEON):
 		EventBus.update_status_sexdungeon.connect(set_ping)
-	elif(riddle==Globals.Riddle.SCHICHTPLAN):
+	elif(riddle==RiddleStatus.Riddle.SCHICHTPLAN):
 		EventBus.update_status_schichtplan.connect(set_ping)
-	elif(riddle==Globals.Riddle.SEPAREE):
+	elif(riddle==RiddleStatus.Riddle.SEPAREE):
 		EventBus.update_status_separee.connect(set_ping)
 
 func set_ping(ping:int, _solved:int, _state:int):

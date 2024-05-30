@@ -1,0 +1,1236 @@
+[gd_scene load_steps=41 format=3 uid="uid://vwdey52kj1k1"]
+
+[ext_resource type="Script" path="res://scripts/stopwatch.gd" id="1_qovry"]
+[ext_resource type="Texture2D" uid="uid://c54wd0xksp7q6" path="res://images/background.jpg" id="1_wndni"]
+[ext_resource type="Script" path="res://scripts/Connector.cs" id="2_5v0y2"]
+[ext_resource type="Theme" uid="uid://sugpe2yib08n" path="res://styles/note.tres" id="2_8htos"]
+[ext_resource type="Script" path="res://scripts/music_player.gd" id="3_kv775"]
+[ext_resource type="Script" path="res://riddle_button.gd" id="4_036af"]
+[ext_resource type="PackedScene" uid="uid://bquu7rbldubs" path="res://modules/ping/ping.tscn" id="4_jr8c0"]
+[ext_resource type="PackedScene" uid="uid://djrna64nmdkwm" path="res://modules/ui_button/ui_button.tscn" id="7_2ulun"]
+[ext_resource type="Script" path="res://riddle_buttons_overlay.gd" id="7_6h440"]
+[ext_resource type="Texture2D" uid="uid://cee8ntxujt2c8" path="res://images/Rot.png" id="7_17ck7"]
+[ext_resource type="Texture2D" uid="uid://b6rlcqmv51afq" path="res://images/Grün.png" id="8_fk3wt"]
+[ext_resource type="Texture2D" uid="uid://b7prlhq6wolju" path="res://images/Blau.png" id="9_mog3e"]
+[ext_resource type="Script" path="res://scripts/reset.gd" id="10_ej0gq"]
+[ext_resource type="Texture2D" uid="uid://b5gxmcsvju566" path="res://images/heart-svgrepo-com.svg" id="10_jqrgx"]
+[ext_resource type="Texture2D" uid="uid://cuvbpc3rnt8rf" path="res://images/pause.svg" id="10_myun6"]
+[ext_resource type="StyleBox" uid="uid://csaq6gdpvlk43" path="res://styles/frame_panel.tres" id="14_qmo6p"]
+[ext_resource type="StyleBox" uid="uid://bcul6etw4b0l0" path="res://styles/info_right.tres" id="15_0gdhf"]
+[ext_resource type="Script" path="res://scripts/pregame_timer.gd" id="15_dfdlo"]
+[ext_resource type="Script" path="res://start_session.gd" id="16_7kkjc"]
+[ext_resource type="Theme" uid="uid://dtn0ytlq0wxpq" path="res://styles/base_right.tres" id="16_xh5hu"]
+[ext_resource type="Theme" uid="uid://5bl76iy64ruh" path="res://styles/base_center.tres" id="17_717m6"]
+[ext_resource type="Theme" uid="uid://bwgeofpmajy4u" path="res://styles/base_left.tres" id="18_7wtpm"]
+[ext_resource type="Texture2D" uid="uid://dq0cwm667k3an" path="res://images/play.svg" id="21_4shkp"]
+[ext_resource type="Script" path="res://restart_session.gd" id="23_3xokn"]
+[ext_resource type="PackedScene" uid="uid://ckre735enmpg5" path="res://scenes/debug.tscn" id="23_o6lvy"]
+[ext_resource type="PackedScene" uid="uid://bp2vttdv1s8n5" path="res://scenes/feedback.tscn" id="24_dx087"]
+[ext_resource type="Script" path="res://finale.gd" id="26_l61b3"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_r5qll"]
+bg_color = Color(0.290196, 0.14902, 0.384314, 0.164706)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_oihui"]
+bg_color = Color(0.44358, 0.421226, 0.565551, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1kbyv"]
+bg_color = Color(0.596079, 0.500042, 0.606036, 1)
+corner_radius_bottom_right = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_o23ju"]
+bg_color = Color(0.070625, 0.329469, 0.210616, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5pf7f"]
+bg_color = Color(0.560191, 0.133241, 0.150046, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_d80xw"]
+bg_color = Color(0.942686, 0.4157, 0.686177, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_oorca"]
+bg_color = Color(0.308251, 0.469415, 0.336346, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_scg08"]
+bg_color = Color(0.280863, 0.34731, 0.683463, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hkno4"]
+bg_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="Animation" id="Animation_004xm"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:volume_db")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
+[sub_resource type="Animation" id="Animation_q070l"]
+resource_name = "music_fade_in"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:volume_db")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [-30.0, 0.0]
+}
+
+[sub_resource type="Animation" id="Animation_ekmhg"]
+resource_name = "music_fade_out"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:volume_db")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, -35.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_rpdep"]
+_data = {
+"RESET": SubResource("Animation_004xm"),
+"music_fade_in": SubResource("Animation_q070l"),
+"music_fade_out": SubResource("Animation_ekmhg")
+}
+
+[node name="Universe" type="Node"]
+
+[node name="Background" type="TextureRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -306.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_wndni")
+expand_mode = 3
+flip_h = true
+metadata/_edit_group_ = true
+
+[node name="TintOverlay" type="Panel" parent="Background"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_r5qll")
+
+[node name="RiddleButtons" type="MarginContainer" parent="."]
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -420.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/margin_right = 160
+theme_override_constants/margin_bottom = 50
+
+[node name="Controller" type="VBoxContainer" parent="RiddleButtons"]
+layout_mode = 2
+theme_override_constants/separation = 8
+alignment = 2
+
+[node name="Notes" type="HBoxContainer" parent="RiddleButtons/Controller"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="RiddleButtons/Controller/Notes"]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+
+[node name="Label" type="Label" parent="RiddleButtons/Controller/Notes/MarginContainer"]
+layout_mode = 2
+theme = ExtResource("2_8htos")
+text = "Rätsel"
+horizontal_alignment = 1
+
+[node name="MarginContainer2" type="MarginContainer" parent="RiddleButtons/Controller/Notes"]
+layout_mode = 2
+theme_override_constants/margin_left = 200
+
+[node name="Label2" type="Label" parent="RiddleButtons/Controller/Notes/MarginContainer2"]
+layout_mode = 2
+theme = ExtResource("2_8htos")
+text = "Rätselsteuerung"
+horizontal_alignment = 1
+
+[node name="MarginContainer3" type="MarginContainer" parent="RiddleButtons/Controller/Notes"]
+layout_mode = 2
+theme_override_constants/margin_left = 250
+
+[node name="Label3" type="Label" parent="RiddleButtons/Controller/Notes/MarginContainer3"]
+layout_mode = 2
+theme = ExtResource("2_8htos")
+text = "Lösen
+"
+horizontal_alignment = 1
+
+[node name="MarginContainer4" type="MarginContainer" parent="RiddleButtons/Controller/Notes"]
+layout_mode = 2
+theme_override_constants/margin_left = 140
+
+[node name="Label4" type="Label" parent="RiddleButtons/Controller/Notes/MarginContainer4"]
+layout_mode = 2
+theme = ExtResource("2_8htos")
+text = "Notfall"
+horizontal_alignment = 1
+
+[node name="MarginContainer5" type="MarginContainer" parent="RiddleButtons/Controller/Notes"]
+layout_mode = 2
+theme_override_constants/margin_left = 135
+
+[node name="Label5" type="Label" parent="RiddleButtons/Controller/Notes/MarginContainer5"]
+layout_mode = 2
+theme = ExtResource("2_8htos")
+text = "Verbindung"
+horizontal_alignment = 1
+
+[node name="Drinks" type="VBoxContainer" parent="RiddleButtons/Controller"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Separator" type="PanelContainer" parent="RiddleButtons/Controller/Drinks"]
+custom_minimum_size = Vector2(0, 5)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_oihui")
+
+[node name="Panel" type="Panel" parent="RiddleButtons/Controller/Drinks"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_1kbyv")
+
+[node name="NameMargin" type="MarginContainer" parent="RiddleButtons/Controller/Drinks/Panel"]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 51.0
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+
+[node name="Name" type="Label" parent="RiddleButtons/Controller/Drinks/Panel/NameMargin"]
+layout_mode = 2
+text = "Drinks"
+
+[node name="ButtonMargin" type="MarginContainer" parent="RiddleButtons/Controller/Drinks/Panel"]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 100.0
+grow_vertical = 2
+theme_override_constants/margin_left = 140
+
+[node name="Buttons" type="HBoxContainer" parent="RiddleButtons/Controller/Drinks/Panel/ButtonMargin"]
+layout_mode = 2
+
+[node name="ButtonMargin2" type="MarginContainer" parent="RiddleButtons/Controller/Drinks/Panel"]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 260.0
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 550
+
+[node name="Buttons" type="HBoxContainer" parent="RiddleButtons/Controller/Drinks/Panel/ButtonMargin2"]
+layout_mode = 2
+
+[node name="ButtonDrinksSolve2" parent="RiddleButtons/Controller/Drinks/Panel/ButtonMargin2/Buttons" instance=ExtResource("7_2ulun")]
+layout_mode = 2
+
+[node name="Label" parent="RiddleButtons/Controller/Drinks/Panel/ButtonMargin2/Buttons/ButtonDrinksSolve2" index="1"]
+text = "Drinks
+Lösen"
+
+[node name="Button" type="Button" parent="RiddleButtons/Controller/Drinks/Panel/ButtonMargin2/Buttons"]
+custom_minimum_size = Vector2(100, 25)
+layout_mode = 2
+script = ExtResource("4_036af")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="RiddleButtons/Controller/Drinks/Panel/ButtonMargin2/Buttons/Button"]
+layout_mode = 1
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -19.0
+offset_right = 19.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="RiddleButtons/Controller/Drinks/Panel/ButtonMargin2/Buttons/Button/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("17_717m6")
+theme_override_font_sizes/font_size = 12
+text = "Drinks"
+horizontal_alignment = 1
+
+[node name="Label2" type="Label" parent="RiddleButtons/Controller/Drinks/Panel/ButtonMargin2/Buttons/Button/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("17_717m6")
+theme_override_font_sizes/font_size = 12
+text = "Lösen"
+horizontal_alignment = 1
+
+[node name="Panel" type="Panel" parent="RiddleButtons/Controller/Drinks/Panel/ButtonMargin2/Buttons/Button"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ButtonMargin3" type="MarginContainer" parent="RiddleButtons/Controller/Drinks/Panel"]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 640.0
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 685
+
+[node name="Buttons" type="HBoxContainer" parent="RiddleButtons/Controller/Drinks/Panel/ButtonMargin3"]
+layout_mode = 2
+
+[node name="Ping" parent="RiddleButtons/Controller/Drinks/Panel" instance=ExtResource("4_jr8c0")]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 0
+grow_vertical = 2
+size_flags_vertical = 0
+
+[node name="Stopptanz" type="VBoxContainer" parent="RiddleButtons/Controller"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Separator" type="PanelContainer" parent="RiddleButtons/Controller/Stopptanz"]
+custom_minimum_size = Vector2(0, 5)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_oihui")
+
+[node name="Panel" type="Panel" parent="RiddleButtons/Controller/Stopptanz"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_1kbyv")
+
+[node name="NameMargin" type="MarginContainer" parent="RiddleButtons/Controller/Stopptanz/Panel"]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 51.0
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+
+[node name="Name" type="Label" parent="RiddleButtons/Controller/Stopptanz/Panel/NameMargin"]
+layout_mode = 2
+text = "Stopptanz"
+
+[node name="ButtonMargin" type="MarginContainer" parent="RiddleButtons/Controller/Stopptanz/Panel"]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 100.0
+grow_vertical = 2
+theme_override_constants/margin_left = 140
+
+[node name="Buttons" type="HBoxContainer" parent="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin"]
+layout_mode = 2
+
+[node name="ButtonStopptanzInit" parent="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin/Buttons" instance=ExtResource("7_2ulun")]
+layout_mode = 2
+
+[node name="Label" parent="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin/Buttons/ButtonStopptanzInit" index="1"]
+text = "Stopptanz
+Starten"
+
+[node name="ButtonStopptanzDance" parent="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin/Buttons" instance=ExtResource("7_2ulun")]
+layout_mode = 2
+
+[node name="PanelContainer" parent="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin/Buttons/ButtonStopptanzDance" index="0"]
+visible = true
+theme_override_styles/panel = SubResource("StyleBoxFlat_o23ju")
+
+[node name="Label" parent="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin/Buttons/ButtonStopptanzDance" index="1"]
+text = "Dance!"
+
+[node name="ButtonStopptanzStop" parent="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin/Buttons" instance=ExtResource("7_2ulun")]
+layout_mode = 2
+
+[node name="PanelContainer" parent="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin/Buttons/ButtonStopptanzStop" index="0"]
+visible = true
+theme_override_styles/panel = SubResource("StyleBoxFlat_5pf7f")
+
+[node name="Label" parent="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin/Buttons/ButtonStopptanzStop" index="1"]
+text = "Stop!"
+
+[node name="ButtonMargin2" type="MarginContainer" parent="RiddleButtons/Controller/Stopptanz/Panel"]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 260.0
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 550
+
+[node name="Buttons" type="HBoxContainer" parent="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin2"]
+layout_mode = 2
+
+[node name="ButtonStopptanzSolve" parent="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin2/Buttons" instance=ExtResource("7_2ulun")]
+layout_mode = 2
+
+[node name="Label" parent="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin2/Buttons/ButtonStopptanzSolve" index="1"]
+text = "Stopptanz
+Lösen"
+
+[node name="ButtonMargin3" type="MarginContainer" parent="RiddleButtons/Controller/Stopptanz/Panel"]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_top = 1.0
+offset_right = 640.0
+offset_bottom = 1.0
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 685
+
+[node name="Buttons" type="HBoxContainer" parent="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin3"]
+layout_mode = 2
+
+[node name="Ping" parent="RiddleButtons/Controller/Stopptanz/Panel" instance=ExtResource("4_jr8c0")]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 0
+grow_vertical = 2
+riddle = 1
+
+[node name="Sparkasten" type="VBoxContainer" parent="RiddleButtons/Controller"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Separator" type="PanelContainer" parent="RiddleButtons/Controller/Sparkasten"]
+custom_minimum_size = Vector2(0, 5)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_oihui")
+
+[node name="Panel" type="Panel" parent="RiddleButtons/Controller/Sparkasten"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_1kbyv")
+
+[node name="NameMargin" type="MarginContainer" parent="RiddleButtons/Controller/Sparkasten/Panel"]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 51.0
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+
+[node name="Name" type="Label" parent="RiddleButtons/Controller/Sparkasten/Panel/NameMargin"]
+layout_mode = 2
+text = "Sparkasten"
+
+[node name="ButtonMargin" type="MarginContainer" parent="RiddleButtons/Controller/Sparkasten/Panel"]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 100.0
+grow_vertical = 2
+theme_override_constants/margin_left = 140
+
+[node name="Buttons" type="HBoxContainer" parent="RiddleButtons/Controller/Sparkasten/Panel/ButtonMargin"]
+layout_mode = 2
+
+[node name="ButtonMargin2" type="MarginContainer" parent="RiddleButtons/Controller/Sparkasten/Panel"]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 600.0
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 550
+
+[node name="Buttons" type="HBoxContainer" parent="RiddleButtons/Controller/Sparkasten/Panel/ButtonMargin2"]
+layout_mode = 2
+
+[node name="ButtonMargin3" type="MarginContainer" parent="RiddleButtons/Controller/Sparkasten/Panel"]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 740.0
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 685
+
+[node name="Buttons" type="HBoxContainer" parent="RiddleButtons/Controller/Sparkasten/Panel/ButtonMargin3"]
+layout_mode = 2
+
+[node name="ButtonSparkastenOpen" parent="RiddleButtons/Controller/Sparkasten/Panel/ButtonMargin3/Buttons" instance=ExtResource("7_2ulun")]
+layout_mode = 2
+
+[node name="Label" parent="RiddleButtons/Controller/Sparkasten/Panel/ButtonMargin3/Buttons/ButtonSparkastenOpen" index="1"]
+text = "Sparkasten
+Öffnen"
+
+[node name="Ping" parent="RiddleButtons/Controller/Sparkasten/Panel" instance=ExtResource("4_jr8c0")]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 0
+grow_vertical = 2
+riddle = 2
+
+[node name="Telefon" type="VBoxContainer" parent="RiddleButtons/Controller"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Separator" type="PanelContainer" parent="RiddleButtons/Controller/Telefon"]
+custom_minimum_size = Vector2(0, 5)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_oihui")
+
+[node name="Panel" type="Panel" parent="RiddleButtons/Controller/Telefon"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_1kbyv")
+
+[node name="NameMargin" type="MarginContainer" parent="RiddleButtons/Controller/Telefon/Panel"]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 51.0
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+
+[node name="Name" type="Label" parent="RiddleButtons/Controller/Telefon/Panel/NameMargin"]
+layout_mode = 2
+text = "Telefon"
+
+[node name="ButtonMargin" type="MarginContainer" parent="RiddleButtons/Controller/Telefon/Panel"]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 100.0
+grow_vertical = 2
+theme_override_constants/margin_left = 140
+
+[node name="Buttons" type="HBoxContainer" parent="RiddleButtons/Controller/Telefon/Panel/ButtonMargin"]
+layout_mode = 2
+
+[node name="ButtonWasserhahnEnable" parent="RiddleButtons/Controller/Telefon/Panel/ButtonMargin/Buttons" instance=ExtResource("7_2ulun")]
+layout_mode = 2
+
+[node name="Label" parent="RiddleButtons/Controller/Telefon/Panel/ButtonMargin/Buttons/ButtonWasserhahnEnable" index="1"]
+text = "Wasserhahn
+Aktivieren"
+
+[node name="ButtonMargin2" type="MarginContainer" parent="RiddleButtons/Controller/Telefon/Panel"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -25.0
+offset_right = 550.0
+offset_bottom = 25.0
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 550
+
+[node name="Buttons" type="HBoxContainer" parent="RiddleButtons/Controller/Telefon/Panel/ButtonMargin2"]
+layout_mode = 2
+
+[node name="ButtonMargin3" type="MarginContainer" parent="RiddleButtons/Controller/Telefon/Panel"]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 844.0
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 685
+
+[node name="Buttons" type="HBoxContainer" parent="RiddleButtons/Controller/Telefon/Panel/ButtonMargin3"]
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="ButtonTelefonRing" parent="RiddleButtons/Controller/Telefon/Panel/ButtonMargin3/Buttons" instance=ExtResource("7_2ulun")]
+layout_mode = 2
+
+[node name="Label" parent="RiddleButtons/Controller/Telefon/Panel/ButtonMargin3/Buttons/ButtonTelefonRing" index="1"]
+text = "Telefon
+Klingeln"
+
+[node name="ButtonSexdungeonOpen2" parent="RiddleButtons/Controller/Telefon/Panel/ButtonMargin3/Buttons" instance=ExtResource("7_2ulun")]
+layout_mode = 2
+
+[node name="Label" parent="RiddleButtons/Controller/Telefon/Panel/ButtonMargin3/Buttons/ButtonSexdungeonOpen2" index="1"]
+text = "Sexdungeon
+Öffnen"
+
+[node name="Ping" parent="RiddleButtons/Controller/Telefon/Panel" instance=ExtResource("4_jr8c0")]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 0
+grow_vertical = 2
+riddle = 3
+
+[node name="Schichtplan" type="VBoxContainer" parent="RiddleButtons/Controller"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Separator" type="PanelContainer" parent="RiddleButtons/Controller/Schichtplan"]
+custom_minimum_size = Vector2(0, 5)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_oihui")
+
+[node name="Panel" type="Panel" parent="RiddleButtons/Controller/Schichtplan"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_1kbyv")
+
+[node name="NameMargin" type="MarginContainer" parent="RiddleButtons/Controller/Schichtplan/Panel"]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 51.0
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+
+[node name="Name" type="Label" parent="RiddleButtons/Controller/Schichtplan/Panel/NameMargin"]
+layout_mode = 2
+text = "Schichtplan"
+
+[node name="ButtonMargin" type="MarginContainer" parent="RiddleButtons/Controller/Schichtplan/Panel"]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 100.0
+grow_vertical = 2
+theme_override_constants/margin_left = 140
+
+[node name="Buttons" type="HBoxContainer" parent="RiddleButtons/Controller/Schichtplan/Panel/ButtonMargin"]
+layout_mode = 2
+
+[node name="ButtonMargin2" type="MarginContainer" parent="RiddleButtons/Controller/Schichtplan/Panel"]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 600.0
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 550
+
+[node name="Buttons" type="HBoxContainer" parent="RiddleButtons/Controller/Schichtplan/Panel/ButtonMargin2"]
+layout_mode = 2
+
+[node name="ButtonSchichtplanOpen" parent="RiddleButtons/Controller/Schichtplan/Panel/ButtonMargin2/Buttons" instance=ExtResource("7_2ulun")]
+layout_mode = 2
+
+[node name="Label" parent="RiddleButtons/Controller/Schichtplan/Panel/ButtonMargin2/Buttons/ButtonSchichtplanOpen" index="1"]
+text = "Schichtplan
+Lösen"
+
+[node name="ButtonMargin3" type="MarginContainer" parent="RiddleButtons/Controller/Schichtplan/Panel"]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 640.0
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 685
+
+[node name="Buttons" type="HBoxContainer" parent="RiddleButtons/Controller/Schichtplan/Panel/ButtonMargin3"]
+layout_mode = 2
+
+[node name="Ping" parent="RiddleButtons/Controller/Schichtplan/Panel" instance=ExtResource("4_jr8c0")]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 0
+grow_vertical = 2
+riddle = 5
+
+[node name="Separee" type="VBoxContainer" parent="RiddleButtons/Controller"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Separator" type="PanelContainer" parent="RiddleButtons/Controller/Separee"]
+custom_minimum_size = Vector2(0, 5)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_oihui")
+
+[node name="Panel" type="Panel" parent="RiddleButtons/Controller/Separee"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_1kbyv")
+
+[node name="NameMargin" type="MarginContainer" parent="RiddleButtons/Controller/Separee/Panel"]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 51.0
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+
+[node name="Name" type="Label" parent="RiddleButtons/Controller/Separee/Panel/NameMargin"]
+layout_mode = 2
+text = "Separee"
+
+[node name="ButtonMargin" type="MarginContainer" parent="RiddleButtons/Controller/Separee/Panel"]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 100.0
+grow_vertical = 2
+theme_override_constants/margin_left = 140
+
+[node name="Buttons" type="HBoxContainer" parent="RiddleButtons/Controller/Separee/Panel/ButtonMargin"]
+layout_mode = 2
+
+[node name="ButtonSepareeRot" parent="RiddleButtons/Controller/Separee/Panel/ButtonMargin/Buttons" instance=ExtResource("7_2ulun")]
+layout_mode = 2
+
+[node name="PanelContainer" parent="RiddleButtons/Controller/Separee/Panel/ButtonMargin/Buttons/ButtonSepareeRot" index="0"]
+visible = true
+theme_override_styles/panel = SubResource("StyleBoxFlat_d80xw")
+
+[node name="TextureRect" parent="RiddleButtons/Controller/Separee/Panel/ButtonMargin/Buttons/ButtonSepareeRot/PanelContainer" index="0"]
+texture = ExtResource("7_17ck7")
+
+[node name="Label" parent="RiddleButtons/Controller/Separee/Panel/ButtonMargin/Buttons/ButtonSepareeRot" index="1"]
+visible = false
+text = "Licht
+Rot"
+
+[node name="ButtonSepareeGrün" parent="RiddleButtons/Controller/Separee/Panel/ButtonMargin/Buttons" instance=ExtResource("7_2ulun")]
+layout_mode = 2
+
+[node name="PanelContainer" parent="RiddleButtons/Controller/Separee/Panel/ButtonMargin/Buttons/ButtonSepareeGrün" index="0"]
+visible = true
+theme_override_styles/panel = SubResource("StyleBoxFlat_oorca")
+
+[node name="TextureRect" parent="RiddleButtons/Controller/Separee/Panel/ButtonMargin/Buttons/ButtonSepareeGrün/PanelContainer" index="0"]
+texture = ExtResource("8_fk3wt")
+
+[node name="Label" parent="RiddleButtons/Controller/Separee/Panel/ButtonMargin/Buttons/ButtonSepareeGrün" index="1"]
+visible = false
+text = "Licht
+Grün"
+
+[node name="ButtonSepareeBlau" parent="RiddleButtons/Controller/Separee/Panel/ButtonMargin/Buttons" instance=ExtResource("7_2ulun")]
+layout_mode = 2
+
+[node name="PanelContainer" parent="RiddleButtons/Controller/Separee/Panel/ButtonMargin/Buttons/ButtonSepareeBlau" index="0"]
+visible = true
+theme_override_styles/panel = SubResource("StyleBoxFlat_scg08")
+
+[node name="TextureRect" parent="RiddleButtons/Controller/Separee/Panel/ButtonMargin/Buttons/ButtonSepareeBlau/PanelContainer" index="0"]
+texture = ExtResource("9_mog3e")
+
+[node name="Label" parent="RiddleButtons/Controller/Separee/Panel/ButtonMargin/Buttons/ButtonSepareeBlau" index="1"]
+visible = false
+text = "Licht
+Blau"
+
+[node name="ButtonMargin2" type="MarginContainer" parent="RiddleButtons/Controller/Separee/Panel"]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 600.0
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 550
+
+[node name="Buttons" type="HBoxContainer" parent="RiddleButtons/Controller/Separee/Panel/ButtonMargin2"]
+layout_mode = 2
+
+[node name="ButtonSepareeSolve2" parent="RiddleButtons/Controller/Separee/Panel/ButtonMargin2/Buttons" instance=ExtResource("7_2ulun")]
+layout_mode = 2
+
+[node name="Label" parent="RiddleButtons/Controller/Separee/Panel/ButtonMargin2/Buttons/ButtonSepareeSolve2" index="1"]
+text = "Separee
+Lösen"
+
+[node name="ButtonMargin3" type="MarginContainer" parent="RiddleButtons/Controller/Separee/Panel"]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 740.0
+grow_vertical = 2
+rotation = 0.000377113
+mouse_filter = 2
+theme_override_constants/margin_left = 685
+
+[node name="Buttons" type="HBoxContainer" parent="RiddleButtons/Controller/Separee/Panel/ButtonMargin3"]
+layout_mode = 2
+
+[node name="ButtonSepareeWeiss" parent="RiddleButtons/Controller/Separee/Panel/ButtonMargin3/Buttons" instance=ExtResource("7_2ulun")]
+layout_mode = 2
+
+[node name="PanelContainer" parent="RiddleButtons/Controller/Separee/Panel/ButtonMargin3/Buttons/ButtonSepareeWeiss" index="0"]
+visible = true
+theme_override_styles/panel = SubResource("StyleBoxFlat_hkno4")
+
+[node name="Label" parent="RiddleButtons/Controller/Separee/Panel/ButtonMargin3/Buttons/ButtonSepareeWeiss" index="1"]
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Licht
+Weiß"
+
+[node name="ButtonSepareeAus" parent="RiddleButtons/Controller/Separee/Panel/ButtonMargin3/Buttons" instance=ExtResource("7_2ulun")]
+layout_mode = 2
+
+[node name="PanelContainer" parent="RiddleButtons/Controller/Separee/Panel/ButtonMargin3/Buttons/ButtonSepareeAus" index="0"]
+theme_override_styles/panel = SubResource("StyleBoxFlat_hkno4")
+
+[node name="Label" parent="RiddleButtons/Controller/Separee/Panel/ButtonMargin3/Buttons/ButtonSepareeAus" index="1"]
+text = "Licht
+Ausschalten"
+
+[node name="Ping" parent="RiddleButtons/Controller/Separee/Panel" instance=ExtResource("4_jr8c0")]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 0
+grow_vertical = 2
+riddle = 6
+
+[node name="MarginContainer" type="MarginContainer" parent="RiddleButtons"]
+visible = false
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_top = 22
+
+[node name="Overlay" type="Panel" parent="RiddleButtons/MarginContainer"]
+layout_mode = 2
+script = ExtResource("7_6h440")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -130.0
+offset_top = -361.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_constants/margin_bottom = 236
+
+[node name="ManualMusic" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+metadata/_edit_group_ = true
+
+[node name="atmo1" type="Button" parent="MarginContainer/ManualMusic"]
+layout_mode = 2
+theme = ExtResource("16_xh5hu")
+text = "Atmo1"
+
+[node name="stopptanz" type="Button" parent="MarginContainer/ManualMusic"]
+layout_mode = 2
+theme = ExtResource("16_xh5hu")
+text = "Stopptanz"
+
+[node name="atmo2" type="Button" parent="MarginContainer/ManualMusic"]
+layout_mode = 2
+theme = ExtResource("16_xh5hu")
+text = "Atmo2"
+
+[node name="separee" type="Button" parent="MarginContainer/ManualMusic"]
+layout_mode = 2
+theme = ExtResource("16_xh5hu")
+text = "Separee"
+
+[node name="finale" type="Button" parent="MarginContainer/ManualMusic"]
+layout_mode = 2
+theme = ExtResource("16_xh5hu")
+text = "Finale"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/ManualMusic"]
+layout_mode = 2
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="Stop" type="TextureButton" parent="MarginContainer/ManualMusic/HBoxContainer"]
+self_modulate = Color(0.329159, 0.329158, 0.329159, 1)
+layout_mode = 2
+focus_mode = 0
+texture_normal = ExtResource("10_myun6")
+stretch_mode = 5
+
+[node name="Play" type="TextureButton" parent="MarginContainer/ManualMusic/HBoxContainer"]
+self_modulate = Color(0.329159, 0.329158, 0.329159, 1)
+layout_mode = 2
+focus_mode = 0
+texture_normal = ExtResource("21_4shkp")
+stretch_mode = 5
+
+[node name="UtilityButtons" type="MarginContainer" parent="."]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -129.0
+offset_top = -112.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_constants/margin_bottom = 50
+metadata/_edit_group_ = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UtilityButtons"]
+layout_mode = 2
+alignment = 2
+
+[node name="Help" type="Button" parent="UtilityButtons/VBoxContainer"]
+layout_mode = 2
+focus_mode = 0
+theme = ExtResource("16_xh5hu")
+text = "Feedback"
+
+[node name="Debug" type="Button" parent="UtilityButtons/VBoxContainer"]
+layout_mode = 2
+focus_mode = 0
+theme = ExtResource("16_xh5hu")
+text = "Debug"
+
+[node name="ResetButtons" type="VBoxContainer" parent="."]
+visible = false
+offset_left = -3.0
+offset_top = 33.0
+offset_right = 160.0
+offset_bottom = 87.0
+script = ExtResource("10_ej0gq")
+
+[node name="Soft" type="Button" parent="ResetButtons"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Netzwerk Soft Reset"
+
+[node name="Hard" type="Button" parent="ResetButtons"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Netzwerk Hard Reset"
+
+[node name="Stopwatch" type="PanelContainer" parent="." node_paths=PackedStringArray("duration_label")]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -280.0
+offset_top = 18.0
+offset_bottom = 60.0
+grow_horizontal = 0
+theme_override_styles/panel = ExtResource("15_0gdhf")
+script = ExtResource("1_qovry")
+duration_label = NodePath("DurationLabel")
+metadata/_edit_group_ = true
+
+[node name="DurationLabel" type="Label" parent="Stopwatch"]
+layout_mode = 2
+theme = ExtResource("16_xh5hu")
+theme_override_font_sizes/font_size = 26
+text = "00:00:00"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MusicPlayer" type="AudioStreamPlayer" parent="." node_paths=PackedStringArray("animator")]
+script = ExtResource("3_kv775")
+animator = NodePath("AnimationPlayer")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="MusicPlayer"]
+libraries = {
+"": SubResource("AnimationLibrary_rpdep")
+}
+
+[node name="Connector" type="Node" parent="." node_paths=PackedStringArray("timer_ack", "timer_sync_packages")]
+script = ExtResource("2_5v0y2")
+timer_ack = NodePath("TimerACKTimeout")
+timer_sync_packages = NodePath("TimerSync")
+
+[node name="TimerACKTimeout" type="Timer" parent="Connector"]
+wait_time = 20.0
+one_shot = true
+
+[node name="TimerSync" type="Timer" parent="Connector"]
+one_shot = true
+
+[node name="FrameOverlay" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+metadata/_edit_group_ = true
+metadata/_edit_lock_ = true
+
+[node name="TopPanel" type="Panel" parent="FrameOverlay"]
+custom_minimum_size = Vector2(0, 14)
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 14.0
+grow_horizontal = 2
+theme_override_styles/panel = ExtResource("14_qmo6p")
+
+[node name="BottomPanel" type="Panel" parent="FrameOverlay"]
+custom_minimum_size = Vector2(0, 14)
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/panel = ExtResource("14_qmo6p")
+
+[node name="MarginContainer" type="MarginContainer" parent="FrameOverlay/BottomPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_right = 5
+
+[node name="HBoxContainer" type="HBoxContainer" parent="FrameOverlay/BottomPanel/MarginContainer"]
+layout_mode = 2
+alignment = 2
+
+[node name="Label" type="Label" parent="FrameOverlay/BottomPanel/MarginContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 9
+text = "Made with"
+
+[node name="MarginContainer" type="MarginContainer" parent="FrameOverlay/BottomPanel/MarginContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_top = 1
+theme_override_constants/margin_bottom = 1
+
+[node name="TextureRect" type="TextureRect" parent="FrameOverlay/BottomPanel/MarginContainer/HBoxContainer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+texture = ExtResource("10_jqrgx")
+expand_mode = 3
+
+[node name="Label2" type="Label" parent="FrameOverlay/BottomPanel/MarginContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 9
+text = "for Breakout Göttingen"
+
+[node name="PregameTimer" type="PanelContainer" parent="." node_paths=PackedStringArray("pregame_delay_label", "buttons_change_time", "buttons_time_control")]
+custom_minimum_size = Vector2(280, 0)
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -280.0
+offset_top = 67.0
+offset_bottom = 173.0
+grow_horizontal = 0
+size_flags_horizontal = 8
+theme_override_styles/panel = ExtResource("15_0gdhf")
+script = ExtResource("15_dfdlo")
+pregame_delay_label = NodePath("MarginContainer/VBoxContainer/Duration")
+buttons_change_time = NodePath("MarginContainer/VBoxContainer/ChangeDelayButtons")
+buttons_time_control = NodePath("MarginContainer/VBoxContainer/TimeControlButtons")
+metadata/_edit_group_ = true
+
+[node name="MarginContainer" type="MarginContainer" parent="PregameTimer"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PregameTimer/MarginContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="Title" type="Label" parent="PregameTimer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("16_xh5hu")
+text = "Spielstart Countdown"
+horizontal_alignment = 1
+
+[node name="Duration" type="Label" parent="PregameTimer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("16_xh5hu")
+theme_override_font_sizes/font_size = 20
+text = "00:00"
+horizontal_alignment = 1
+
+[node name="ChangeDelayButtons" type="HBoxContainer" parent="PregameTimer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="Decrease" type="Button" parent="PregameTimer/MarginContainer/VBoxContainer/ChangeDelayButtons"]
+layout_mode = 2
+focus_mode = 0
+theme = ExtResource("17_717m6")
+text = "-10s"
+
+[node name="Increase" type="Button" parent="PregameTimer/MarginContainer/VBoxContainer/ChangeDelayButtons"]
+layout_mode = 2
+focus_mode = 0
+theme = ExtResource("17_717m6")
+text = "+10s"
+
+[node name="TimeControlButtons" type="HBoxContainer" parent="PregameTimer/MarginContainer/VBoxContainer"]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="Skip" type="Button" parent="PregameTimer/MarginContainer/VBoxContainer/TimeControlButtons"]
+layout_mode = 2
+focus_mode = 0
+theme = ExtResource("17_717m6")
+text = "Überspringen"
+
+[node name="Cancel" type="Button" parent="PregameTimer/MarginContainer/VBoxContainer/TimeControlButtons"]
+layout_mode = 2
+focus_mode = 0
+theme = ExtResource("17_717m6")
+text = "Zurücksetzen"
+
+[node name="StartGameSessionButton" type="Button" parent="."]
+offset_top = 142.0
+offset_right = 394.0
+offset_bottom = 173.0
+focus_mode = 0
+theme = ExtResource("18_7wtpm")
+text = "Spielstart mit Countdown"
+script = ExtResource("16_7kkjc")
+
+[node name="RestartWithNewGameSessionButton" type="Button" parent="."]
+visible = false
+offset_top = 142.0
+offset_right = 394.0
+offset_bottom = 173.0
+focus_mode = 0
+theme = ExtResource("18_7wtpm")
+text = "Neue Spielsession Vorbereiten"
+script = ExtResource("23_3xokn")
+
+[node name="Debug" parent="." instance=ExtResource("23_o6lvy")]
+
+[node name="Feedback" parent="." instance=ExtResource("24_dx087")]
+
+[node name="Finale" type="Node" parent="."]
+script = ExtResource("26_l61b3")
+
+[connection signal="on_press" from="RiddleButtons/Controller/Drinks/Panel/ButtonMargin2/Buttons/ButtonDrinksSolve2" to="Connector" method="DinksSolve"]
+[connection signal="on_press" from="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin/Buttons/ButtonStopptanzInit" to="Connector" method="StopptanzInit"]
+[connection signal="on_press" from="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin/Buttons/ButtonStopptanzInit" to="MusicPlayer" method="play_track" binds= ["stopptanz", true]]
+[connection signal="on_press" from="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin/Buttons/ButtonStopptanzDance" to="Connector" method="StopptanzDance"]
+[connection signal="on_press" from="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin/Buttons/ButtonStopptanzDance" to="MusicPlayer" method="unpause" binds= [1.0]]
+[connection signal="on_press" from="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin/Buttons/ButtonStopptanzStop" to="Connector" method="StopptanzStop"]
+[connection signal="on_press" from="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin/Buttons/ButtonStopptanzStop" to="MusicPlayer" method="pause" binds= [1.8]]
+[connection signal="on_press" from="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin2/Buttons/ButtonStopptanzSolve" to="Connector" method="StopptanzSolve"]
+[connection signal="on_press" from="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin2/Buttons/ButtonStopptanzSolve" to="MusicPlayer" method="play_track" binds= ["atmo2"]]
+[connection signal="on_press" from="RiddleButtons/Controller/Sparkasten/Panel/ButtonMargin3/Buttons/ButtonSparkastenOpen" to="Connector" method="SparkastenOpen"]
+[connection signal="on_press" from="RiddleButtons/Controller/Telefon/Panel/ButtonMargin/Buttons/ButtonWasserhahnEnable" to="Connector" method="WasserhahnEnable"]
+[connection signal="on_press" from="RiddleButtons/Controller/Telefon/Panel/ButtonMargin3/Buttons/ButtonTelefonRing" to="Connector" method="TelefonRing"]
+[connection signal="on_press" from="RiddleButtons/Controller/Telefon/Panel/ButtonMargin3/Buttons/ButtonSexdungeonOpen2" to="Connector" method="WasserhahnOpen"]
+[connection signal="on_press" from="RiddleButtons/Controller/Schichtplan/Panel/ButtonMargin2/Buttons/ButtonSchichtplanOpen" to="Connector" method="SchichtplanOpen"]
+[connection signal="on_press" from="RiddleButtons/Controller/Separee/Panel/ButtonMargin/Buttons/ButtonSepareeRot" to="Connector" method="SepareeRot"]
+[connection signal="on_press" from="RiddleButtons/Controller/Separee/Panel/ButtonMargin/Buttons/ButtonSepareeRot" to="MusicPlayer" method="play_track" binds= ["separee"]]
+[connection signal="on_press" from="RiddleButtons/Controller/Separee/Panel/ButtonMargin/Buttons/ButtonSepareeGrün" to="Connector" method="SepareeGruen"]
+[connection signal="on_press" from="RiddleButtons/Controller/Separee/Panel/ButtonMargin/Buttons/ButtonSepareeGrün" to="MusicPlayer" method="play_track" binds= ["separee"]]
+[connection signal="on_press" from="RiddleButtons/Controller/Separee/Panel/ButtonMargin/Buttons/ButtonSepareeBlau" to="Connector" method="SepareeBlau"]
+[connection signal="on_press" from="RiddleButtons/Controller/Separee/Panel/ButtonMargin/Buttons/ButtonSepareeBlau" to="MusicPlayer" method="play_track" binds= ["separee"]]
+[connection signal="on_press" from="RiddleButtons/Controller/Separee/Panel/ButtonMargin2/Buttons/ButtonSepareeSolve2" to="Connector" method="SepareeOpen"]
+[connection signal="on_press" from="RiddleButtons/Controller/Separee/Panel/ButtonMargin2/Buttons/ButtonSepareeSolve2" to="Finale" method="request_finale"]
+[connection signal="on_press" from="RiddleButtons/Controller/Separee/Panel/ButtonMargin2/Buttons/ButtonSepareeSolve2" to="MusicPlayer" method="play_track" binds= ["finale"]]
+[connection signal="on_press" from="RiddleButtons/Controller/Separee/Panel/ButtonMargin3/Buttons/ButtonSepareeWeiss" to="Connector" method="SepareeWhite"]
+[connection signal="on_press" from="RiddleButtons/Controller/Separee/Panel/ButtonMargin3/Buttons/ButtonSepareeAus" to="Connector" method="SepareeLightsOff"]
+[connection signal="button_down" from="MarginContainer/ManualMusic/atmo1" to="MusicPlayer" method="play_track" binds= ["atmo1", true]]
+[connection signal="button_down" from="MarginContainer/ManualMusic/stopptanz" to="MusicPlayer" method="play_track" binds= ["stopptanz", true]]
+[connection signal="button_down" from="MarginContainer/ManualMusic/atmo2" to="MusicPlayer" method="play_track" binds= ["atmo2", true]]
+[connection signal="button_down" from="MarginContainer/ManualMusic/separee" to="MusicPlayer" method="play_track" binds= ["separee", true]]
+[connection signal="button_down" from="MarginContainer/ManualMusic/finale" to="MusicPlayer" method="play_track" binds= ["finale", true]]
+[connection signal="button_down" from="MarginContainer/ManualMusic/HBoxContainer/Stop" to="MusicPlayer" method="pause"]
+[connection signal="button_down" from="MarginContainer/ManualMusic/HBoxContainer/Play" to="MusicPlayer" method="unpause"]
+[connection signal="button_down" from="UtilityButtons/VBoxContainer/Help" to="Feedback" method="show"]
+[connection signal="button_down" from="UtilityButtons/VBoxContainer/Debug" to="Debug" method="show"]
+[connection signal="on_hard_reset" from="ResetButtons" to="Connector" method="SystemHardReset"]
+[connection signal="on_soft_reset" from="ResetButtons" to="Connector" method="SystemSoftReset"]
+[connection signal="button_down" from="ResetButtons/Soft" to="ResetButtons" method="soft_reset"]
+[connection signal="button_down" from="ResetButtons/Hard" to="ResetButtons" method="hard_reset"]
+[connection signal="button_down" from="PregameTimer/MarginContainer/VBoxContainer/ChangeDelayButtons/Decrease" to="PregameTimer" method="increase_delay" binds= [-10]]
+[connection signal="button_down" from="PregameTimer/MarginContainer/VBoxContainer/ChangeDelayButtons/Increase" to="PregameTimer" method="increase_delay" binds= [10]]
+[connection signal="button_down" from="PregameTimer/MarginContainer/VBoxContainer/TimeControlButtons/Skip" to="PregameTimer" method="skip"]
+[connection signal="button_down" from="PregameTimer/MarginContainer/VBoxContainer/TimeControlButtons/Cancel" to="PregameTimer" method="cancel"]
+[connection signal="button_down" from="StartGameSessionButton" to="PregameTimer" method="start"]
+[connection signal="button_down" from="StartGameSessionButton" to="StartGameSessionButton" method="set_visible" binds= [false]]
+
+[editable path="RiddleButtons/Controller/Drinks/Panel/ButtonMargin2/Buttons/ButtonDrinksSolve2"]
+[editable path="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin/Buttons/ButtonStopptanzInit"]
+[editable path="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin/Buttons/ButtonStopptanzDance"]
+[editable path="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin/Buttons/ButtonStopptanzStop"]
+[editable path="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin2/Buttons/ButtonStopptanzSolve"]
+[editable path="RiddleButtons/Controller/Sparkasten/Panel/ButtonMargin3/Buttons/ButtonSparkastenOpen"]
+[editable path="RiddleButtons/Controller/Telefon/Panel/ButtonMargin/Buttons/ButtonWasserhahnEnable"]
+[editable path="RiddleButtons/Controller/Telefon/Panel/ButtonMargin3/Buttons/ButtonTelefonRing"]
+[editable path="RiddleButtons/Controller/Telefon/Panel/ButtonMargin3/Buttons/ButtonSexdungeonOpen2"]
+[editable path="RiddleButtons/Controller/Schichtplan/Panel/ButtonMargin2/Buttons/ButtonSchichtplanOpen"]
+[editable path="RiddleButtons/Controller/Separee/Panel/ButtonMargin/Buttons/ButtonSepareeRot"]
+[editable path="RiddleButtons/Controller/Separee/Panel/ButtonMargin/Buttons/ButtonSepareeGrün"]
+[editable path="RiddleButtons/Controller/Separee/Panel/ButtonMargin/Buttons/ButtonSepareeBlau"]
+[editable path="RiddleButtons/Controller/Separee/Panel/ButtonMargin2/Buttons/ButtonSepareeSolve2"]
+[editable path="RiddleButtons/Controller/Separee/Panel/ButtonMargin3/Buttons/ButtonSepareeWeiss"]
+[editable path="RiddleButtons/Controller/Separee/Panel/ButtonMargin3/Buttons/ButtonSepareeAus"]

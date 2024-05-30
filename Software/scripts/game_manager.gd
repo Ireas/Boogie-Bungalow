@@ -2,7 +2,7 @@ extends Node
 
 # CONSTANTS
 ### ignore no coms problem 
-var WORKING_FROM_HOME = true
+var WORKING_FROM_HOME = false
 
 ### preload scenes
 @export var LOADING_SCREEN : PackedScene = preload("res://scenes/loading_screen.tscn")
@@ -63,7 +63,13 @@ func request_master_ack():
 
 
 func start_new_game_session():
-	session = GAME_SESSION.instantiate()
+	if session:
+		var previous_delay = session.previous_delay
+		session = GAME_SESSION.instantiate()
+		session.pregame_delay = previous_delay
+	else:
+		session = GAME_SESSION.instantiate()
+	
 	new_game_session_started.emit()
 
 func restart_session():

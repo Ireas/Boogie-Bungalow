@@ -6,7 +6,6 @@ using System.IO.Ports;
 using System.Reflection;
 
 // currently green traffic light is slow, original uses same code.... Why?
-// no reset but if rätselstrom is out, test?
 
 
 public partial class Connector : Node{
@@ -26,7 +25,6 @@ public partial class Connector : Node{
 	private const int TARGET_PORT_BAUDRATE = 115200;
 
 	private const float SYNC_PACK_DOWNTIME = 0.5f;
-	private const float ACK_TIMEOUT_MAX = 10f;
 	
 	private const float TELEFPHONE_RING_DURATION = 3f;
 	private const float OPEN_SPARKASTEN_AFTER_STOPPTANZ_DELAY = 2.5f;

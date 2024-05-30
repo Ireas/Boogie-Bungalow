@@ -5,8 +5,8 @@
 [ext_resource type="Script" path="res://scripts/Connector.cs" id="2_5v0y2"]
 [ext_resource type="Theme" uid="uid://sugpe2yib08n" path="res://styles/note.tres" id="2_8htos"]
 [ext_resource type="Script" path="res://scripts/music_player.gd" id="3_kv775"]
+[ext_resource type="Script" path="res://riddle_button.gd" id="4_036af"]
 [ext_resource type="PackedScene" uid="uid://bquu7rbldubs" path="res://modules/ping/ping.tscn" id="4_jr8c0"]
-[ext_resource type="PackedScene" uid="uid://djrna64nmdkwm" path="res://modules/ui_button/ui_button.tscn" id="7_2ulun"]
 [ext_resource type="Script" path="res://riddle_buttons_overlay.gd" id="7_6h440"]
 [ext_resource type="Texture2D" uid="uid://cee8ntxujt2c8" path="res://images/Rot.png" id="7_17ck7"]
 [ext_resource type="Texture2D" uid="uid://b6rlcqmv51afq" path="res://images/Grün.png" id="8_fk3wt"]
@@ -37,42 +37,41 @@ bg_color = Color(0.44358, 0.421226, 0.565551, 1)
 bg_color = Color(0.596079, 0.500042, 0.606036, 1)
 corner_radius_bottom_right = 5
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_o23ju"]
-bg_color = Color(0.070625, 0.329469, 0.210616, 1)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_53ov3"]
+bg_color = Color(0.0690678, 0.325406, 0, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hr7t5"]
+bg_color = Color(0.453672, 0, 0.0480986, 1)
 corner_radius_top_left = 5
 corner_radius_top_right = 5
 corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5pf7f"]
-bg_color = Color(0.560191, 0.133241, 0.150046, 1)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wynm2"]
+bg_color = Color(0.941176, 0.415686, 0.686275, 1)
 corner_radius_top_left = 5
 corner_radius_top_right = 5
 corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_d80xw"]
-bg_color = Color(0.942686, 0.4157, 0.686177, 1)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_l8ho2"]
+bg_color = Color(0.309804, 0.470588, 0.337255, 1)
 corner_radius_top_left = 5
 corner_radius_top_right = 5
 corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_oorca"]
-bg_color = Color(0.308251, 0.469415, 0.336346, 1)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_g55wc"]
+bg_color = Color(0.251161, 0.424779, 0.684483, 1)
 corner_radius_top_left = 5
 corner_radius_top_right = 5
 corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_scg08"]
-bg_color = Color(0.280863, 0.34731, 0.683463, 1)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hkno4"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_301tn"]
 bg_color = Color(1, 1, 1, 1)
 corner_radius_top_left = 5
 corner_radius_top_right = 5
@@ -175,7 +174,8 @@ layout_mode = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="RiddleButtons/Controller/Notes"]
 layout_mode = 2
-theme_override_constants/margin_left = 20
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_bottom = -8
 
 [node name="Label" type="Label" parent="RiddleButtons/Controller/Notes/MarginContainer"]
 layout_mode = 2
@@ -186,6 +186,7 @@ horizontal_alignment = 1
 [node name="MarginContainer2" type="MarginContainer" parent="RiddleButtons/Controller/Notes"]
 layout_mode = 2
 theme_override_constants/margin_left = 200
+theme_override_constants/margin_bottom = -8
 
 [node name="Label2" type="Label" parent="RiddleButtons/Controller/Notes/MarginContainer2"]
 layout_mode = 2
@@ -196,6 +197,7 @@ horizontal_alignment = 1
 [node name="MarginContainer3" type="MarginContainer" parent="RiddleButtons/Controller/Notes"]
 layout_mode = 2
 theme_override_constants/margin_left = 250
+theme_override_constants/margin_bottom = -8
 
 [node name="Label3" type="Label" parent="RiddleButtons/Controller/Notes/MarginContainer3"]
 layout_mode = 2
@@ -207,6 +209,7 @@ horizontal_alignment = 1
 [node name="MarginContainer4" type="MarginContainer" parent="RiddleButtons/Controller/Notes"]
 layout_mode = 2
 theme_override_constants/margin_left = 140
+theme_override_constants/margin_bottom = -8
 
 [node name="Label4" type="Label" parent="RiddleButtons/Controller/Notes/MarginContainer4"]
 layout_mode = 2
@@ -217,6 +220,7 @@ horizontal_alignment = 1
 [node name="MarginContainer5" type="MarginContainer" parent="RiddleButtons/Controller/Notes"]
 layout_mode = 2
 theme_override_constants/margin_left = 135
+theme_override_constants/margin_bottom = -8
 
 [node name="Label5" type="Label" parent="RiddleButtons/Controller/Notes/MarginContainer5"]
 layout_mode = 2
@@ -273,12 +277,46 @@ theme_override_constants/margin_left = 550
 [node name="Buttons" type="HBoxContainer" parent="RiddleButtons/Controller/Drinks/Panel/ButtonMargin2"]
 layout_mode = 2
 
-[node name="ButtonDrinksSolve2" parent="RiddleButtons/Controller/Drinks/Panel/ButtonMargin2/Buttons" instance=ExtResource("7_2ulun")]
+[node name="DrinksSolve" type="Button" parent="RiddleButtons/Controller/Drinks/Panel/ButtonMargin2/Buttons"]
+custom_minimum_size = Vector2(100, 25)
 layout_mode = 2
+focus_mode = 0
+script = ExtResource("4_036af")
 
-[node name="Label" parent="RiddleButtons/Controller/Drinks/Panel/ButtonMargin2/Buttons/ButtonDrinksSolve2" index="1"]
-text = "Drinks
-Lösen"
+[node name="Labels" type="VBoxContainer" parent="RiddleButtons/Controller/Drinks/Panel/ButtonMargin2/Buttons/DrinksSolve"]
+layout_mode = 1
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -19.0
+offset_right = 19.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="RiddleButtons/Controller/Drinks/Panel/ButtonMargin2/Buttons/DrinksSolve/Labels"]
+layout_mode = 2
+theme = ExtResource("17_717m6")
+theme_override_font_sizes/font_size = 12
+text = "Drinks"
+horizontal_alignment = 1
+
+[node name="Label2" type="Label" parent="RiddleButtons/Controller/Drinks/Panel/ButtonMargin2/Buttons/DrinksSolve/Labels"]
+layout_mode = 2
+theme = ExtResource("17_717m6")
+theme_override_font_sizes/font_size = 12
+text = "Lösen"
+horizontal_alignment = 1
+
+[node name="DisableOverlay" type="Panel" parent="RiddleButtons/Controller/Drinks/Panel/ButtonMargin2/Buttons/DrinksSolve"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="ButtonMargin3" type="MarginContainer" parent="RiddleButtons/Controller/Drinks/Panel"]
 layout_mode = 1
@@ -339,32 +377,164 @@ theme_override_constants/margin_left = 140
 [node name="Buttons" type="HBoxContainer" parent="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin"]
 layout_mode = 2
 
-[node name="ButtonStopptanzInit" parent="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin/Buttons" instance=ExtResource("7_2ulun")]
+[node name="StopptanzInit" type="Button" parent="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin/Buttons"]
+custom_minimum_size = Vector2(100, 25)
 layout_mode = 2
+focus_mode = 0
+script = ExtResource("4_036af")
 
-[node name="Label" parent="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin/Buttons/ButtonStopptanzInit" index="1"]
-text = "Stopptanz
-Starten"
+[node name="Labels" type="VBoxContainer" parent="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin/Buttons/StopptanzInit"]
+layout_mode = 1
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -19.0
+offset_right = 19.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
 
-[node name="ButtonStopptanzDance" parent="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin/Buttons" instance=ExtResource("7_2ulun")]
+[node name="Label" type="Label" parent="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin/Buttons/StopptanzInit/Labels"]
 layout_mode = 2
+theme = ExtResource("17_717m6")
+theme_override_font_sizes/font_size = 12
+text = "Stopptanz"
+horizontal_alignment = 1
 
-[node name="PanelContainer" parent="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin/Buttons/ButtonStopptanzDance" index="0"]
-visible = true
-theme_override_styles/panel = SubResource("StyleBoxFlat_o23ju")
+[node name="Label2" type="Label" parent="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin/Buttons/StopptanzInit/Labels"]
+layout_mode = 2
+theme = ExtResource("17_717m6")
+theme_override_font_sizes/font_size = 12
+text = "Starten"
+horizontal_alignment = 1
 
-[node name="Label" parent="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin/Buttons/ButtonStopptanzDance" index="1"]
+[node name="DisableOverlay" type="Panel" parent="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin/Buttons/StopptanzInit"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="StopptanzDance" type="Button" parent="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin/Buttons"]
+custom_minimum_size = Vector2(100, 25)
+layout_mode = 2
+focus_mode = 0
+script = ExtResource("4_036af")
+
+[node name="Background" type="MarginContainer" parent="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin/Buttons/StopptanzDance"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="Panel" type="Panel" parent="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin/Buttons/StopptanzDance/Background"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_53ov3")
+
+[node name="Labels" type="VBoxContainer" parent="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin/Buttons/StopptanzDance"]
+layout_mode = 1
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -19.0
+offset_right = 19.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin/Buttons/StopptanzDance/Labels"]
+layout_mode = 2
+theme = ExtResource("17_717m6")
+theme_override_font_sizes/font_size = 12
 text = "Dance!"
+horizontal_alignment = 1
 
-[node name="ButtonStopptanzStop" parent="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin/Buttons" instance=ExtResource("7_2ulun")]
+[node name="Label2" type="Label" parent="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin/Buttons/StopptanzDance/Labels"]
 layout_mode = 2
+theme = ExtResource("17_717m6")
+theme_override_font_sizes/font_size = 12
+text = "(2s Delay)"
+horizontal_alignment = 1
 
-[node name="PanelContainer" parent="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin/Buttons/ButtonStopptanzStop" index="0"]
-visible = true
-theme_override_styles/panel = SubResource("StyleBoxFlat_5pf7f")
+[node name="DisableOverlay" type="Panel" parent="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin/Buttons/StopptanzDance"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
-[node name="Label" parent="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin/Buttons/ButtonStopptanzStop" index="1"]
+[node name="StopptanzStop" type="Button" parent="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin/Buttons"]
+custom_minimum_size = Vector2(100, 25)
+layout_mode = 2
+focus_mode = 0
+script = ExtResource("4_036af")
+
+[node name="Background" type="MarginContainer" parent="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin/Buttons/StopptanzStop"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="Panel" type="Panel" parent="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin/Buttons/StopptanzStop/Background"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_hr7t5")
+
+[node name="Labels" type="VBoxContainer" parent="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin/Buttons/StopptanzStop"]
+layout_mode = 1
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -19.0
+offset_right = 19.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin/Buttons/StopptanzStop/Labels"]
+layout_mode = 2
+theme = ExtResource("17_717m6")
+theme_override_font_sizes/font_size = 12
 text = "Stop!"
+horizontal_alignment = 1
+
+[node name="Label2" type="Label" parent="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin/Buttons/StopptanzStop/Labels"]
+layout_mode = 2
+theme = ExtResource("17_717m6")
+theme_override_font_sizes/font_size = 12
+text = "(2s Delay)"
+horizontal_alignment = 1
+
+[node name="DisableOverlay" type="Panel" parent="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin/Buttons/StopptanzStop"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="ButtonMargin2" type="MarginContainer" parent="RiddleButtons/Controller/Stopptanz/Panel"]
 layout_mode = 1
@@ -378,12 +548,46 @@ theme_override_constants/margin_left = 550
 [node name="Buttons" type="HBoxContainer" parent="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin2"]
 layout_mode = 2
 
-[node name="ButtonStopptanzSolve" parent="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin2/Buttons" instance=ExtResource("7_2ulun")]
+[node name="StopptanzSolve" type="Button" parent="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin2/Buttons"]
+custom_minimum_size = Vector2(100, 25)
 layout_mode = 2
+focus_mode = 0
+script = ExtResource("4_036af")
 
-[node name="Label" parent="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin2/Buttons/ButtonStopptanzSolve" index="1"]
-text = "Stopptanz
-Lösen"
+[node name="Labels" type="VBoxContainer" parent="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin2/Buttons/StopptanzSolve"]
+layout_mode = 1
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -19.0
+offset_right = 19.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin2/Buttons/StopptanzSolve/Labels"]
+layout_mode = 2
+theme = ExtResource("17_717m6")
+theme_override_font_sizes/font_size = 12
+text = "Stopptanz"
+horizontal_alignment = 1
+
+[node name="Label2" type="Label" parent="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin2/Buttons/StopptanzSolve/Labels"]
+layout_mode = 2
+theme = ExtResource("17_717m6")
+theme_override_font_sizes/font_size = 12
+text = "Lösen"
+horizontal_alignment = 1
+
+[node name="DisableOverlay" type="Panel" parent="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin2/Buttons/StopptanzSolve"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="ButtonMargin3" type="MarginContainer" parent="RiddleButtons/Controller/Stopptanz/Panel"]
 layout_mode = 1
@@ -470,12 +674,46 @@ theme_override_constants/margin_left = 685
 [node name="Buttons" type="HBoxContainer" parent="RiddleButtons/Controller/Sparkasten/Panel/ButtonMargin3"]
 layout_mode = 2
 
-[node name="ButtonSparkastenOpen" parent="RiddleButtons/Controller/Sparkasten/Panel/ButtonMargin3/Buttons" instance=ExtResource("7_2ulun")]
+[node name="SparkastenOpen" type="Button" parent="RiddleButtons/Controller/Sparkasten/Panel/ButtonMargin3/Buttons"]
+custom_minimum_size = Vector2(100, 25)
 layout_mode = 2
+focus_mode = 0
+script = ExtResource("4_036af")
 
-[node name="Label" parent="RiddleButtons/Controller/Sparkasten/Panel/ButtonMargin3/Buttons/ButtonSparkastenOpen" index="1"]
-text = "Sparkasten
-Öffnen"
+[node name="Labels" type="VBoxContainer" parent="RiddleButtons/Controller/Sparkasten/Panel/ButtonMargin3/Buttons/SparkastenOpen"]
+layout_mode = 1
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -19.0
+offset_right = 19.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="RiddleButtons/Controller/Sparkasten/Panel/ButtonMargin3/Buttons/SparkastenOpen/Labels"]
+layout_mode = 2
+theme = ExtResource("17_717m6")
+theme_override_font_sizes/font_size = 12
+text = "Sparkasten"
+horizontal_alignment = 1
+
+[node name="Label2" type="Label" parent="RiddleButtons/Controller/Sparkasten/Panel/ButtonMargin3/Buttons/SparkastenOpen/Labels"]
+layout_mode = 2
+theme = ExtResource("17_717m6")
+theme_override_font_sizes/font_size = 12
+text = "Öffnen"
+horizontal_alignment = 1
+
+[node name="DisableOverlay" type="Panel" parent="RiddleButtons/Controller/Sparkasten/Panel/ButtonMargin3/Buttons/SparkastenOpen"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="Ping" parent="RiddleButtons/Controller/Sparkasten/Panel" instance=ExtResource("4_jr8c0")]
 layout_mode = 1
@@ -524,12 +762,46 @@ theme_override_constants/margin_left = 140
 [node name="Buttons" type="HBoxContainer" parent="RiddleButtons/Controller/Telefon/Panel/ButtonMargin"]
 layout_mode = 2
 
-[node name="ButtonWasserhahnEnable" parent="RiddleButtons/Controller/Telefon/Panel/ButtonMargin/Buttons" instance=ExtResource("7_2ulun")]
+[node name="WasserhahnActivate" type="Button" parent="RiddleButtons/Controller/Telefon/Panel/ButtonMargin/Buttons"]
+custom_minimum_size = Vector2(100, 25)
 layout_mode = 2
+focus_mode = 0
+script = ExtResource("4_036af")
 
-[node name="Label" parent="RiddleButtons/Controller/Telefon/Panel/ButtonMargin/Buttons/ButtonWasserhahnEnable" index="1"]
-text = "Wasserhahn
-Aktivieren"
+[node name="Labels" type="VBoxContainer" parent="RiddleButtons/Controller/Telefon/Panel/ButtonMargin/Buttons/WasserhahnActivate"]
+layout_mode = 1
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -19.0
+offset_right = 19.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="RiddleButtons/Controller/Telefon/Panel/ButtonMargin/Buttons/WasserhahnActivate/Labels"]
+layout_mode = 2
+theme = ExtResource("17_717m6")
+theme_override_font_sizes/font_size = 12
+text = "Wasserhahn"
+horizontal_alignment = 1
+
+[node name="Label2" type="Label" parent="RiddleButtons/Controller/Telefon/Panel/ButtonMargin/Buttons/WasserhahnActivate/Labels"]
+layout_mode = 2
+theme = ExtResource("17_717m6")
+theme_override_font_sizes/font_size = 12
+text = "Aktivieren"
+horizontal_alignment = 1
+
+[node name="DisableOverlay" type="Panel" parent="RiddleButtons/Controller/Telefon/Panel/ButtonMargin/Buttons/WasserhahnActivate"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="ButtonMargin2" type="MarginContainer" parent="RiddleButtons/Controller/Telefon/Panel"]
 layout_mode = 1
@@ -559,19 +831,87 @@ theme_override_constants/margin_left = 685
 layout_mode = 2
 size_flags_horizontal = 0
 
-[node name="ButtonTelefonRing" parent="RiddleButtons/Controller/Telefon/Panel/ButtonMargin3/Buttons" instance=ExtResource("7_2ulun")]
+[node name="TelephoneRing" type="Button" parent="RiddleButtons/Controller/Telefon/Panel/ButtonMargin3/Buttons"]
+custom_minimum_size = Vector2(100, 25)
 layout_mode = 2
+focus_mode = 0
+script = ExtResource("4_036af")
 
-[node name="Label" parent="RiddleButtons/Controller/Telefon/Panel/ButtonMargin3/Buttons/ButtonTelefonRing" index="1"]
-text = "Telefon
-Klingeln"
+[node name="Labels" type="VBoxContainer" parent="RiddleButtons/Controller/Telefon/Panel/ButtonMargin3/Buttons/TelephoneRing"]
+layout_mode = 1
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -19.0
+offset_right = 19.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
 
-[node name="ButtonSexdungeonOpen2" parent="RiddleButtons/Controller/Telefon/Panel/ButtonMargin3/Buttons" instance=ExtResource("7_2ulun")]
+[node name="Label" type="Label" parent="RiddleButtons/Controller/Telefon/Panel/ButtonMargin3/Buttons/TelephoneRing/Labels"]
 layout_mode = 2
+theme = ExtResource("17_717m6")
+theme_override_font_sizes/font_size = 12
+text = "Telefon"
+horizontal_alignment = 1
 
-[node name="Label" parent="RiddleButtons/Controller/Telefon/Panel/ButtonMargin3/Buttons/ButtonSexdungeonOpen2" index="1"]
-text = "Sexdungeon
-Öffnen"
+[node name="Label2" type="Label" parent="RiddleButtons/Controller/Telefon/Panel/ButtonMargin3/Buttons/TelephoneRing/Labels"]
+layout_mode = 2
+theme = ExtResource("17_717m6")
+theme_override_font_sizes/font_size = 12
+text = "Klingeln"
+horizontal_alignment = 1
+
+[node name="DisableOverlay" type="Panel" parent="RiddleButtons/Controller/Telefon/Panel/ButtonMargin3/Buttons/TelephoneRing"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SexdungeonOpen" type="Button" parent="RiddleButtons/Controller/Telefon/Panel/ButtonMargin3/Buttons"]
+custom_minimum_size = Vector2(100, 25)
+layout_mode = 2
+focus_mode = 0
+script = ExtResource("4_036af")
+
+[node name="Labels" type="VBoxContainer" parent="RiddleButtons/Controller/Telefon/Panel/ButtonMargin3/Buttons/SexdungeonOpen"]
+layout_mode = 1
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -19.0
+offset_right = 19.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="RiddleButtons/Controller/Telefon/Panel/ButtonMargin3/Buttons/SexdungeonOpen/Labels"]
+layout_mode = 2
+theme = ExtResource("17_717m6")
+theme_override_font_sizes/font_size = 12
+text = "Sexdungeon"
+horizontal_alignment = 1
+
+[node name="Label2" type="Label" parent="RiddleButtons/Controller/Telefon/Panel/ButtonMargin3/Buttons/SexdungeonOpen/Labels"]
+layout_mode = 2
+theme = ExtResource("17_717m6")
+theme_override_font_sizes/font_size = 12
+text = "Öffnen"
+horizontal_alignment = 1
+
+[node name="DisableOverlay" type="Panel" parent="RiddleButtons/Controller/Telefon/Panel/ButtonMargin3/Buttons/SexdungeonOpen"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="Ping" parent="RiddleButtons/Controller/Telefon/Panel" instance=ExtResource("4_jr8c0")]
 layout_mode = 1
@@ -632,12 +972,46 @@ theme_override_constants/margin_left = 550
 [node name="Buttons" type="HBoxContainer" parent="RiddleButtons/Controller/Schichtplan/Panel/ButtonMargin2"]
 layout_mode = 2
 
-[node name="ButtonSchichtplanOpen" parent="RiddleButtons/Controller/Schichtplan/Panel/ButtonMargin2/Buttons" instance=ExtResource("7_2ulun")]
+[node name="SchichtplanSolve" type="Button" parent="RiddleButtons/Controller/Schichtplan/Panel/ButtonMargin2/Buttons"]
+custom_minimum_size = Vector2(100, 25)
 layout_mode = 2
+focus_mode = 0
+script = ExtResource("4_036af")
 
-[node name="Label" parent="RiddleButtons/Controller/Schichtplan/Panel/ButtonMargin2/Buttons/ButtonSchichtplanOpen" index="1"]
-text = "Schichtplan
-Lösen"
+[node name="Labels" type="VBoxContainer" parent="RiddleButtons/Controller/Schichtplan/Panel/ButtonMargin2/Buttons/SchichtplanSolve"]
+layout_mode = 1
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -19.0
+offset_right = 19.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="RiddleButtons/Controller/Schichtplan/Panel/ButtonMargin2/Buttons/SchichtplanSolve/Labels"]
+layout_mode = 2
+theme = ExtResource("17_717m6")
+theme_override_font_sizes/font_size = 12
+text = "Schichtplan"
+horizontal_alignment = 1
+
+[node name="Label2" type="Label" parent="RiddleButtons/Controller/Schichtplan/Panel/ButtonMargin2/Buttons/SchichtplanSolve/Labels"]
+layout_mode = 2
+theme = ExtResource("17_717m6")
+theme_override_font_sizes/font_size = 12
+text = "Lösen"
+horizontal_alignment = 1
+
+[node name="DisableOverlay" type="Panel" parent="RiddleButtons/Controller/Schichtplan/Panel/ButtonMargin2/Buttons/SchichtplanSolve"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="ButtonMargin3" type="MarginContainer" parent="RiddleButtons/Controller/Schichtplan/Panel"]
 layout_mode = 1
@@ -698,50 +1072,122 @@ theme_override_constants/margin_left = 140
 [node name="Buttons" type="HBoxContainer" parent="RiddleButtons/Controller/Separee/Panel/ButtonMargin"]
 layout_mode = 2
 
-[node name="ButtonSepareeRot" parent="RiddleButtons/Controller/Separee/Panel/ButtonMargin/Buttons" instance=ExtResource("7_2ulun")]
+[node name="SepareeRed" type="Button" parent="RiddleButtons/Controller/Separee/Panel/ButtonMargin/Buttons"]
+custom_minimum_size = Vector2(100, 25)
 layout_mode = 2
+focus_mode = 0
+script = ExtResource("4_036af")
 
-[node name="PanelContainer" parent="RiddleButtons/Controller/Separee/Panel/ButtonMargin/Buttons/ButtonSepareeRot" index="0"]
-visible = true
-theme_override_styles/panel = SubResource("StyleBoxFlat_d80xw")
+[node name="Background" type="MarginContainer" parent="RiddleButtons/Controller/Separee/Panel/ButtonMargin/Buttons/SepareeRed"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
 
-[node name="TextureRect" parent="RiddleButtons/Controller/Separee/Panel/ButtonMargin/Buttons/ButtonSepareeRot/PanelContainer" index="0"]
+[node name="Panel" type="Panel" parent="RiddleButtons/Controller/Separee/Panel/ButtonMargin/Buttons/SepareeRed/Background"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_wynm2")
+
+[node name="TextureRect" type="TextureRect" parent="RiddleButtons/Controller/Separee/Panel/ButtonMargin/Buttons/SepareeRed/Background"]
+layout_mode = 2
 texture = ExtResource("7_17ck7")
+expand_mode = 2
+stretch_mode = 5
 
-[node name="Label" parent="RiddleButtons/Controller/Separee/Panel/ButtonMargin/Buttons/ButtonSepareeRot" index="1"]
+[node name="DisableOverlay" type="Panel" parent="RiddleButtons/Controller/Separee/Panel/ButtonMargin/Buttons/SepareeRed"]
 visible = false
-text = "Licht
-Rot"
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
-[node name="ButtonSepareeGrün" parent="RiddleButtons/Controller/Separee/Panel/ButtonMargin/Buttons" instance=ExtResource("7_2ulun")]
+[node name="SepareeGreen" type="Button" parent="RiddleButtons/Controller/Separee/Panel/ButtonMargin/Buttons"]
+custom_minimum_size = Vector2(100, 25)
 layout_mode = 2
+focus_mode = 0
+script = ExtResource("4_036af")
 
-[node name="PanelContainer" parent="RiddleButtons/Controller/Separee/Panel/ButtonMargin/Buttons/ButtonSepareeGrün" index="0"]
-visible = true
-theme_override_styles/panel = SubResource("StyleBoxFlat_oorca")
+[node name="Background" type="MarginContainer" parent="RiddleButtons/Controller/Separee/Panel/ButtonMargin/Buttons/SepareeGreen"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
 
-[node name="TextureRect" parent="RiddleButtons/Controller/Separee/Panel/ButtonMargin/Buttons/ButtonSepareeGrün/PanelContainer" index="0"]
+[node name="Panel" type="Panel" parent="RiddleButtons/Controller/Separee/Panel/ButtonMargin/Buttons/SepareeGreen/Background"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_l8ho2")
+
+[node name="TextureRect" type="TextureRect" parent="RiddleButtons/Controller/Separee/Panel/ButtonMargin/Buttons/SepareeGreen/Background"]
+layout_mode = 2
 texture = ExtResource("8_fk3wt")
+expand_mode = 2
+stretch_mode = 5
 
-[node name="Label" parent="RiddleButtons/Controller/Separee/Panel/ButtonMargin/Buttons/ButtonSepareeGrün" index="1"]
+[node name="DisableOverlay" type="Panel" parent="RiddleButtons/Controller/Separee/Panel/ButtonMargin/Buttons/SepareeGreen"]
 visible = false
-text = "Licht
-Grün"
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
-[node name="ButtonSepareeBlau" parent="RiddleButtons/Controller/Separee/Panel/ButtonMargin/Buttons" instance=ExtResource("7_2ulun")]
+[node name="SepareeBlue" type="Button" parent="RiddleButtons/Controller/Separee/Panel/ButtonMargin/Buttons"]
+custom_minimum_size = Vector2(100, 25)
 layout_mode = 2
+focus_mode = 0
+script = ExtResource("4_036af")
 
-[node name="PanelContainer" parent="RiddleButtons/Controller/Separee/Panel/ButtonMargin/Buttons/ButtonSepareeBlau" index="0"]
-visible = true
-theme_override_styles/panel = SubResource("StyleBoxFlat_scg08")
+[node name="Background" type="MarginContainer" parent="RiddleButtons/Controller/Separee/Panel/ButtonMargin/Buttons/SepareeBlue"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
 
-[node name="TextureRect" parent="RiddleButtons/Controller/Separee/Panel/ButtonMargin/Buttons/ButtonSepareeBlau/PanelContainer" index="0"]
+[node name="Panel" type="Panel" parent="RiddleButtons/Controller/Separee/Panel/ButtonMargin/Buttons/SepareeBlue/Background"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_g55wc")
+
+[node name="TextureRect" type="TextureRect" parent="RiddleButtons/Controller/Separee/Panel/ButtonMargin/Buttons/SepareeBlue/Background"]
+layout_mode = 2
 texture = ExtResource("9_mog3e")
+expand_mode = 2
+stretch_mode = 5
 
-[node name="Label" parent="RiddleButtons/Controller/Separee/Panel/ButtonMargin/Buttons/ButtonSepareeBlau" index="1"]
+[node name="DisableOverlay" type="Panel" parent="RiddleButtons/Controller/Separee/Panel/ButtonMargin/Buttons/SepareeBlue"]
 visible = false
-text = "Licht
-Blau"
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="ButtonMargin2" type="MarginContainer" parent="RiddleButtons/Controller/Separee/Panel"]
 layout_mode = 1
@@ -755,12 +1201,46 @@ theme_override_constants/margin_left = 550
 [node name="Buttons" type="HBoxContainer" parent="RiddleButtons/Controller/Separee/Panel/ButtonMargin2"]
 layout_mode = 2
 
-[node name="ButtonSepareeSolve2" parent="RiddleButtons/Controller/Separee/Panel/ButtonMargin2/Buttons" instance=ExtResource("7_2ulun")]
+[node name="SepareeSolve" type="Button" parent="RiddleButtons/Controller/Separee/Panel/ButtonMargin2/Buttons"]
+custom_minimum_size = Vector2(100, 25)
 layout_mode = 2
+focus_mode = 0
+script = ExtResource("4_036af")
 
-[node name="Label" parent="RiddleButtons/Controller/Separee/Panel/ButtonMargin2/Buttons/ButtonSepareeSolve2" index="1"]
-text = "Separee
-Lösen"
+[node name="Labels" type="VBoxContainer" parent="RiddleButtons/Controller/Separee/Panel/ButtonMargin2/Buttons/SepareeSolve"]
+layout_mode = 1
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -19.0
+offset_right = 19.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="RiddleButtons/Controller/Separee/Panel/ButtonMargin2/Buttons/SepareeSolve/Labels"]
+layout_mode = 2
+theme = ExtResource("17_717m6")
+theme_override_font_sizes/font_size = 12
+text = "Separee"
+horizontal_alignment = 1
+
+[node name="Label2" type="Label" parent="RiddleButtons/Controller/Separee/Panel/ButtonMargin2/Buttons/SepareeSolve/Labels"]
+layout_mode = 2
+theme = ExtResource("17_717m6")
+theme_override_font_sizes/font_size = 12
+text = "Lösen"
+horizontal_alignment = 1
+
+[node name="DisableOverlay" type="Panel" parent="RiddleButtons/Controller/Separee/Panel/ButtonMargin2/Buttons/SepareeSolve"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="ButtonMargin3" type="MarginContainer" parent="RiddleButtons/Controller/Separee/Panel"]
 layout_mode = 1
@@ -775,27 +1255,107 @@ theme_override_constants/margin_left = 685
 [node name="Buttons" type="HBoxContainer" parent="RiddleButtons/Controller/Separee/Panel/ButtonMargin3"]
 layout_mode = 2
 
-[node name="ButtonSepareeWeiss" parent="RiddleButtons/Controller/Separee/Panel/ButtonMargin3/Buttons" instance=ExtResource("7_2ulun")]
+[node name="SepareeWhite" type="Button" parent="RiddleButtons/Controller/Separee/Panel/ButtonMargin3/Buttons"]
+custom_minimum_size = Vector2(100, 25)
 layout_mode = 2
+focus_mode = 0
+script = ExtResource("4_036af")
 
-[node name="PanelContainer" parent="RiddleButtons/Controller/Separee/Panel/ButtonMargin3/Buttons/ButtonSepareeWeiss" index="0"]
-visible = true
-theme_override_styles/panel = SubResource("StyleBoxFlat_hkno4")
+[node name="Background" type="MarginContainer" parent="RiddleButtons/Controller/Separee/Panel/ButtonMargin3/Buttons/SepareeWhite"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
 
-[node name="Label" parent="RiddleButtons/Controller/Separee/Panel/ButtonMargin3/Buttons/ButtonSepareeWeiss" index="1"]
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "Licht
-Weiß"
-
-[node name="ButtonSepareeAus" parent="RiddleButtons/Controller/Separee/Panel/ButtonMargin3/Buttons" instance=ExtResource("7_2ulun")]
+[node name="Panel" type="Panel" parent="RiddleButtons/Controller/Separee/Panel/ButtonMargin3/Buttons/SepareeWhite/Background"]
 layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_301tn")
 
-[node name="PanelContainer" parent="RiddleButtons/Controller/Separee/Panel/ButtonMargin3/Buttons/ButtonSepareeAus" index="0"]
-theme_override_styles/panel = SubResource("StyleBoxFlat_hkno4")
+[node name="Labels" type="VBoxContainer" parent="RiddleButtons/Controller/Separee/Panel/ButtonMargin3/Buttons/SepareeWhite"]
+layout_mode = 1
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -19.0
+offset_right = 19.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
 
-[node name="Label" parent="RiddleButtons/Controller/Separee/Panel/ButtonMargin3/Buttons/ButtonSepareeAus" index="1"]
-text = "Licht
-Ausschalten"
+[node name="Label" type="Label" parent="RiddleButtons/Controller/Separee/Panel/ButtonMargin3/Buttons/SepareeWhite/Labels"]
+layout_mode = 2
+theme = ExtResource("17_717m6")
+theme_override_colors/font_color = Color(0.136826, 0.136826, 0.136826, 1)
+theme_override_font_sizes/font_size = 12
+text = "Licht"
+horizontal_alignment = 1
+
+[node name="Label2" type="Label" parent="RiddleButtons/Controller/Separee/Panel/ButtonMargin3/Buttons/SepareeWhite/Labels"]
+layout_mode = 2
+theme = ExtResource("17_717m6")
+theme_override_colors/font_color = Color(0.136826, 0.136826, 0.136826, 1)
+theme_override_font_sizes/font_size = 12
+text = "Weiß"
+horizontal_alignment = 1
+
+[node name="DisableOverlay" type="Panel" parent="RiddleButtons/Controller/Separee/Panel/ButtonMargin3/Buttons/SepareeWhite"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SepareeTurnoff" type="Button" parent="RiddleButtons/Controller/Separee/Panel/ButtonMargin3/Buttons"]
+custom_minimum_size = Vector2(100, 25)
+layout_mode = 2
+focus_mode = 0
+script = ExtResource("4_036af")
+
+[node name="Labels" type="VBoxContainer" parent="RiddleButtons/Controller/Separee/Panel/ButtonMargin3/Buttons/SepareeTurnoff"]
+layout_mode = 1
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -19.0
+offset_right = 19.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="RiddleButtons/Controller/Separee/Panel/ButtonMargin3/Buttons/SepareeTurnoff/Labels"]
+layout_mode = 2
+theme = ExtResource("17_717m6")
+theme_override_font_sizes/font_size = 12
+text = "Licht"
+horizontal_alignment = 1
+
+[node name="Label2" type="Label" parent="RiddleButtons/Controller/Separee/Panel/ButtonMargin3/Buttons/SepareeTurnoff/Labels"]
+layout_mode = 2
+theme = ExtResource("17_717m6")
+theme_override_font_sizes/font_size = 12
+text = "Aus"
+horizontal_alignment = 1
+
+[node name="DisableOverlay" type="Panel" parent="RiddleButtons/Controller/Separee/Panel/ButtonMargin3/Buttons/SepareeTurnoff"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="Ping" parent="RiddleButtons/Controller/Separee/Panel" instance=ExtResource("4_jr8c0")]
 layout_mode = 1
@@ -810,7 +1370,7 @@ riddle = 6
 [node name="MarginContainer" type="MarginContainer" parent="RiddleButtons"]
 layout_mode = 2
 mouse_filter = 2
-theme_override_constants/margin_top = 22
+theme_override_constants/margin_top = 14
 
 [node name="Overlay" type="Panel" parent="RiddleButtons/MarginContainer"]
 layout_mode = 2
@@ -906,20 +1466,20 @@ theme = ExtResource("16_xh5hu")
 text = "Debug"
 
 [node name="ResetButtons" type="VBoxContainer" parent="."]
-visible = false
-offset_left = -3.0
-offset_top = 33.0
-offset_right = 160.0
-offset_bottom = 87.0
+offset_top = 20.0
+offset_right = 163.0
+offset_bottom = 74.0
 script = ExtResource("10_ej0gq")
 
 [node name="Soft" type="Button" parent="ResetButtons"]
 layout_mode = 2
+theme = ExtResource("18_7wtpm")
 theme_override_font_sizes/font_size = 12
 text = "Netzwerk Soft Reset"
 
 [node name="Hard" type="Button" parent="ResetButtons"]
 layout_mode = 2
+theme = ExtResource("18_7wtpm")
 theme_override_font_sizes/font_size = 12
 text = "Netzwerk Hard Reset"
 
@@ -928,8 +1488,8 @@ anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
 offset_left = -280.0
-offset_top = 18.0
-offset_bottom = 60.0
+offset_top = 20.0
+offset_bottom = 62.0
 grow_horizontal = 0
 theme_override_styles/panel = ExtResource("15_0gdhf")
 script = ExtResource("1_qovry")
@@ -1127,35 +1687,36 @@ script = ExtResource("23_3xokn")
 [node name="Debug" parent="." instance=ExtResource("23_o6lvy")]
 
 [node name="Feedback" parent="." instance=ExtResource("24_dx087")]
+visible = false
 
 [node name="Finale" type="Node" parent="."]
 script = ExtResource("26_l61b3")
 
-[connection signal="on_press" from="RiddleButtons/Controller/Drinks/Panel/ButtonMargin2/Buttons/ButtonDrinksSolve2" to="Connector" method="DinksSolve"]
-[connection signal="on_press" from="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin/Buttons/ButtonStopptanzInit" to="Connector" method="StopptanzInit"]
-[connection signal="on_press" from="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin/Buttons/ButtonStopptanzInit" to="MusicPlayer" method="play_track" binds= ["stopptanz", true]]
-[connection signal="on_press" from="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin/Buttons/ButtonStopptanzDance" to="Connector" method="StopptanzDance"]
-[connection signal="on_press" from="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin/Buttons/ButtonStopptanzDance" to="MusicPlayer" method="unpause" binds= [1.0]]
-[connection signal="on_press" from="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin/Buttons/ButtonStopptanzStop" to="Connector" method="StopptanzStop"]
-[connection signal="on_press" from="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin/Buttons/ButtonStopptanzStop" to="MusicPlayer" method="pause" binds= [1.8]]
-[connection signal="on_press" from="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin2/Buttons/ButtonStopptanzSolve" to="Connector" method="StopptanzSolve"]
-[connection signal="on_press" from="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin2/Buttons/ButtonStopptanzSolve" to="MusicPlayer" method="play_track" binds= ["atmo2"]]
-[connection signal="on_press" from="RiddleButtons/Controller/Sparkasten/Panel/ButtonMargin3/Buttons/ButtonSparkastenOpen" to="Connector" method="SparkastenOpen"]
-[connection signal="on_press" from="RiddleButtons/Controller/Telefon/Panel/ButtonMargin/Buttons/ButtonWasserhahnEnable" to="Connector" method="WasserhahnEnable"]
-[connection signal="on_press" from="RiddleButtons/Controller/Telefon/Panel/ButtonMargin3/Buttons/ButtonTelefonRing" to="Connector" method="TelefonRing"]
-[connection signal="on_press" from="RiddleButtons/Controller/Telefon/Panel/ButtonMargin3/Buttons/ButtonSexdungeonOpen2" to="Connector" method="WasserhahnOpen"]
-[connection signal="on_press" from="RiddleButtons/Controller/Schichtplan/Panel/ButtonMargin2/Buttons/ButtonSchichtplanOpen" to="Connector" method="SchichtplanOpen"]
-[connection signal="on_press" from="RiddleButtons/Controller/Separee/Panel/ButtonMargin/Buttons/ButtonSepareeRot" to="Connector" method="SepareeRot"]
-[connection signal="on_press" from="RiddleButtons/Controller/Separee/Panel/ButtonMargin/Buttons/ButtonSepareeRot" to="MusicPlayer" method="play_track" binds= ["separee"]]
-[connection signal="on_press" from="RiddleButtons/Controller/Separee/Panel/ButtonMargin/Buttons/ButtonSepareeGrün" to="Connector" method="SepareeGruen"]
-[connection signal="on_press" from="RiddleButtons/Controller/Separee/Panel/ButtonMargin/Buttons/ButtonSepareeGrün" to="MusicPlayer" method="play_track" binds= ["separee"]]
-[connection signal="on_press" from="RiddleButtons/Controller/Separee/Panel/ButtonMargin/Buttons/ButtonSepareeBlau" to="Connector" method="SepareeBlau"]
-[connection signal="on_press" from="RiddleButtons/Controller/Separee/Panel/ButtonMargin/Buttons/ButtonSepareeBlau" to="MusicPlayer" method="play_track" binds= ["separee"]]
-[connection signal="on_press" from="RiddleButtons/Controller/Separee/Panel/ButtonMargin2/Buttons/ButtonSepareeSolve2" to="Connector" method="SepareeOpen"]
-[connection signal="on_press" from="RiddleButtons/Controller/Separee/Panel/ButtonMargin2/Buttons/ButtonSepareeSolve2" to="Finale" method="request_finale"]
-[connection signal="on_press" from="RiddleButtons/Controller/Separee/Panel/ButtonMargin2/Buttons/ButtonSepareeSolve2" to="MusicPlayer" method="play_track" binds= ["finale"]]
-[connection signal="on_press" from="RiddleButtons/Controller/Separee/Panel/ButtonMargin3/Buttons/ButtonSepareeWeiss" to="Connector" method="SepareeWhite"]
-[connection signal="on_press" from="RiddleButtons/Controller/Separee/Panel/ButtonMargin3/Buttons/ButtonSepareeAus" to="Connector" method="SepareeLightsOff"]
+[connection signal="button_down" from="RiddleButtons/Controller/Drinks/Panel/ButtonMargin2/Buttons/DrinksSolve" to="Connector" method="DinksSolve"]
+[connection signal="button_down" from="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin/Buttons/StopptanzInit" to="Connector" method="StopptanzInit"]
+[connection signal="button_down" from="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin/Buttons/StopptanzInit" to="MusicPlayer" method="play_track" binds= ["stopptanz", true]]
+[connection signal="button_down" from="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin/Buttons/StopptanzDance" to="Connector" method="StopptanzDance"]
+[connection signal="button_down" from="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin/Buttons/StopptanzDance" to="MusicPlayer" method="unpause" binds= [2.0]]
+[connection signal="button_down" from="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin/Buttons/StopptanzStop" to="Connector" method="StopptanzStop"]
+[connection signal="button_down" from="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin/Buttons/StopptanzStop" to="MusicPlayer" method="pause" binds= [2.0]]
+[connection signal="button_down" from="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin2/Buttons/StopptanzSolve" to="Connector" method="StopptanzSolve"]
+[connection signal="button_down" from="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin2/Buttons/StopptanzSolve" to="MusicPlayer" method="play_track" binds= ["atmo2"]]
+[connection signal="button_down" from="RiddleButtons/Controller/Sparkasten/Panel/ButtonMargin3/Buttons/SparkastenOpen" to="Connector" method="SparkastenOpen"]
+[connection signal="button_down" from="RiddleButtons/Controller/Telefon/Panel/ButtonMargin/Buttons/WasserhahnActivate" to="Connector" method="WasserhahnEnable"]
+[connection signal="button_down" from="RiddleButtons/Controller/Telefon/Panel/ButtonMargin3/Buttons/TelephoneRing" to="Connector" method="TelefonRing"]
+[connection signal="button_down" from="RiddleButtons/Controller/Telefon/Panel/ButtonMargin3/Buttons/SexdungeonOpen" to="Connector" method="WasserhahnOpen"]
+[connection signal="button_down" from="RiddleButtons/Controller/Schichtplan/Panel/ButtonMargin2/Buttons/SchichtplanSolve" to="Connector" method="SchichtplanOpen"]
+[connection signal="button_down" from="RiddleButtons/Controller/Separee/Panel/ButtonMargin/Buttons/SepareeRed" to="Connector" method="SepareeRot"]
+[connection signal="button_down" from="RiddleButtons/Controller/Separee/Panel/ButtonMargin/Buttons/SepareeRed" to="MusicPlayer" method="play_track" binds= ["separee"]]
+[connection signal="button_down" from="RiddleButtons/Controller/Separee/Panel/ButtonMargin/Buttons/SepareeGreen" to="Connector" method="SepareeGruen"]
+[connection signal="button_down" from="RiddleButtons/Controller/Separee/Panel/ButtonMargin/Buttons/SepareeGreen" to="MusicPlayer" method="play_track" binds= ["separee"]]
+[connection signal="button_down" from="RiddleButtons/Controller/Separee/Panel/ButtonMargin/Buttons/SepareeBlue" to="Connector" method="SepareeBlau"]
+[connection signal="button_down" from="RiddleButtons/Controller/Separee/Panel/ButtonMargin/Buttons/SepareeBlue" to="MusicPlayer" method="play_track" binds= ["separee"]]
+[connection signal="button_down" from="RiddleButtons/Controller/Separee/Panel/ButtonMargin2/Buttons/SepareeSolve" to="Connector" method="SepareeOpen"]
+[connection signal="button_down" from="RiddleButtons/Controller/Separee/Panel/ButtonMargin2/Buttons/SepareeSolve" to="Finale" method="request_finale"]
+[connection signal="button_down" from="RiddleButtons/Controller/Separee/Panel/ButtonMargin2/Buttons/SepareeSolve" to="MusicPlayer" method="play_track" binds= ["finale"]]
+[connection signal="button_down" from="RiddleButtons/Controller/Separee/Panel/ButtonMargin3/Buttons/SepareeWhite" to="Connector" method="SepareeWhite"]
+[connection signal="button_down" from="RiddleButtons/Controller/Separee/Panel/ButtonMargin3/Buttons/SepareeTurnoff" to="Connector" method="SepareeLightsOff"]
 [connection signal="button_down" from="MarginContainer/ManualMusic/atmo1" to="MusicPlayer" method="play_track" binds= ["atmo1", true]]
 [connection signal="button_down" from="MarginContainer/ManualMusic/stopptanz" to="MusicPlayer" method="play_track" binds= ["stopptanz", true]]
 [connection signal="button_down" from="MarginContainer/ManualMusic/atmo2" to="MusicPlayer" method="play_track" binds= ["atmo2", true]]
@@ -1175,20 +1736,3 @@ script = ExtResource("26_l61b3")
 [connection signal="button_down" from="PregameTimer/MarginContainer/VBoxContainer/TimeControlButtons/Cancel" to="PregameTimer" method="cancel"]
 [connection signal="button_down" from="StartGameSessionButton" to="PregameTimer" method="start"]
 [connection signal="button_down" from="StartGameSessionButton" to="StartGameSessionButton" method="set_visible" binds= [false]]
-
-[editable path="RiddleButtons/Controller/Drinks/Panel/ButtonMargin2/Buttons/ButtonDrinksSolve2"]
-[editable path="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin/Buttons/ButtonStopptanzInit"]
-[editable path="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin/Buttons/ButtonStopptanzDance"]
-[editable path="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin/Buttons/ButtonStopptanzStop"]
-[editable path="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin2/Buttons/ButtonStopptanzSolve"]
-[editable path="RiddleButtons/Controller/Sparkasten/Panel/ButtonMargin3/Buttons/ButtonSparkastenOpen"]
-[editable path="RiddleButtons/Controller/Telefon/Panel/ButtonMargin/Buttons/ButtonWasserhahnEnable"]
-[editable path="RiddleButtons/Controller/Telefon/Panel/ButtonMargin3/Buttons/ButtonTelefonRing"]
-[editable path="RiddleButtons/Controller/Telefon/Panel/ButtonMargin3/Buttons/ButtonSexdungeonOpen2"]
-[editable path="RiddleButtons/Controller/Schichtplan/Panel/ButtonMargin2/Buttons/ButtonSchichtplanOpen"]
-[editable path="RiddleButtons/Controller/Separee/Panel/ButtonMargin/Buttons/ButtonSepareeRot"]
-[editable path="RiddleButtons/Controller/Separee/Panel/ButtonMargin/Buttons/ButtonSepareeGrün"]
-[editable path="RiddleButtons/Controller/Separee/Panel/ButtonMargin/Buttons/ButtonSepareeBlau"]
-[editable path="RiddleButtons/Controller/Separee/Panel/ButtonMargin2/Buttons/ButtonSepareeSolve2"]
-[editable path="RiddleButtons/Controller/Separee/Panel/ButtonMargin3/Buttons/ButtonSepareeWeiss"]
-[editable path="RiddleButtons/Controller/Separee/Panel/ButtonMargin3/Buttons/ButtonSepareeAus"]

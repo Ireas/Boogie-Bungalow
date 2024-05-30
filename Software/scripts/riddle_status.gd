@@ -1,6 +1,17 @@
 extends PanelContainer
+class_name RiddleStatus
 
-@export var riddle : Globals.Riddle
+enum Riddle{
+	DRINKS,
+	STOPPTANZ,
+	SPARKASTEN,
+	TELEFON,
+	SEXDUNGEON,
+	SCHICHTPLAN,
+	SEPAREE,
+}
+
+@export var riddle : Riddle
 @export var ping_label : Label
 @export var solved_label : Label
 @export var state_label : Label
@@ -8,20 +19,21 @@ extends PanelContainer
 
 func _ready():
 	match(riddle):
-		Globals.Riddle.DRINKS:
+		Riddle.DRINKS:
 			EventBus.update_status_drinks.connect(update_ui)
-		Globals.Riddle.STOPPTANZ:
+		Riddle.STOPPTANZ:
 			EventBus.update_status_stopptanz.connect(update_ui)
-		Globals.Riddle.SPARKASTEN:
+		Riddle.SPARKASTEN:
 			EventBus.update_status_sparkasten.connect(update_ui)
-		Globals.Riddle.TELEFON:
+		Riddle.TELEFON:
 			EventBus.update_status_telefon.connect(update_ui)
-		Globals.Riddle.SEXDUNGEON:
+		Riddle.SEXDUNGEON:
 			EventBus.update_status_sexdungeon.connect(update_ui)
-		Globals.Riddle.SCHICHTPLAN:
+		Riddle.SCHICHTPLAN:
 			EventBus.update_status_schichtplan.connect(update_ui)
-		Globals.Riddle.SEPAREE:
+		Riddle.SEPAREE:
 			EventBus.update_status_separee.connect(update_ui)
+
 
 func update_ui(ping:int, solved:int, state:int):
 	ping_label.text = str(ping)

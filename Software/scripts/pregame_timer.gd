@@ -7,7 +7,6 @@ class_name PregameTimer
 @export var buttons_time_control : Control
 
 # VARIABLES
-var last_delay : int = 0
 var cancel_countdown : bool = true
 
 func _ready():
@@ -38,14 +37,14 @@ func cancel():
 
 func start():
 	GameManager.pregame_timer_started.emit()
-	last_delay = GameManager.session.pregame_delay
+	GameManager.session.previous_delay = GameManager.session.pregame_delay
 	cancel_countdown = false
 	buttons_change_time.visible = false
 	buttons_time_control.visible = true
 	
 	while(GameManager.session.pregame_delay>0):
 		if cancel_countdown:
-			GameManager.session.pregame_delay = last_delay
+			GameManager.session.pregame_delay = GameManager.session.previous_delay
 			buttons_change_time.visible = true
 			buttons_time_control.visible = false
 			GameManager.pregame_timer_canceled.emit()

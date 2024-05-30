@@ -8,6 +8,8 @@ var pregame_delay : int = 150 :
 		pregame_delay = value if value>0 else 0
 		pregame_delay_changed.emit()
 
+var previous_delay : int = 0
+
 var game_duration : int = 0 : 
 	set(value):
 		game_duration = value if value>0 else 0
