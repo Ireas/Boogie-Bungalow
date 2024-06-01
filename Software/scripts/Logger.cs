@@ -15,7 +15,7 @@ public class Logger{
         ERROR,
     }
 
-    private int NUMBER_OF_LOGS_SAVED = 5; // number of previous sessions which are saved until override
+    private int NUMBER_OF_LOGS_SAVED = 10; // number of previous sessions which are saved until override
 
     // store logfile in application data folder (Windows: %Appdata%/Roaming/Boogie-Bungalow)
 	string PATH_LOGFILE = Path.Combine(
@@ -44,7 +44,7 @@ public class Logger{
         }
 
         // create new Logfile and add date and time to new files
-        File.AppendAllText(PATH_LOGFILE+"0.txt", DateTime.Now.ToString()+"\n");
+        File.AppendAllText(PATH_LOGFILE+"0.txt", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss")+"\n\n");
     }
 
 

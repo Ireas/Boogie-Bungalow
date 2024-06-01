@@ -5,4 +5,5 @@ Software made with Godot v4.2.2
 
 ## Requests
 - fix green light delay bug
-- create new protocol information sheet
+- add information/cheat sheet at top of program (quick fixes?)
+

@@ -1,10 +1,8 @@
 extends Node
 
 # CONSTANTS
-### ignore no coms problem 
-var WORKING_FROM_HOME = false
+var WORKING_FROM_HOME = false # ignore coms if working at home with no arduino
 
-### preload scenes
 @export var LOADING_SCREEN : PackedScene = preload("res://scenes/loading_screen.tscn")
 @export var GAME_SESSION : PackedScene = preload("res://scenes/game_session.tscn")
 
@@ -25,8 +23,10 @@ signal game_session_finished
 
 # SETUP
 func _ready():
-	if WORKING_FROM_HOME:
-		return
+	# detect if im working from home to skip connecting to coms
+	if OS.has_environment("USERNAME") and OS.get_environment("USERNAME")=="ireas":
+		WORKING_FROM_HOME = true
+	
 	loading_screen = LOADING_SCREEN.instantiate()
 	loading_screen.loading_screen_clicked.connect(connect_to_master)
 	get_node("/root/Universe").add_child(loading_screen)
@@ -40,6 +40,10 @@ func connect_to_master():
 		request_master_ack()
 	else:
 		loading_screen.set_message("Fehler: Port Fehlkonfiguration => Bitte Ireas schreiben!")
+	
+	if WORKING_FROM_HOME:
+		loading_screen.delete()
+		start_new_game_session()
 
 
 func request_master_ack():
@@ -68,6 +72,7 @@ func start_new_game_session():
 
 func restart_session():
 	connector.call("SystemHardReset")
+	connector.call("CreateNewLogger")
 	loading_screen = LOADING_SCREEN.instantiate()
 	loading_screen.loading_screen_clicked.connect(fake_loading)
 	loading_screen.set_message("Bereite nächstes Spiel vor...")
@@ -77,9 +82,9 @@ func restart_session():
 func fake_loading(): # fake loading to give better feeling at restart
 	loading_screen.set_percentage(20)
 	await get_tree().create_timer(3).timeout
-	loading_screen.set_percentage(50)	
+	loading_screen.set_percentage(50)
 	await get_tree().create_timer(1.5).timeout
-	loading_screen.set_percentage(60)	
+	loading_screen.set_percentage(60)
 	await get_tree().create_timer(10).timeout
 	loading_screen.set_percentage(100)
 	loading_screen.delete()

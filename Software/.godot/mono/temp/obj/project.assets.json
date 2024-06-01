@@ -721,19 +721,19 @@
     ]
   },
   "packageFolders": {
-    "/home/ireas/.nuget/packages/": {}
+    "C:\\Users\\ireas\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/ireas/git_repos/Boogie-Bungalow/Software/boogie_bungalow.csproj",
+      "projectUniqueName": "C:\\Boogie-Bungalow\\Software\\boogie_bungalow.csproj",
       "projectName": "boogie_bungalow",
-      "projectPath": "/home/ireas/git_repos/Boogie-Bungalow/Software/boogie_bungalow.csproj",
-      "packagesPath": "/home/ireas/.nuget/packages/",
-      "outputPath": "/home/ireas/git_repos/Boogie-Bungalow/Software/.godot/mono/temp/obj/",
+      "projectPath": "C:\\Boogie-Bungalow\\Software\\boogie_bungalow.csproj",
+      "packagesPath": "C:\\Users\\ireas\\.nuget\\packages\\",
+      "outputPath": "C:\\Boogie-Bungalow\\Software\\.godot\\mono\\temp\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/home/ireas/.nuget/NuGet/NuGet.Config"
+        "C:\\Users\\ireas\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net6.0"
@@ -751,6 +751,11 @@
         "warnAsError": [
           "NU1605"
         ]
+      },
+      "restoreAuditProperties": {
+        "enableAudit": "true",
+        "auditLevel": "low",
+        "auditMode": "direct"
       }
     },
     "frameworks": {
@@ -792,11 +797,15 @@
         "downloadDependencies": [
           {
             "name": "Microsoft.AspNetCore.App.Ref",
-            "version": "[6.0.30, 6.0.30]"
+            "version": "[6.0.29, 6.0.29]"
           },
           {
             "name": "Microsoft.NETCore.App.Ref",
-            "version": "[6.0.30, 6.0.30]"
+            "version": "[6.0.29, 6.0.29]"
+          },
+          {
+            "name": "Microsoft.WindowsDesktop.App.Ref",
+            "version": "[6.0.29, 6.0.29]"
           }
         ],
         "frameworkReferences": {
@@ -804,7 +813,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/8.0.105/RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.204\\RuntimeIdentifierGraph.json"
       }
     }
   }

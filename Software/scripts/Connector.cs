@@ -25,8 +25,9 @@ public partial class Connector : Node{
 	private const string TARGET_PORT_NAME = "COM5";
 	private const int TARGET_PORT_BAUDRATE = 115200;
 
+	private const int MAX_ACK_TRIES = 1000;
+
 	private const float SYNC_PACK_DOWNTIME = 0.5f;
-	
 	private const float TELEFPHONE_RING_DURATION = 6f;
 	private const float OPEN_SPARKASTEN_AFTER_STOPPTANZ_DELAY = 2.5f;
 	private const float OPEN_DOOR_AFTER_GAME_FINISH_DELAY = 8f;
@@ -49,9 +50,9 @@ public partial class Connector : Node{
 		SEXDUNGEON_OPEN,
 		SCHICHTPLAN_OPEN,
 		SCHICHTPLAN_STOP_OPENING,
-		SEPAREE_ROT,
-		SEPAREE_GRUEN,
-		SEPAREE_BLAU,
+		SEPAREE_RED,
+		SEPAREE_GREEN,
+		SEPAREE_BLUE,
 		SEPAREE_WHITE,
 		SEPAREE_LIGHTS_OFF,
 		SEPAREE_OPEN,
@@ -77,9 +78,9 @@ public partial class Connector : Node{
 		{COMMANDS.SEXDUNGEON_OPEN, 			"05,00,02"},
 		{COMMANDS.SCHICHTPLAN_OPEN, 		"05,00,09"},
 		{COMMANDS.SCHICHTPLAN_STOP_OPENING,	"05,00,00"},
-		{COMMANDS.SEPAREE_ROT, 				"01,00,01"},
-		{COMMANDS.SEPAREE_GRUEN, 			"01,00,02"},
-		{COMMANDS.SEPAREE_BLAU, 			"01,00,03"},
+		{COMMANDS.SEPAREE_RED, 				"01,00,01"},
+		{COMMANDS.SEPAREE_GREEN, 			"01,00,02"},
+		{COMMANDS.SEPAREE_BLUE, 			"01,00,03"},
 		{COMMANDS.SEPAREE_WHITE, 			"01,00,06"},
 		{COMMANDS.SEPAREE_LIGHTS_OFF, 		"01,00,00"},
 		{COMMANDS.SEPAREE_OPEN, 			"01,01,09"},
@@ -131,7 +132,7 @@ public partial class Connector : Node{
 	public override void _Ready()
 	{
 		// create new Logger with new logfile
-		_logger = new Logger();
+		CreateNewLogger();
 
 
 		// access Godots autoloads
@@ -159,6 +160,12 @@ public partial class Connector : Node{
 		);
 	}
 
+
+	// create new Logger with new logfile, called at start of each new game
+	public void CreateNewLogger()
+	{
+		_logger = new Logger();
+	}
 
 	// initializes serial port 
 	private bool OpenMasterPort()
@@ -197,7 +204,7 @@ public partial class Connector : Node{
 
 			timer_ack.CallDeferred("start", 0.2);
 			
-			for(int i=0; i<1000; i++)
+			for(int i=0; i<MAX_ACK_TRIES; i++)
 			{
 				_logger.Log("Waiting for ACK ("+i.ToString()+")", Logger.LogSeverity.VERBOSE);
 				if(timer_ack.TimeLeft<=0.0){
@@ -235,7 +242,7 @@ public partial class Connector : Node{
 	// sends pack to arduino master
 	private void SendCommand(COMMANDS _command)
 	{
-		_logger.Log("Sending Command: " + _command, Logger.LogSeverity.VERBOSE);
+		_logger.Log("Sending Command: " + _command + " at " + DateTime.Now.ToString("hh:mm:ss"), Logger.LogSeverity.VERBOSE);
 
 		try
 		{
@@ -480,13 +487,13 @@ public partial class Connector : Node{
 		switch(color_index)
 		{
 			case 0:
-				SendCommand(COMMANDS.SEPAREE_ROT);
+				SendCommand(COMMANDS.SEPAREE_RED);
 				break;
 			case 1:
-				SendCommand(COMMANDS.SEPAREE_GRUEN);
+				SendCommand(COMMANDS.SEPAREE_GREEN);
 				break;
 			case 2:
-				SendCommand(COMMANDS.SEPAREE_BLAU);
+				SendCommand(COMMANDS.SEPAREE_BLUE);
 				break;
 			default:
 				_logger.Log("Undefined Separee Color " + color_index, Logger.LogSeverity.WARNING);
@@ -564,17 +571,17 @@ public partial class Connector : Node{
 	public void SepareeRot()
 	{
 		color_index = 0;
-		SendCommand(COMMANDS.SEPAREE_ROT);
+		SendCommand(COMMANDS.SEPAREE_RED);
 	}
 	public void SepareeGruen()
 	{
 		color_index = 1; 
-		SendCommand(COMMANDS.SEPAREE_GRUEN);
+		SendCommand(COMMANDS.SEPAREE_GREEN);
 	}
 	public void SepareeBlau()
 	{
 		color_index = 2;
-		SendCommand(COMMANDS.SEPAREE_BLAU);
+		SendCommand(COMMANDS.SEPAREE_BLUE);
 	}
 	public void SepareeWhite()
 	{

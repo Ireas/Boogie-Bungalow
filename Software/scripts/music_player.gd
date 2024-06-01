@@ -36,7 +36,7 @@ func _ready():
 func stoptanz_react(_ping:int, _solved:int, state:int):
 	if state==2:
 		pause()
-	elif state==1:
+	else:
 		unpause()
 
 
@@ -55,10 +55,8 @@ func play_track(track_name:String, force:bool=false):
 	animator.play("music_fade_in", -1, 0.35)
 	playing = true
 
-func pause(delay:float = 0):
-	await get_tree().create_timer(delay).timeout # artificial delay because green light lags
+func pause():
 	stream_paused = true
 
-func unpause(delay:float = 0):
-	await get_tree().create_timer(delay).timeout # artificial delay because green light lags
+func unpause():
 	stream_paused = false

@@ -1,8 +1,8 @@
+VBoxContainer
+Label
 MarginContainer
 TextureRect
 Panel
-Label
-VBoxContainer
 Button
 Node
 HBoxContainer

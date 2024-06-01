@@ -5,7 +5,7 @@
 [ext_resource type="Script" path="res://scripts/Connector.cs" id="2_5v0y2"]
 [ext_resource type="Theme" uid="uid://sugpe2yib08n" path="res://styles/note.tres" id="2_8htos"]
 [ext_resource type="Script" path="res://scripts/music_player.gd" id="3_kv775"]
-[ext_resource type="Script" path="res://riddle_button.gd" id="4_036af"]
+[ext_resource type="Script" path="res://scripts/riddle_button.gd" id="4_036af"]
 [ext_resource type="PackedScene" uid="uid://bquu7rbldubs" path="res://modules/ping/ping.tscn" id="4_jr8c0"]
 [ext_resource type="Theme" uid="uid://dfnl4pvw4h7vk" path="res://styles/base_center_2.tres" id="6_42bfr"]
 [ext_resource type="Texture2D" uid="uid://cee8ntxujt2c8" path="res://images/Rot.png" id="7_17ck7"]
@@ -17,15 +17,15 @@
 [ext_resource type="StyleBox" uid="uid://csaq6gdpvlk43" path="res://styles/frame_panel.tres" id="14_qmo6p"]
 [ext_resource type="StyleBox" uid="uid://bcul6etw4b0l0" path="res://styles/info_right.tres" id="15_0gdhf"]
 [ext_resource type="Script" path="res://scripts/pregame_timer.gd" id="15_dfdlo"]
-[ext_resource type="Script" path="res://start_session.gd" id="16_7kkjc"]
+[ext_resource type="Script" path="res://scripts/start_session.gd" id="16_7kkjc"]
 [ext_resource type="Theme" uid="uid://dtn0ytlq0wxpq" path="res://styles/base_right.tres" id="16_xh5hu"]
 [ext_resource type="Theme" uid="uid://5bl76iy64ruh" path="res://styles/base_center.tres" id="17_717m6"]
 [ext_resource type="Theme" uid="uid://bwgeofpmajy4u" path="res://styles/base_left.tres" id="18_7wtpm"]
 [ext_resource type="Texture2D" uid="uid://dq0cwm667k3an" path="res://images/play.svg" id="21_4shkp"]
-[ext_resource type="Script" path="res://restart_session.gd" id="23_3xokn"]
+[ext_resource type="Script" path="res://scripts/restart_session.gd" id="23_3xokn"]
 [ext_resource type="PackedScene" uid="uid://ckre735enmpg5" path="res://scenes/debug.tscn" id="23_o6lvy"]
 [ext_resource type="PackedScene" uid="uid://bp2vttdv1s8n5" path="res://scenes/feedback.tscn" id="24_dx087"]
-[ext_resource type="Script" path="res://finale.gd" id="26_l61b3"]
+[ext_resource type="Script" path="res://scripts/finale.gd" id="26_l61b3"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_r5qll"]
 bg_color = Color(0.290196, 0.14902, 0.384314, 0.164706)
@@ -317,6 +317,22 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="RiddleButtons/Controller/Drinks/Panel/ButtonMargin2/Buttons"]
+layout_mode = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="RiddleButtons/Controller/Drinks/Panel/ButtonMargin2/Buttons/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "Jukebox aktivieren"
+horizontal_alignment = 1
+
+[node name="Label2" type="Label" parent="RiddleButtons/Controller/Drinks/Panel/ButtonMargin2/Buttons/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "nicht vergessen"
+horizontal_alignment = 1
 
 [node name="ButtonMargin3" type="MarginContainer" parent="RiddleButtons/Controller/Drinks/Panel"]
 layout_mode = 1
@@ -1022,6 +1038,22 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
+[node name="VBoxContainer" type="VBoxContainer" parent="RiddleButtons/Controller/Schichtplan/Panel/ButtonMargin2/Buttons"]
+layout_mode = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="RiddleButtons/Controller/Schichtplan/Panel/ButtonMargin2/Buttons/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "Nebelmaschine"
+horizontal_alignment = 1
+
+[node name="Label2" type="Label" parent="RiddleButtons/Controller/Schichtplan/Panel/ButtonMargin2/Buttons/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "nicht vergessen"
+horizontal_alignment = 1
+
 [node name="ButtonMargin3" type="MarginContainer" parent="RiddleButtons/Controller/Schichtplan/Panel"]
 layout_mode = 1
 anchors_preset = 9
@@ -1391,7 +1423,7 @@ offset_left = -130.0
 offset_top = -361.0
 grow_horizontal = 0
 grow_vertical = 0
-theme_override_constants/margin_bottom = 232
+theme_override_constants/margin_bottom = 226
 
 [node name="ManualMusic" type="VBoxContainer" parent="MarginContainer"]
 layout_mode = 2
@@ -1424,7 +1456,7 @@ text = "Finale"
 
 [node name="MarginContainer" type="MarginContainer" parent="MarginContainer/ManualMusic"]
 layout_mode = 2
-theme_override_constants/margin_top = 4
+theme_override_constants/margin_top = 10
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/ManualMusic/MarginContainer"]
 layout_mode = 2
@@ -1452,7 +1484,7 @@ anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = -129.0
-offset_top = -112.0
+offset_top = -106.0
 grow_horizontal = 0
 grow_vertical = 0
 theme_override_constants/margin_bottom = 50
@@ -1679,7 +1711,7 @@ offset_right = 394.0
 offset_bottom = 173.0
 focus_mode = 0
 theme = ExtResource("18_7wtpm")
-text = "Neue Spielsession vorbereiten"
+text = "Neue Spielsession vorbereiten (Vor dem Aufräumen)"
 script = ExtResource("23_3xokn")
 
 [node name="Debug" parent="." instance=ExtResource("23_o6lvy")]
@@ -1714,11 +1746,11 @@ script = ExtResource("26_l61b3")
 [connection signal="button_down" from="RiddleButtons/Controller/Telefon/Panel/ButtonMargin3/Buttons/TelephoneRing" to="Connector" method="TelefonRing"]
 [connection signal="button_down" from="RiddleButtons/Controller/Telefon/Panel/ButtonMargin3/Buttons/SexdungeonOpen" to="Connector" method="WasserhahnOpen"]
 [connection signal="button_down" from="RiddleButtons/Controller/Schichtplan/Panel/ButtonMargin2/Buttons/SchichtplanSolve" to="Connector" method="SchichtplanOpen"]
-[connection signal="button_down" from="RiddleButtons/Controller/Separee/Panel/ButtonMargin/Buttons/SepareeRed" to="Connector" method="SepareeRot"]
+[connection signal="button_down" from="RiddleButtons/Controller/Separee/Panel/ButtonMargin/Buttons/SepareeRed" to="Connector" method="SepareeRed"]
 [connection signal="button_down" from="RiddleButtons/Controller/Separee/Panel/ButtonMargin/Buttons/SepareeRed" to="MusicPlayer" method="play_track" binds= ["separee"]]
-[connection signal="button_down" from="RiddleButtons/Controller/Separee/Panel/ButtonMargin/Buttons/SepareeGreen" to="Connector" method="SepareeGruen"]
+[connection signal="button_down" from="RiddleButtons/Controller/Separee/Panel/ButtonMargin/Buttons/SepareeGreen" to="Connector" method="SepareeGreen"]
 [connection signal="button_down" from="RiddleButtons/Controller/Separee/Panel/ButtonMargin/Buttons/SepareeGreen" to="MusicPlayer" method="play_track" binds= ["separee"]]
-[connection signal="button_down" from="RiddleButtons/Controller/Separee/Panel/ButtonMargin/Buttons/SepareeBlue" to="Connector" method="SepareeBlau"]
+[connection signal="button_down" from="RiddleButtons/Controller/Separee/Panel/ButtonMargin/Buttons/SepareeBlue" to="Connector" method="SepareeBlue"]
 [connection signal="button_down" from="RiddleButtons/Controller/Separee/Panel/ButtonMargin/Buttons/SepareeBlue" to="MusicPlayer" method="play_track" binds= ["separee"]]
 [connection signal="button_down" from="RiddleButtons/Controller/Separee/Panel/ButtonMargin2/Buttons/SepareeSolve" to="Connector" method="SepareeOpen"]
 [connection signal="button_down" from="RiddleButtons/Controller/Separee/Panel/ButtonMargin2/Buttons/SepareeSolve" to="Finale" method="request_finale"]

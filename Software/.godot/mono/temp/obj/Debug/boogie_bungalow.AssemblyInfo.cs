@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("boogie_bungalow")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+dc9812c713a3f8eca018be78e2d93f0a5ddc2b89")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+49c681f23712c890396a50ed6afcc6c3df1375a0")]
 [assembly: System.Reflection.AssemblyProductAttribute("boogie_bungalow")]
 [assembly: System.Reflection.AssemblyTitleAttribute("boogie_bungalow")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
