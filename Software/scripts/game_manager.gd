@@ -10,9 +10,9 @@ var WORKING_FROM_HOME = false
 
 
 # VARIABLES
+var connector : Node # connector node registers itself
 var game_start_button : Control
 var pregame_timer : Control
-var connector : Node # connector node registers itself
 var loading_screen : LoadingScreen
 var session : GameSession 
 
@@ -25,8 +25,10 @@ signal game_session_finished
 
 # SETUP
 func _ready():
+	if WORKING_FROM_HOME:
+		return
 	loading_screen = LOADING_SCREEN.instantiate()
-	loading_screen.loading_screen_clicked.connect(request_master_ack)
+	loading_screen.loading_screen_clicked.connect(connect_to_master)
 	get_node("/root/Universe").add_child(loading_screen)
 
 func connect_to_master():
@@ -37,11 +39,7 @@ func connect_to_master():
 	if verification:
 		request_master_ack()
 	else:
-		loading_screen.set_message("Verbindung unmöglich: Port nicht richtig konfiguriert!")
-		
-	if WORKING_FROM_HOME: # ignore everything and emulate feeling
-		await get_tree().create_timer(0.5).timeout
-		request_master_ack()
+		loading_screen.set_message("Fehler: Port Fehlkonfiguration => Bitte Ireas schreiben!")
 
 
 func request_master_ack():
@@ -53,12 +51,8 @@ func request_master_ack():
 		loading_screen.delete()
 		start_new_game_session()
 	else:
-		loading_screen.set_message("Verbindung unmöglich: Ist der Rätselstrom angeschalten?")
-
-	if WORKING_FROM_HOME: # ignore everything and emulate feeling
-		await get_tree().create_timer(2).timeout
-		loading_screen.delete()
-		start_new_game_session()
+		loading_screen.set_message("Ist der Rätselstrom angeschalten? Klicken für erneuten Versuch")
+		loading_screen.disabled = false
 
 
 
@@ -74,4 +68,18 @@ func start_new_game_session():
 
 func restart_session():
 	connector.call("SystemHardReset")
+	loading_screen = LOADING_SCREEN.instantiate()
+	loading_screen.loading_screen_clicked.connect(fake_loading)
+	loading_screen.set_message("Bereite nächstes Spiel vor...")
+	get_node("/root/Universe").add_child(loading_screen)
 	start_new_game_session()
+
+func fake_loading(): # fake loading to give better feeling at restart
+	loading_screen.set_percentage(20)
+	await get_tree().create_timer(3).timeout
+	loading_screen.set_percentage(50)	
+	await get_tree().create_timer(1.5).timeout
+	loading_screen.set_percentage(60)	
+	await get_tree().create_timer(10).timeout
+	loading_screen.set_percentage(100)
+	loading_screen.delete()

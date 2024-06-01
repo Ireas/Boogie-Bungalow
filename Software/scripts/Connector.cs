@@ -6,6 +6,7 @@ using System.IO.Ports;
 using System.Reflection;
 
 // currently green traffic light is slow, original uses same code.... Why?
+// ALways followed by a Node Resycn => Delay?
 
 
 public partial class Connector : Node{
@@ -26,7 +27,7 @@ public partial class Connector : Node{
 
 	private const float SYNC_PACK_DOWNTIME = 0.5f;
 	
-	private const float TELEFPHONE_RING_DURATION = 3f;
+	private const float TELEFPHONE_RING_DURATION = 6f;
 	private const float OPEN_SPARKASTEN_AFTER_STOPPTANZ_DELAY = 2.5f;
 	private const float OPEN_DOOR_AFTER_GAME_FINISH_DELAY = 8f;
 	
@@ -71,7 +72,7 @@ public partial class Connector : Node{
 		{COMMANDS.SPARKASTEN_OPEN, 			"03,00,01"},
 		{COMMANDS.SPARKASTEN_STOP_OPENING, 	"03,00,00"},
 		{COMMANDS.TELEFON_RING,				"21,00,03"},
-		{COMMANDS.TELEPHONE_STOP_RINGING, 	"21,00,00"},
+		{COMMANDS.TELEPHONE_STOP_RINGING, 	"21,00,01"}, // does not stop the ringing...
 		{COMMANDS.WASSERHAHN_ENABLE,		"05,00,01"},
 		{COMMANDS.SEXDUNGEON_OPEN, 			"05,00,02"},
 		{COMMANDS.SCHICHTPLAN_OPEN, 		"05,00,09"},
@@ -131,6 +132,7 @@ public partial class Connector : Node{
 	{
 		// create new Logger with new logfile
 		_logger = new Logger();
+
 
 		// access Godots autoloads
 		_logger.Log("Accessing Autoloads", Logger.LogSeverity.VERBOSE);
@@ -195,14 +197,13 @@ public partial class Connector : Node{
 
 			timer_ack.CallDeferred("start", 0.2);
 			
-			for(int i=0; i<15; i++)
+			for(int i=0; i<1000; i++)
 			{
+				_logger.Log("Waiting for ACK ("+i.ToString()+")", Logger.LogSeverity.VERBOSE);
 				if(timer_ack.TimeLeft<=0.0){
 					timer_ack.CallDeferred("start", 0.2);
 				}
 				while(timer_ack.TimeLeft>0){}
-
-				_logger.Log("Check ACK!", Logger.LogSeverity.VERBOSE);
 				if(_arduinoMaster.BytesToRead>0 && _arduinoMaster.ReadChar()==56)
 				{
 					_logger.Log("ACK Revieced!", Logger.LogSeverity.VERBOSE);
@@ -220,6 +221,7 @@ public partial class Connector : Node{
 
 		if(!_ackRecieved)
 		{
+			_logger.Log("No ACK recieved!", Logger.LogSeverity.WARNING);
 			return false;
 		}
 

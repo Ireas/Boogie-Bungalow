@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Boogie-Bungalow\\Software\\boogie_bungalow.csproj": {}
+    "/home/ireas/git_repos/Boogie-Bungalow/Software/boogie_bungalow.csproj": {}
   },
   "projects": {
-    "C:\\Boogie-Bungalow\\Software\\boogie_bungalow.csproj": {
+    "/home/ireas/git_repos/Boogie-Bungalow/Software/boogie_bungalow.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Boogie-Bungalow\\Software\\boogie_bungalow.csproj",
+        "projectUniqueName": "/home/ireas/git_repos/Boogie-Bungalow/Software/boogie_bungalow.csproj",
         "projectName": "boogie_bungalow",
-        "projectPath": "C:\\Boogie-Bungalow\\Software\\boogie_bungalow.csproj",
-        "packagesPath": "C:\\Users\\ireas\\.nuget\\packages\\",
-        "outputPath": "C:\\Boogie-Bungalow\\Software\\.godot\\mono\\temp\\obj\\",
+        "projectPath": "/home/ireas/git_repos/Boogie-Bungalow/Software/boogie_bungalow.csproj",
+        "packagesPath": "/home/ireas/.nuget/packages/",
+        "outputPath": "/home/ireas/git_repos/Boogie-Bungalow/Software/.godot/mono/temp/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\ireas\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "/home/ireas/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net6.0"
@@ -32,11 +32,6 @@
           "warnAsError": [
             "NU1605"
           ]
-        },
-        "restoreAuditProperties": {
-          "enableAudit": "true",
-          "auditLevel": "low",
-          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -48,6 +43,10 @@
               "version": "[4.2.2, )"
             },
             "GodotSharp": {
+              "target": "Package",
+              "version": "[4.2.2, )"
+            },
+            "GodotSharpEditor": {
               "target": "Package",
               "version": "[4.2.2, )"
             },
@@ -74,27 +73,11 @@
           "downloadDependencies": [
             {
               "name": "Microsoft.AspNetCore.App.Ref",
-              "version": "[6.0.29, 6.0.29]"
-            },
-            {
-              "name": "Microsoft.AspNetCore.App.Runtime.win-x64",
-              "version": "[6.0.29, 6.0.29]"
+              "version": "[6.0.30, 6.0.30]"
             },
             {
               "name": "Microsoft.NETCore.App.Ref",
-              "version": "[6.0.29, 6.0.29]"
-            },
-            {
-              "name": "Microsoft.NETCore.App.Runtime.win-x64",
-              "version": "[6.0.29, 6.0.29]"
-            },
-            {
-              "name": "Microsoft.WindowsDesktop.App.Ref",
-              "version": "[6.0.29, 6.0.29]"
-            },
-            {
-              "name": "Microsoft.WindowsDesktop.App.Runtime.win-x64",
-              "version": "[6.0.29, 6.0.29]"
+              "version": "[6.0.30, 6.0.30]"
             }
           ],
           "frameworkReferences": {
@@ -102,12 +85,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.204\\RuntimeIdentifierGraph.json"
-        }
-      },
-      "runtimes": {
-        "win-x64": {
-          "#import": []
+          "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/8.0.105/RuntimeIdentifierGraph.json"
         }
       }
     }

@@ -11,8 +11,10 @@ var cancel_countdown : bool = true
 
 func _ready():
 	GameManager.new_game_session_started.connect(setup)
+	GameManager.game_session_finished.connect(cancel)
 
 func setup():
+	cancel() #prevent game countdown while new game started
 	visible = true
 	buttons_change_time.visible = true
 	buttons_time_control.visible = false

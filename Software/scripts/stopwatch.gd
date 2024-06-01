@@ -24,8 +24,7 @@ func update_ui():
 	duration_label.text = "%02d:%02d:%02d"%[hours,minutes,seconds]
 
 func start():
-	while GameManager.session.game_duration<7200: # 2h max
+	stop = false
+	while not stop:
 		await get_tree().create_timer(1).timeout
-		if stop:
-			return
 		GameManager.session.game_duration+= 1

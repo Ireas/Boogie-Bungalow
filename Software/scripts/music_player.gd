@@ -31,7 +31,15 @@ func _ready():
 		
 	GameManager.game_session_started.connect( func(): play_track("atmo1", true) )
 	GameManager.new_game_session_started.connect( func(): playing = false )
-	
+	EventBus.update_status_stopptanz.connect(stoptanz_react)
+
+func stoptanz_react(_ping:int, _solved:int, state:int):
+	if state==2:
+		pause()
+	elif state==1:
+		unpause()
+
+
 func play_track(track_name:String, force:bool=false):
 	if not track_name in dict_loaded_music_tracks:
 		print(" >>[W]: music track \"%s\" not found"%[track_name])

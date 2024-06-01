@@ -1,7 +1,7 @@
 extends Button
 
 # CONSTANTS
-const BUTTON_DOWNTIME : float = 0.7
+const BUTTON_DOWNTIME : float = 1
 
 # EXPORT
 @export var ignore_delay : bool = false

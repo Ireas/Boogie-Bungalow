@@ -26,6 +26,10 @@ EventBus="*res://scripts/event_bus.gd"
 PopupManager="*res://scripts/popup_manager.gd"
 GameManager="*res://scripts/game_manager.gd"
 
+[display]
+
+window/size/resizable=false
+
 [dotnet]
 
 project/assembly_name="boogie_bungalow"

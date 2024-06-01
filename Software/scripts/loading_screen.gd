@@ -11,6 +11,7 @@ class_name LoadingScreen
 # VARIABLES
 var disabled : bool = false
 var is_fading_out : bool = false
+var first_time : bool = true
 
 # SIGNALS
 signal loading_screen_clicked
@@ -41,8 +42,16 @@ func _input(event):
 	# if user presses left mouse click
 	if event is InputEventMouseButton and event.button_index==1:
 		disabled = true
-		animator.play("fade_in")
-		loading_screen_clicked.emit()
+		if first_time:
+			first_time = false
+			animator.play("fade_in")
+			await animator.animation_finished
+			loading_screen_clicked.emit()
+		else: # manual restart, skip open coms
+			set_message("Erneuter Versuch...")
+			await get_tree().create_timer(4).timeout
+			GameManager.request_master_ack()
+			
 
 # remove loading screen with cool fade out effect
 func delete():

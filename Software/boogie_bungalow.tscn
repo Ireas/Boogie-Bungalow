@@ -7,7 +7,7 @@
 [ext_resource type="Script" path="res://scripts/music_player.gd" id="3_kv775"]
 [ext_resource type="Script" path="res://riddle_button.gd" id="4_036af"]
 [ext_resource type="PackedScene" uid="uid://bquu7rbldubs" path="res://modules/ping/ping.tscn" id="4_jr8c0"]
-[ext_resource type="Script" path="res://riddle_buttons_overlay.gd" id="7_6h440"]
+[ext_resource type="Theme" uid="uid://dfnl4pvw4h7vk" path="res://styles/base_center_2.tres" id="6_42bfr"]
 [ext_resource type="Texture2D" uid="uid://cee8ntxujt2c8" path="res://images/Rot.png" id="7_17ck7"]
 [ext_resource type="Texture2D" uid="uid://b6rlcqmv51afq" path="res://images/Grün.png" id="8_fk3wt"]
 [ext_resource type="Texture2D" uid="uid://b7prlhq6wolju" path="res://images/Blau.png" id="9_mog3e"]
@@ -196,7 +196,7 @@ horizontal_alignment = 1
 
 [node name="MarginContainer3" type="MarginContainer" parent="RiddleButtons/Controller/Notes"]
 layout_mode = 2
-theme_override_constants/margin_left = 250
+theme_override_constants/margin_left = 183
 theme_override_constants/margin_bottom = -8
 
 [node name="Label3" type="Label" parent="RiddleButtons/Controller/Notes/MarginContainer3"]
@@ -208,7 +208,7 @@ horizontal_alignment = 1
 
 [node name="MarginContainer4" type="MarginContainer" parent="RiddleButtons/Controller/Notes"]
 layout_mode = 2
-theme_override_constants/margin_left = 140
+theme_override_constants/margin_left = 220
 theme_override_constants/margin_bottom = -8
 
 [node name="Label4" type="Label" parent="RiddleButtons/Controller/Notes/MarginContainer4"]
@@ -219,7 +219,7 @@ horizontal_alignment = 1
 
 [node name="MarginContainer5" type="MarginContainer" parent="RiddleButtons/Controller/Notes"]
 layout_mode = 2
-theme_override_constants/margin_left = 135
+theme_override_constants/margin_left = 110
 theme_override_constants/margin_bottom = -8
 
 [node name="Label5" type="Label" parent="RiddleButtons/Controller/Notes/MarginContainer5"]
@@ -272,7 +272,7 @@ anchor_bottom = 1.0
 offset_right = 260.0
 grow_vertical = 2
 mouse_filter = 2
-theme_override_constants/margin_left = 550
+theme_override_constants/margin_left = 480
 
 [node name="Buttons" type="HBoxContainer" parent="RiddleButtons/Controller/Drinks/Panel/ButtonMargin2"]
 layout_mode = 2
@@ -465,7 +465,7 @@ horizontal_alignment = 1
 layout_mode = 2
 theme = ExtResource("17_717m6")
 theme_override_font_sizes/font_size = 12
-text = "(2s Delay)"
+text = "(mit Delay)"
 horizontal_alignment = 1
 
 [node name="DisableOverlay" type="Panel" parent="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin/Buttons/StopptanzDance"]
@@ -524,7 +524,7 @@ horizontal_alignment = 1
 layout_mode = 2
 theme = ExtResource("17_717m6")
 theme_override_font_sizes/font_size = 12
-text = "(2s Delay)"
+text = "(mit Delay)"
 horizontal_alignment = 1
 
 [node name="DisableOverlay" type="Panel" parent="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin/Buttons/StopptanzStop"]
@@ -543,7 +543,7 @@ anchor_bottom = 1.0
 offset_right = 260.0
 grow_vertical = 2
 mouse_filter = 2
-theme_override_constants/margin_left = 550
+theme_override_constants/margin_left = 480
 
 [node name="Buttons" type="HBoxContainer" parent="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin2"]
 layout_mode = 2
@@ -657,7 +657,7 @@ anchor_bottom = 1.0
 offset_right = 600.0
 grow_vertical = 2
 mouse_filter = 2
-theme_override_constants/margin_left = 550
+theme_override_constants/margin_left = 480
 
 [node name="Buttons" type="HBoxContainer" parent="RiddleButtons/Controller/Sparkasten/Panel/ButtonMargin2"]
 layout_mode = 2
@@ -678,6 +678,7 @@ layout_mode = 2
 custom_minimum_size = Vector2(100, 25)
 layout_mode = 2
 focus_mode = 0
+theme = ExtResource("6_42bfr")
 script = ExtResource("4_036af")
 
 [node name="Labels" type="VBoxContainer" parent="RiddleButtons/Controller/Sparkasten/Panel/ButtonMargin3/Buttons/SparkastenOpen"]
@@ -694,14 +695,16 @@ alignment = 1
 
 [node name="Label" type="Label" parent="RiddleButtons/Controller/Sparkasten/Panel/ButtonMargin3/Buttons/SparkastenOpen/Labels"]
 layout_mode = 2
-theme = ExtResource("17_717m6")
+theme = ExtResource("6_42bfr")
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 12
 text = "Sparkasten"
 horizontal_alignment = 1
 
 [node name="Label2" type="Label" parent="RiddleButtons/Controller/Sparkasten/Panel/ButtonMargin3/Buttons/SparkastenOpen/Labels"]
 layout_mode = 2
-theme = ExtResource("17_717m6")
+theme = ExtResource("6_42bfr")
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 12
 text = "Öffnen"
 horizontal_alignment = 1
@@ -813,7 +816,7 @@ offset_right = 550.0
 offset_bottom = 25.0
 grow_vertical = 2
 mouse_filter = 2
-theme_override_constants/margin_left = 550
+theme_override_constants/margin_left = 480
 
 [node name="Buttons" type="HBoxContainer" parent="RiddleButtons/Controller/Telefon/Panel/ButtonMargin2"]
 layout_mode = 2
@@ -835,6 +838,7 @@ size_flags_horizontal = 0
 custom_minimum_size = Vector2(100, 25)
 layout_mode = 2
 focus_mode = 0
+theme = ExtResource("6_42bfr")
 script = ExtResource("4_036af")
 
 [node name="Labels" type="VBoxContainer" parent="RiddleButtons/Controller/Telefon/Panel/ButtonMargin3/Buttons/TelephoneRing"]
@@ -851,14 +855,16 @@ alignment = 1
 
 [node name="Label" type="Label" parent="RiddleButtons/Controller/Telefon/Panel/ButtonMargin3/Buttons/TelephoneRing/Labels"]
 layout_mode = 2
-theme = ExtResource("17_717m6")
+theme = ExtResource("6_42bfr")
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 12
 text = "Telefon"
 horizontal_alignment = 1
 
 [node name="Label2" type="Label" parent="RiddleButtons/Controller/Telefon/Panel/ButtonMargin3/Buttons/TelephoneRing/Labels"]
 layout_mode = 2
-theme = ExtResource("17_717m6")
+theme = ExtResource("6_42bfr")
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 12
 text = "Klingeln"
 horizontal_alignment = 1
@@ -876,6 +882,7 @@ grow_vertical = 2
 custom_minimum_size = Vector2(100, 25)
 layout_mode = 2
 focus_mode = 0
+theme = ExtResource("6_42bfr")
 script = ExtResource("4_036af")
 
 [node name="Labels" type="VBoxContainer" parent="RiddleButtons/Controller/Telefon/Panel/ButtonMargin3/Buttons/SexdungeonOpen"]
@@ -892,14 +899,16 @@ alignment = 1
 
 [node name="Label" type="Label" parent="RiddleButtons/Controller/Telefon/Panel/ButtonMargin3/Buttons/SexdungeonOpen/Labels"]
 layout_mode = 2
-theme = ExtResource("17_717m6")
+theme = ExtResource("6_42bfr")
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 12
 text = "Sexdungeon"
 horizontal_alignment = 1
 
 [node name="Label2" type="Label" parent="RiddleButtons/Controller/Telefon/Panel/ButtonMargin3/Buttons/SexdungeonOpen/Labels"]
 layout_mode = 2
-theme = ExtResource("17_717m6")
+theme = ExtResource("6_42bfr")
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 12
 text = "Öffnen"
 horizontal_alignment = 1
@@ -967,7 +976,7 @@ anchor_bottom = 1.0
 offset_right = 600.0
 grow_vertical = 2
 mouse_filter = 2
-theme_override_constants/margin_left = 550
+theme_override_constants/margin_left = 480
 
 [node name="Buttons" type="HBoxContainer" parent="RiddleButtons/Controller/Schichtplan/Panel/ButtonMargin2"]
 layout_mode = 2
@@ -1196,7 +1205,7 @@ anchor_bottom = 1.0
 offset_right = 600.0
 grow_vertical = 2
 mouse_filter = 2
-theme_override_constants/margin_left = 550
+theme_override_constants/margin_left = 480
 
 [node name="Buttons" type="HBoxContainer" parent="RiddleButtons/Controller/Separee/Panel/ButtonMargin2"]
 layout_mode = 2
@@ -1259,9 +1268,11 @@ layout_mode = 2
 custom_minimum_size = Vector2(100, 25)
 layout_mode = 2
 focus_mode = 0
+theme = ExtResource("6_42bfr")
 script = ExtResource("4_036af")
 
 [node name="Background" type="MarginContainer" parent="RiddleButtons/Controller/Separee/Panel/ButtonMargin3/Buttons/SepareeWhite"]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -1293,16 +1304,16 @@ alignment = 1
 
 [node name="Label" type="Label" parent="RiddleButtons/Controller/Separee/Panel/ButtonMargin3/Buttons/SepareeWhite/Labels"]
 layout_mode = 2
-theme = ExtResource("17_717m6")
-theme_override_colors/font_color = Color(0.136826, 0.136826, 0.136826, 1)
+theme = ExtResource("6_42bfr")
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 12
 text = "Licht"
 horizontal_alignment = 1
 
 [node name="Label2" type="Label" parent="RiddleButtons/Controller/Separee/Panel/ButtonMargin3/Buttons/SepareeWhite/Labels"]
 layout_mode = 2
-theme = ExtResource("17_717m6")
-theme_override_colors/font_color = Color(0.136826, 0.136826, 0.136826, 1)
+theme = ExtResource("6_42bfr")
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 12
 text = "Weiß"
 horizontal_alignment = 1
@@ -1320,6 +1331,7 @@ grow_vertical = 2
 custom_minimum_size = Vector2(100, 25)
 layout_mode = 2
 focus_mode = 0
+theme = ExtResource("6_42bfr")
 script = ExtResource("4_036af")
 
 [node name="Labels" type="VBoxContainer" parent="RiddleButtons/Controller/Separee/Panel/ButtonMargin3/Buttons/SepareeTurnoff"]
@@ -1336,14 +1348,16 @@ alignment = 1
 
 [node name="Label" type="Label" parent="RiddleButtons/Controller/Separee/Panel/ButtonMargin3/Buttons/SepareeTurnoff/Labels"]
 layout_mode = 2
-theme = ExtResource("17_717m6")
+theme = ExtResource("6_42bfr")
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 12
 text = "Licht"
 horizontal_alignment = 1
 
 [node name="Label2" type="Label" parent="RiddleButtons/Controller/Separee/Panel/ButtonMargin3/Buttons/SepareeTurnoff/Labels"]
 layout_mode = 2
-theme = ExtResource("17_717m6")
+theme = ExtResource("6_42bfr")
+theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 12
 text = "Aus"
 horizontal_alignment = 1
@@ -1367,15 +1381,6 @@ grow_horizontal = 0
 grow_vertical = 2
 riddle = 6
 
-[node name="MarginContainer" type="MarginContainer" parent="RiddleButtons"]
-layout_mode = 2
-mouse_filter = 2
-theme_override_constants/margin_top = 14
-
-[node name="Overlay" type="Panel" parent="RiddleButtons/MarginContainer"]
-layout_mode = 2
-script = ExtResource("7_6h440")
-
 [node name="MarginContainer" type="MarginContainer" parent="."]
 anchors_preset = 3
 anchor_left = 1.0
@@ -1386,7 +1391,7 @@ offset_left = -130.0
 offset_top = -361.0
 grow_horizontal = 0
 grow_vertical = 0
-theme_override_constants/margin_bottom = 236
+theme_override_constants/margin_bottom = 232
 
 [node name="ManualMusic" type="VBoxContainer" parent="MarginContainer"]
 layout_mode = 2
@@ -1417,23 +1422,27 @@ layout_mode = 2
 theme = ExtResource("16_xh5hu")
 text = "Finale"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/ManualMusic"]
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/ManualMusic"]
+layout_mode = 2
+theme_override_constants/margin_top = 4
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/ManualMusic/MarginContainer"]
 layout_mode = 2
 theme_override_constants/separation = 10
 alignment = 1
 
-[node name="Stop" type="TextureButton" parent="MarginContainer/ManualMusic/HBoxContainer"]
-self_modulate = Color(0.329159, 0.329158, 0.329159, 1)
-layout_mode = 2
-focus_mode = 0
-texture_normal = ExtResource("10_myun6")
-stretch_mode = 5
-
-[node name="Play" type="TextureButton" parent="MarginContainer/ManualMusic/HBoxContainer"]
+[node name="Play" type="TextureButton" parent="MarginContainer/ManualMusic/MarginContainer/HBoxContainer"]
 self_modulate = Color(0.329159, 0.329158, 0.329159, 1)
 layout_mode = 2
 focus_mode = 0
 texture_normal = ExtResource("21_4shkp")
+stretch_mode = 5
+
+[node name="Stop" type="TextureButton" parent="MarginContainer/ManualMusic/MarginContainer/HBoxContainer"]
+self_modulate = Color(0.329159, 0.329158, 0.329159, 1)
+layout_mode = 2
+focus_mode = 0
+texture_normal = ExtResource("10_myun6")
 stretch_mode = 5
 
 [node name="UtilityButtons" type="MarginContainer" parent="."]
@@ -1466,6 +1475,7 @@ theme = ExtResource("16_xh5hu")
 text = "Debug"
 
 [node name="ResetButtons" type="VBoxContainer" parent="."]
+visible = false
 offset_top = 20.0
 offset_right = 163.0
 offset_bottom = 74.0
@@ -1512,18 +1522,6 @@ animator = NodePath("AnimationPlayer")
 libraries = {
 "": SubResource("AnimationLibrary_rpdep")
 }
-
-[node name="Connector" type="Node" parent="." node_paths=PackedStringArray("timer_ack", "timer_sync_packages")]
-script = ExtResource("2_5v0y2")
-timer_ack = NodePath("TimerACKTimeout")
-timer_sync_packages = NodePath("TimerSync")
-
-[node name="TimerACKTimeout" type="Timer" parent="Connector"]
-wait_time = 20.0
-one_shot = true
-
-[node name="TimerSync" type="Timer" parent="Connector"]
-one_shot = true
 
 [node name="FrameOverlay" type="Control" parent="."]
 layout_mode = 3
@@ -1681,13 +1679,25 @@ offset_right = 394.0
 offset_bottom = 173.0
 focus_mode = 0
 theme = ExtResource("18_7wtpm")
-text = "Neue Spielsession Vorbereiten"
+text = "Neue Spielsession vorbereiten"
 script = ExtResource("23_3xokn")
 
 [node name="Debug" parent="." instance=ExtResource("23_o6lvy")]
 
 [node name="Feedback" parent="." instance=ExtResource("24_dx087")]
 visible = false
+
+[node name="Connector" type="Node" parent="." node_paths=PackedStringArray("timer_ack", "timer_sync_packages")]
+script = ExtResource("2_5v0y2")
+timer_ack = NodePath("TimerACKTimeout")
+timer_sync_packages = NodePath("TimerSync")
+
+[node name="TimerACKTimeout" type="Timer" parent="Connector"]
+wait_time = 20.0
+one_shot = true
+
+[node name="TimerSync" type="Timer" parent="Connector"]
+one_shot = true
 
 [node name="Finale" type="Node" parent="."]
 script = ExtResource("26_l61b3")
@@ -1696,9 +1706,7 @@ script = ExtResource("26_l61b3")
 [connection signal="button_down" from="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin/Buttons/StopptanzInit" to="Connector" method="StopptanzInit"]
 [connection signal="button_down" from="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin/Buttons/StopptanzInit" to="MusicPlayer" method="play_track" binds= ["stopptanz", true]]
 [connection signal="button_down" from="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin/Buttons/StopptanzDance" to="Connector" method="StopptanzDance"]
-[connection signal="button_down" from="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin/Buttons/StopptanzDance" to="MusicPlayer" method="unpause" binds= [2.0]]
 [connection signal="button_down" from="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin/Buttons/StopptanzStop" to="Connector" method="StopptanzStop"]
-[connection signal="button_down" from="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin/Buttons/StopptanzStop" to="MusicPlayer" method="pause" binds= [2.0]]
 [connection signal="button_down" from="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin2/Buttons/StopptanzSolve" to="Connector" method="StopptanzSolve"]
 [connection signal="button_down" from="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin2/Buttons/StopptanzSolve" to="MusicPlayer" method="play_track" binds= ["atmo2"]]
 [connection signal="button_down" from="RiddleButtons/Controller/Sparkasten/Panel/ButtonMargin3/Buttons/SparkastenOpen" to="Connector" method="SparkastenOpen"]
@@ -1722,8 +1730,8 @@ script = ExtResource("26_l61b3")
 [connection signal="button_down" from="MarginContainer/ManualMusic/atmo2" to="MusicPlayer" method="play_track" binds= ["atmo2", true]]
 [connection signal="button_down" from="MarginContainer/ManualMusic/separee" to="MusicPlayer" method="play_track" binds= ["separee", true]]
 [connection signal="button_down" from="MarginContainer/ManualMusic/finale" to="MusicPlayer" method="play_track" binds= ["finale", true]]
-[connection signal="button_down" from="MarginContainer/ManualMusic/HBoxContainer/Stop" to="MusicPlayer" method="pause"]
-[connection signal="button_down" from="MarginContainer/ManualMusic/HBoxContainer/Play" to="MusicPlayer" method="unpause"]
+[connection signal="button_down" from="MarginContainer/ManualMusic/MarginContainer/HBoxContainer/Play" to="MusicPlayer" method="unpause"]
+[connection signal="button_down" from="MarginContainer/ManualMusic/MarginContainer/HBoxContainer/Stop" to="MusicPlayer" method="pause"]
 [connection signal="button_down" from="UtilityButtons/VBoxContainer/Help" to="Feedback" method="show"]
 [connection signal="button_down" from="UtilityButtons/VBoxContainer/Debug" to="Debug" method="show"]
 [connection signal="on_hard_reset" from="ResetButtons" to="Connector" method="SystemHardReset"]

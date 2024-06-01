@@ -31,7 +31,7 @@ horizontal_alignment = 1
 layout_mode = 2
 theme_override_font_sizes/normal_font_size = 11
 bbcode_enabled = true
-text = "Schreib gerne [color=violet]@Ireas[/color] über Slack oder Whatsapp deine Ideen! 
+text = "Schreib gerne [color=violet]@Ireas[/color] über [color=violet]Slack oder Whatsapp[/color] deine Ideen! 
 Egal ob neue Wunschfeatures, Bugs in der Software oder einfache Rückmeldung wie die Software läuft - Jedes Feedback ist gern gesehen.
 "
 fit_content = true
@@ -43,8 +43,8 @@ theme_override_font_sizes/normal_font_size = 11
 bbcode_enabled = true
 text = "
 [center]HINWEIS[/center]
-Das [color=violet]Stopptanzlicht ist aktuell ca. 2s verzögert[/color] - Problem ist bekannt und ich habe keine Blassen Schimmer warum. Liegt wahrscheinlich wieder der Boogie-Dämon >:(
-Aktueller Workaround: Die [color=violet]Musikänderung ist auch 2s verzögert[/color]."
+Das [color=violet]Stopptanzlicht ist verzögert[/color] - Problem ist bekannt und ich arbeite an einer Lösung.
+Aktueller Workaround: Die [color=violet]Musik wartet auf die Lichter[/color] und ist deswegen ebenfalls verzögert. Nicht zu schnell drücken!"
 fit_content = true
 scroll_active = false
 

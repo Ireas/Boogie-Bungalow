@@ -4,6 +4,7 @@ signal on_soft_reset()
 signal on_hard_reset()
 
 func _ready():
+	visible = false
 	GameManager.game_session_started.connect( func(): visible=true )
 	GameManager.game_session_finished.connect( func(): visible=false )
 
