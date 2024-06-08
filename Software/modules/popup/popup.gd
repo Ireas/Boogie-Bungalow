@@ -1,13 +1,13 @@
 extends Panel
 class_name CustomPopup
 
-@export var label : Label
+@export var label : RichTextLabel
 
 signal response_confirm()
 signal response_cancel()
 
 func setup(message:String):
-	label.text = message
+	label.text = "[center]" + message
 
 
 func confirm():

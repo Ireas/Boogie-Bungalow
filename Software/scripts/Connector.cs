@@ -1,9 +1,7 @@
 using Godot;
 using System;
-using System.IO;
 using System.Collections.Generic;
 using System.IO.Ports;
-using System.Reflection;
 
 // currently green traffic light is slow, original uses same code.... Why?
 // ALways followed by a Node Resycn => Delay?
@@ -17,8 +15,6 @@ public partial class Connector : Node{
 	[Export] public Godot.Timer timer_sync_packages;
 
 
-
-
 	//========================================
 	//=====  CONSTANTS
 	//========================================
@@ -28,9 +24,9 @@ public partial class Connector : Node{
 	private const int MAX_ACK_TRIES = 1000;
 
 	private const float SYNC_PACK_DOWNTIME = 0.5f;
-	private const float TELEFPHONE_RING_DURATION = 6f;
+	private const float TELEFPHONE_RING_DURATION = 6f; // I think this does not work properly, but it is not used anyway
 	private const float OPEN_SPARKASTEN_AFTER_STOPPTANZ_DELAY = 2.5f;
-	private const float OPEN_DOOR_AFTER_GAME_FINISH_DELAY = 8f;
+	private const float OPEN_DOOR_AFTER_GAME_FINISH_DELAY = 7f;
 	
 	public enum COMMANDS{
 		SYSTEM_INITIALIZE,
@@ -119,6 +115,7 @@ public partial class Connector : Node{
 	private Logger _logger;
 	private int color_index = -1;
 	private bool final_sequence_started = false;
+	private bool _do_not_reset_separee_lights = false;
 	private SyncState _syncState = SyncState.NOT_STARTED;
 
 	private Node _eventBus;
@@ -167,6 +164,7 @@ public partial class Connector : Node{
 		_logger = new Logger();
 	}
 
+
 	// initializes serial port 
 	private bool OpenMasterPort()
 	{
@@ -207,10 +205,13 @@ public partial class Connector : Node{
 			for(int i=0; i<MAX_ACK_TRIES; i++)
 			{
 				_logger.Log("Waiting for ACK ("+i.ToString()+")", Logger.LogSeverity.VERBOSE);
-				if(timer_ack.TimeLeft<=0.0){
+
+				if(timer_ack.TimeLeft<=0.0)
+				{
 					timer_ack.CallDeferred("start", 0.2);
 				}
 				while(timer_ack.TimeLeft>0){}
+
 				if(_arduinoMaster.BytesToRead>0 && _arduinoMaster.ReadChar()==56)
 				{
 					_logger.Log("ACK Revieced!", Logger.LogSeverity.VERBOSE);
@@ -256,8 +257,10 @@ public partial class Connector : Node{
 
 
 	private void ProcessRecievedData(object sender, SerialDataReceivedEventArgs args){
-		try{
-			if(_arduinoMaster.BytesToRead<28){
+		try
+		{
+			if(_arduinoMaster.BytesToRead<28)
+			{
 				//_logger.Log("Pack Contains <28 Bytes", Logger.LogSeverity.WARNING); ignore spam
 				return;
 			}
@@ -265,11 +268,11 @@ public partial class Connector : Node{
 			string data = _arduinoMaster.ReadLine();
 			_logger.Log("Pack Recieved: " + data, Logger.LogSeverity.VERBOSE);
 
-
 			string[] data_split = data.Split(',');
 			processBuffer(data_split);
 		}
-		catch(Exception e){
+		catch(Exception e)
+		{
 			_logger.Log(e.Message, Logger.LogSeverity.WARNING);
 		}
 
@@ -285,26 +288,31 @@ public partial class Connector : Node{
 		// [3] solved
 		// [4] state
 
-		uint transformed_data_0;
-		if(!uint.TryParse(data[0].Substring(1), out transformed_data_0)){
+		uint _first_int_in_pack;
+		if(!uint.TryParse(data[0].Substring(1), out _first_int_in_pack))
+		{
 			_logger.Log("Ignoring Pack (First Byte not Understood)", Logger.LogSeverity.WARNING);
 			return;
 		}
 
 		
-		if(transformed_data_0>=11 && transformed_data_0<=17){
-			_logger.Log("Laggy Connection with Node " + (transformed_data_0-10).ToString() + " (Auto-Restart is forced)", Logger.LogSeverity.WARNING);
+		if(_first_int_in_pack>=11 && _first_int_in_pack<=17)
+		{
+			_logger.Log("Laggy Connection with Node " + (_first_int_in_pack-10).ToString() + " (Auto-Restart is forced)", Logger.LogSeverity.WARNING);
 			return;
 		}
-		else if(transformed_data_0>=70 && transformed_data_0<=120){
-			_logger.Log("Network Channel set to " + transformed_data_0.ToString(), Logger.LogSeverity.WARNING);
+		else if(_first_int_in_pack>=70 && _first_int_in_pack<=120)
+		{
+			_logger.Log("Network Channel set to " + _first_int_in_pack.ToString(), Logger.LogSeverity.WARNING);
 			_eventBus.CallDeferred("emit_sync_successful"); //this is called once every time after sync, so success
 			return;
 		}
-		else if(transformed_data_0==1){
+		else if(_first_int_in_pack==1)
+		{
 			_logger.Log("Master Node Requested Sync", Logger.LogSeverity.VERBOSE);
 
-			if(_syncState!=SyncState.NOT_STARTED){
+			if(_syncState!=SyncState.NOT_STARTED)
+			{
 				_logger.Log("Already Syncing", Logger.LogSeverity.WARNING);
 				return;
 			}
@@ -322,34 +330,42 @@ public partial class Connector : Node{
 			
 			return;
 		}
-		else if(transformed_data_0==2 || transformed_data_0==3){
+		else if(_first_int_in_pack==2 || _first_int_in_pack==3)
+		{
 			_logger.Log("Master Node Netself-Rapair", Logger.LogSeverity.WARNING);
 			return;
 		}
-		else if(transformed_data_0==4){
+		else if(_first_int_in_pack==4)
+		{
 			_logger.Log("Master Node Recieved a Network Reset Request", Logger.LogSeverity.WARNING);
 			return;
 		}
-		else if(transformed_data_0==5){
+		else if(_first_int_in_pack==5)
+		{
 			_logger.Log("Master Node Resynced Node", Logger.LogSeverity.WARNING);
 			return;  
 		}
-		else if(transformed_data_0==6){ // this is not recieved after every successful sync time
+		else if(_first_int_in_pack==6
+		){ // this is not recieved after every successful sync time
 			_logger.Log("Master Node Sync Successful", Logger.LogSeverity.VERBOSE);
 			_eventBus.CallDeferred("emit_sync_successful");
 			return;
 		}
-		else if(transformed_data_0==7){
+		else if(_first_int_in_pack==7)
+		{
 			_logger.Log("Master Node Sync Failed", Logger.LogSeverity.WARNING);
 
-			if(_syncState==SyncState.NOT_STARTED){
+			if(_syncState==SyncState.NOT_STARTED)
+			{
 				return;
 			}
-			else if(_syncState==SyncState.CURRENTLY_SYNCING){
+			else if(_syncState==SyncState.CURRENTLY_SYNCING)
+			{
 				_logger.Log("Trying Syncing Again", Logger.LogSeverity.WARNING);
 				_eventBus.CallDeferred("emit_sync_restart"); //restart Godot Overlay
 			}
-			else if(_syncState==SyncState.CURRENTLY_SYNCING_AGAIN || _syncState==SyncState.SYNC_FAILED){
+			else if(_syncState==SyncState.CURRENTLY_SYNCING_AGAIN || _syncState==SyncState.SYNC_FAILED)
+			{
 				_logger.Log("Resync Already Failed", Logger.LogSeverity.WARNING);
 				_syncState = SyncState.SYNC_FAILED;
 				return;
@@ -369,15 +385,18 @@ public partial class Connector : Node{
 			}
 			return;
 		}
-		else if(transformed_data_0==8){
+		else if(_first_int_in_pack==8)
+		{
 			_logger.Log("Master Node Recieved a Reset Request", Logger.LogSeverity.VERBOSE);
 			return;
 		}
-		else if(transformed_data_0<=3000){
-			_logger.Log("Undefined Behaviour for " + transformed_data_0.ToString(), Logger.LogSeverity.WARNING);
+		else if(_first_int_in_pack<=3000)
+		{
+			_logger.Log("Undefined Behaviour for " + _first_int_in_pack.ToString(), Logger.LogSeverity.WARNING);
 			return;
 		}
-		else{
+		else
+		{
 			int index;
 
 			int DrinksPing = -1;
@@ -412,7 +431,8 @@ public partial class Connector : Node{
 						SepareePing = (int)delay;
 						SepareeSolved = newSolved ? 1 : 0;
 						SepareeState = newState;
-						if(color_index!=-1 && newState==0){
+						if(newState==0) // separee lights went out, reset it to previous color
+						{
 							ResetPreviousColor();
 						}
 						break;
@@ -425,7 +445,8 @@ public partial class Connector : Node{
 						SparkastenPing = (int)delay;
 						SparkastenSolved = newSolved ? 1 : 0;
 						SparkastenState = newState;
-						if(newState>0){ //sparkasten is open then reset so it can be opened again
+						if(newState>0)//sparkasten is open then reset so it can be opened again
+						{ 
 							SendCommand(COMMANDS.SPARKASTEN_STOP_OPENING);
 						}
 						break;
@@ -478,14 +499,18 @@ public partial class Connector : Node{
 	// reset separee lights to previous color if they turn off randomly
 	private void ResetPreviousColor()
 	{
-		// if final sequence is ongoing, do not reset colors
-		if(final_sequence_started){
+		// if final sequence is ongoing or light has been turned off by default
+		if(final_sequence_started || _do_not_reset_separee_lights)
+		{
 			return;
 		}
 		
 		// turn on last saved color
 		switch(color_index)
 		{
+			case -1:
+				SendCommand(COMMANDS.SEPAREE_WHITE);
+				break;
 			case 0:
 				SendCommand(COMMANDS.SEPAREE_RED);
 				break;
@@ -508,7 +533,8 @@ public partial class Connector : Node{
 	//=====  BUTTONS
 	//========================================
 	// Drinks
-	public void DinksSolve(){
+	public void DinksSolve()
+	{
 		SendCommand(COMMANDS.DRINKS_SOLVE);
 	}
 	
@@ -562,41 +588,53 @@ public partial class Connector : Node{
 
 
 	// Schichtplan
-	public void SchichtplanOpen(){
+	public void SchichtplanOpen()
+	{
 		SendCommand(COMMANDS.SCHICHTPLAN_OPEN);
 	}
 
 
 	// Separee
-	public void SepareeRot()
+	public void SepareeRed()
 	{
+		_do_not_reset_separee_lights = false;
 		color_index = 0;
 		SendCommand(COMMANDS.SEPAREE_RED);
 	}
-	public void SepareeGruen()
+	public void SepareeGreen()
 	{
+		_do_not_reset_separee_lights = false;
 		color_index = 1; 
 		SendCommand(COMMANDS.SEPAREE_GREEN);
 	}
-	public void SepareeBlau()
+	public void SepareeBlue()
 	{
+		_do_not_reset_separee_lights = false;
 		color_index = 2;
 		SendCommand(COMMANDS.SEPAREE_BLUE);
 	}
 	public void SepareeWhite()
 	{
+		_do_not_reset_separee_lights = false;
+		color_index = -1;
 		SendCommand(COMMANDS.SEPAREE_WHITE);
 	}
 	public void SepareeLightsOff()
 	{
+		_do_not_reset_separee_lights = true;
 		SendCommand(COMMANDS.SEPAREE_LIGHTS_OFF);
 	}
-	public async void SepareeOpen()
+	public void SepareeOpen()
+	{
+		SendCommand(COMMANDS.SEPAREE_OPEN);
+	}
+	public async void SepareeSolve()
 	{
 		ResetPreviousColor();
 		final_sequence_started = true;
 		await ToSignal(GetTree().CreateTimer(OPEN_DOOR_AFTER_GAME_FINISH_DELAY), "timeout");
 		SendCommand(COMMANDS.SEPAREE_OPEN);
+		final_sequence_started = false;
 	}
 
 
@@ -633,16 +671,20 @@ public partial class Connector : Node{
 	private void Disconnect()
 	{
 		_logger.Log("Closing Port", Logger.LogSeverity.VERBOSE);
-		try{
-			if(_arduinoMaster==null || !_arduinoMaster.IsOpen){
+
+		try
+		{
+			if(_arduinoMaster==null || !_arduinoMaster.IsOpen)
+			{
 				_logger.Log("Port is not Open", Logger.LogSeverity.WARNING);
 				return;
-			}	
+			}
 
 			_arduinoMaster.Close();
 			_logger.Log("Port Closed", Logger.LogSeverity.VERBOSE);
 		}
-		catch(Exception e){
+		catch(Exception e)
+		{
 			_logger.Log(e.Message, Logger.LogSeverity.ERROR);
 		}
 		return;

@@ -208,7 +208,7 @@ horizontal_alignment = 1
 
 [node name="MarginContainer4" type="MarginContainer" parent="RiddleButtons/Controller/Notes"]
 layout_mode = 2
-theme_override_constants/margin_left = 220
+theme_override_constants/margin_left = 400
 theme_override_constants/margin_bottom = -8
 
 [node name="Label4" type="Label" parent="RiddleButtons/Controller/Notes/MarginContainer4"]
@@ -219,7 +219,7 @@ horizontal_alignment = 1
 
 [node name="MarginContainer5" type="MarginContainer" parent="RiddleButtons/Controller/Notes"]
 layout_mode = 2
-theme_override_constants/margin_left = 110
+theme_override_constants/margin_left = 180
 theme_override_constants/margin_bottom = -8
 
 [node name="Label5" type="Label" parent="RiddleButtons/Controller/Notes/MarginContainer5"]
@@ -318,17 +318,22 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="RiddleButtons/Controller/Drinks/Panel/ButtonMargin2/Buttons"]
+[node name="MarginContainer" type="MarginContainer" parent="RiddleButtons/Controller/Drinks/Panel/ButtonMargin2"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 120
+
+[node name="VBoxContainer" type="VBoxContainer" parent="RiddleButtons/Controller/Drinks/Panel/ButtonMargin2/MarginContainer"]
 layout_mode = 2
 alignment = 1
 
-[node name="Label" type="Label" parent="RiddleButtons/Controller/Drinks/Panel/ButtonMargin2/Buttons/VBoxContainer"]
+[node name="Label" type="Label" parent="RiddleButtons/Controller/Drinks/Panel/ButtonMargin2/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 11
-text = "Jukebox aktivieren"
+text = "Jukebox"
 horizontal_alignment = 1
 
-[node name="Label2" type="Label" parent="RiddleButtons/Controller/Drinks/Panel/ButtonMargin2/Buttons/VBoxContainer"]
+[node name="Label2" type="Label" parent="RiddleButtons/Controller/Drinks/Panel/ButtonMargin2/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 11
 text = "nicht vergessen"
@@ -336,15 +341,19 @@ horizontal_alignment = 1
 
 [node name="ButtonMargin3" type="MarginContainer" parent="RiddleButtons/Controller/Drinks/Panel"]
 layout_mode = 1
-anchors_preset = 9
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = 640.0
+offset_left = -120.0
+grow_horizontal = 0
 grow_vertical = 2
 mouse_filter = 2
-theme_override_constants/margin_left = 685
+theme_override_constants/margin_right = 120
 
 [node name="Buttons" type="HBoxContainer" parent="RiddleButtons/Controller/Drinks/Panel/ButtonMargin3"]
 layout_mode = 2
+alignment = 2
 
 [node name="Ping" parent="RiddleButtons/Controller/Drinks/Panel" instance=ExtResource("4_jr8c0")]
 layout_mode = 1
@@ -607,17 +616,19 @@ grow_vertical = 2
 
 [node name="ButtonMargin3" type="MarginContainer" parent="RiddleButtons/Controller/Stopptanz/Panel"]
 layout_mode = 1
-anchors_preset = 9
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = 1.0
-offset_right = 640.0
-offset_bottom = 1.0
+offset_left = -120.0
+grow_horizontal = 0
 grow_vertical = 2
 mouse_filter = 2
-theme_override_constants/margin_left = 685
+theme_override_constants/margin_right = 120
 
 [node name="Buttons" type="HBoxContainer" parent="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin3"]
 layout_mode = 2
+alignment = 2
 
 [node name="Ping" parent="RiddleButtons/Controller/Stopptanz/Panel" instance=ExtResource("4_jr8c0")]
 layout_mode = 1
@@ -680,15 +691,19 @@ layout_mode = 2
 
 [node name="ButtonMargin3" type="MarginContainer" parent="RiddleButtons/Controller/Sparkasten/Panel"]
 layout_mode = 1
-anchors_preset = 9
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = 740.0
+offset_left = -220.0
+grow_horizontal = 0
 grow_vertical = 2
 mouse_filter = 2
-theme_override_constants/margin_left = 685
+theme_override_constants/margin_right = 120
 
 [node name="Buttons" type="HBoxContainer" parent="RiddleButtons/Controller/Sparkasten/Panel/ButtonMargin3"]
 layout_mode = 2
+alignment = 2
 
 [node name="SparkastenOpen" type="Button" parent="RiddleButtons/Controller/Sparkasten/Panel/ButtonMargin3/Buttons"]
 custom_minimum_size = Vector2(100, 25)
@@ -839,16 +854,20 @@ layout_mode = 2
 
 [node name="ButtonMargin3" type="MarginContainer" parent="RiddleButtons/Controller/Telefon/Panel"]
 layout_mode = 1
-anchors_preset = 9
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = 844.0
+offset_left = -324.0
+grow_horizontal = 0
 grow_vertical = 2
 mouse_filter = 2
-theme_override_constants/margin_left = 685
+theme_override_constants/margin_right = 120
 
 [node name="Buttons" type="HBoxContainer" parent="RiddleButtons/Controller/Telefon/Panel/ButtonMargin3"]
 layout_mode = 2
 size_flags_horizontal = 0
+alignment = 2
 
 [node name="TelephoneRing" type="Button" parent="RiddleButtons/Controller/Telefon/Panel/ButtonMargin3/Buttons"]
 custom_minimum_size = Vector2(100, 25)
@@ -1038,17 +1057,22 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="RiddleButtons/Controller/Schichtplan/Panel/ButtonMargin2/Buttons"]
+[node name="MarginContainer" type="MarginContainer" parent="RiddleButtons/Controller/Schichtplan/Panel/ButtonMargin2"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 120
+
+[node name="VBoxContainer" type="VBoxContainer" parent="RiddleButtons/Controller/Schichtplan/Panel/ButtonMargin2/MarginContainer"]
 layout_mode = 2
 alignment = 1
 
-[node name="Label" type="Label" parent="RiddleButtons/Controller/Schichtplan/Panel/ButtonMargin2/Buttons/VBoxContainer"]
+[node name="Label" type="Label" parent="RiddleButtons/Controller/Schichtplan/Panel/ButtonMargin2/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 11
 text = "Nebelmaschine"
 horizontal_alignment = 1
 
-[node name="Label2" type="Label" parent="RiddleButtons/Controller/Schichtplan/Panel/ButtonMargin2/Buttons/VBoxContainer"]
+[node name="Label2" type="Label" parent="RiddleButtons/Controller/Schichtplan/Panel/ButtonMargin2/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 11
 text = "nicht vergessen"
@@ -1056,15 +1080,19 @@ horizontal_alignment = 1
 
 [node name="ButtonMargin3" type="MarginContainer" parent="RiddleButtons/Controller/Schichtplan/Panel"]
 layout_mode = 1
-anchors_preset = 9
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = 640.0
+offset_left = -120.0
+grow_horizontal = 0
 grow_vertical = 2
 mouse_filter = 2
-theme_override_constants/margin_left = 685
+theme_override_constants/margin_right = 120
 
 [node name="Buttons" type="HBoxContainer" parent="RiddleButtons/Controller/Schichtplan/Panel/ButtonMargin3"]
 layout_mode = 2
+alignment = 2
 
 [node name="Ping" parent="RiddleButtons/Controller/Schichtplan/Panel" instance=ExtResource("4_jr8c0")]
 layout_mode = 1
@@ -1285,16 +1313,20 @@ grow_vertical = 2
 
 [node name="ButtonMargin3" type="MarginContainer" parent="RiddleButtons/Controller/Separee/Panel"]
 layout_mode = 1
-anchors_preset = 9
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = 740.0
+offset_left = -428.0
+grow_horizontal = 0
 grow_vertical = 2
 rotation = 0.000377113
 mouse_filter = 2
-theme_override_constants/margin_left = 685
+theme_override_constants/margin_right = 120
 
 [node name="Buttons" type="HBoxContainer" parent="RiddleButtons/Controller/Separee/Panel/ButtonMargin3"]
 layout_mode = 2
+alignment = 2
 
 [node name="SepareeWhite" type="Button" parent="RiddleButtons/Controller/Separee/Panel/ButtonMargin3/Buttons"]
 custom_minimum_size = Vector2(100, 25)
@@ -1403,6 +1435,50 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
+[node name="SepareeOpenDoor" type="Button" parent="RiddleButtons/Controller/Separee/Panel/ButtonMargin3/Buttons"]
+custom_minimum_size = Vector2(100, 25)
+layout_mode = 2
+focus_mode = 0
+theme = ExtResource("6_42bfr")
+script = ExtResource("4_036af")
+
+[node name="Labels" type="VBoxContainer" parent="RiddleButtons/Controller/Separee/Panel/ButtonMargin3/Buttons/SepareeOpenDoor"]
+layout_mode = 1
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -19.0
+offset_right = 19.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="RiddleButtons/Controller/Separee/Panel/ButtonMargin3/Buttons/SepareeOpenDoor/Labels"]
+layout_mode = 2
+theme = ExtResource("6_42bfr")
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 12
+text = "Ausgangstür"
+horizontal_alignment = 1
+
+[node name="Label2" type="Label" parent="RiddleButtons/Controller/Separee/Panel/ButtonMargin3/Buttons/SepareeOpenDoor/Labels"]
+layout_mode = 2
+theme = ExtResource("6_42bfr")
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 12
+text = "Öffnen"
+horizontal_alignment = 1
+
+[node name="DisableOverlay" type="Panel" parent="RiddleButtons/Controller/Separee/Panel/ButtonMargin3/Buttons/SepareeOpenDoor"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
 [node name="Ping" parent="RiddleButtons/Controller/Separee/Panel" instance=ExtResource("4_jr8c0")]
 layout_mode = 1
 anchors_preset = 11
@@ -1424,6 +1500,7 @@ offset_top = -361.0
 grow_horizontal = 0
 grow_vertical = 0
 theme_override_constants/margin_bottom = 226
+metadata/_edit_group_ = true
 
 [node name="ManualMusic" type="VBoxContainer" parent="MarginContainer"]
 layout_mode = 2
@@ -1507,11 +1584,11 @@ theme = ExtResource("16_xh5hu")
 text = "Debug"
 
 [node name="ResetButtons" type="VBoxContainer" parent="."]
-visible = false
-offset_top = 20.0
+offset_top = 30.0
 offset_right = 163.0
-offset_bottom = 74.0
+offset_bottom = 80.0
 script = ExtResource("10_ej0gq")
+metadata/_edit_group_ = true
 
 [node name="Soft" type="Button" parent="ResetButtons"]
 layout_mode = 2
@@ -1530,8 +1607,8 @@ anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
 offset_left = -280.0
-offset_top = 20.0
-offset_bottom = 62.0
+offset_top = 30.0
+offset_bottom = 72.0
 grow_horizontal = 0
 theme_override_styles/panel = ExtResource("15_0gdhf")
 script = ExtResource("1_qovry")
@@ -1626,8 +1703,8 @@ anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
 offset_left = -280.0
-offset_top = 67.0
-offset_bottom = 173.0
+offset_top = 103.0
+offset_bottom = 209.0
 grow_horizontal = 0
 size_flags_horizontal = 8
 theme_override_styles/panel = ExtResource("15_0gdhf")
@@ -1706,9 +1783,9 @@ script = ExtResource("16_7kkjc")
 
 [node name="RestartWithNewGameSessionButton" type="Button" parent="."]
 visible = false
-offset_top = 142.0
+offset_top = 174.0
 offset_right = 394.0
-offset_bottom = 173.0
+offset_bottom = 205.0
 focus_mode = 0
 theme = ExtResource("18_7wtpm")
 text = "Neue Spielsession vorbereiten (Vor dem Aufräumen)"
@@ -1737,10 +1814,12 @@ script = ExtResource("26_l61b3")
 [connection signal="button_down" from="RiddleButtons/Controller/Drinks/Panel/ButtonMargin2/Buttons/DrinksSolve" to="Connector" method="DinksSolve"]
 [connection signal="button_down" from="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin/Buttons/StopptanzInit" to="Connector" method="StopptanzInit"]
 [connection signal="button_down" from="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin/Buttons/StopptanzInit" to="MusicPlayer" method="play_track" binds= ["stopptanz", true]]
+[connection signal="button_down" from="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin/Buttons/StopptanzInit" to="MusicPlayer" method="mark_stopptanz" binds= [true]]
 [connection signal="button_down" from="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin/Buttons/StopptanzDance" to="Connector" method="StopptanzDance"]
 [connection signal="button_down" from="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin/Buttons/StopptanzStop" to="Connector" method="StopptanzStop"]
 [connection signal="button_down" from="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin2/Buttons/StopptanzSolve" to="Connector" method="StopptanzSolve"]
 [connection signal="button_down" from="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin2/Buttons/StopptanzSolve" to="MusicPlayer" method="play_track" binds= ["atmo2"]]
+[connection signal="button_down" from="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin2/Buttons/StopptanzSolve" to="MusicPlayer" method="mark_stopptanz" binds= [false]]
 [connection signal="button_down" from="RiddleButtons/Controller/Sparkasten/Panel/ButtonMargin3/Buttons/SparkastenOpen" to="Connector" method="SparkastenOpen"]
 [connection signal="button_down" from="RiddleButtons/Controller/Telefon/Panel/ButtonMargin/Buttons/WasserhahnActivate" to="Connector" method="WasserhahnEnable"]
 [connection signal="button_down" from="RiddleButtons/Controller/Telefon/Panel/ButtonMargin3/Buttons/TelephoneRing" to="Connector" method="TelefonRing"]
@@ -1752,11 +1831,12 @@ script = ExtResource("26_l61b3")
 [connection signal="button_down" from="RiddleButtons/Controller/Separee/Panel/ButtonMargin/Buttons/SepareeGreen" to="MusicPlayer" method="play_track" binds= ["separee"]]
 [connection signal="button_down" from="RiddleButtons/Controller/Separee/Panel/ButtonMargin/Buttons/SepareeBlue" to="Connector" method="SepareeBlue"]
 [connection signal="button_down" from="RiddleButtons/Controller/Separee/Panel/ButtonMargin/Buttons/SepareeBlue" to="MusicPlayer" method="play_track" binds= ["separee"]]
-[connection signal="button_down" from="RiddleButtons/Controller/Separee/Panel/ButtonMargin2/Buttons/SepareeSolve" to="Connector" method="SepareeOpen"]
+[connection signal="button_down" from="RiddleButtons/Controller/Separee/Panel/ButtonMargin2/Buttons/SepareeSolve" to="Connector" method="SepareeSolve"]
 [connection signal="button_down" from="RiddleButtons/Controller/Separee/Panel/ButtonMargin2/Buttons/SepareeSolve" to="Finale" method="request_finale"]
 [connection signal="button_down" from="RiddleButtons/Controller/Separee/Panel/ButtonMargin2/Buttons/SepareeSolve" to="MusicPlayer" method="play_track" binds= ["finale"]]
 [connection signal="button_down" from="RiddleButtons/Controller/Separee/Panel/ButtonMargin3/Buttons/SepareeWhite" to="Connector" method="SepareeWhite"]
 [connection signal="button_down" from="RiddleButtons/Controller/Separee/Panel/ButtonMargin3/Buttons/SepareeTurnoff" to="Connector" method="SepareeLightsOff"]
+[connection signal="button_down" from="RiddleButtons/Controller/Separee/Panel/ButtonMargin3/Buttons/SepareeOpenDoor" to="Connector" method="SepareeOpen"]
 [connection signal="button_down" from="MarginContainer/ManualMusic/atmo1" to="MusicPlayer" method="play_track" binds= ["atmo1", true]]
 [connection signal="button_down" from="MarginContainer/ManualMusic/stopptanz" to="MusicPlayer" method="play_track" binds= ["stopptanz", true]]
 [connection signal="button_down" from="MarginContainer/ManualMusic/atmo2" to="MusicPlayer" method="play_track" binds= ["atmo2", true]]

@@ -13,6 +13,7 @@ var DICT_MUSIC_TRACKS : Dictionary = {
 }
 
 var dict_loaded_music_tracks : Dictionary = {}
+var stopptanz_ongoing : bool = false
 
 func _ready():
 	if not DirAccess.dir_exists_absolute(DIRECTORY_MUSIC_TRACKS):
@@ -30,10 +31,28 @@ func _ready():
 		dict_loaded_music_tracks[track_name] = mp3_file
 		
 	GameManager.game_session_started.connect( func(): play_track("atmo1", true) )
-	GameManager.new_game_session_started.connect( func(): playing = false )
-	EventBus.update_status_stopptanz.connect(stoptanz_react)
+	GameManager.new_game_session_started.connect( func(): pause() )
+	
 
-func stoptanz_react(_ping:int, _solved:int, state:int):
+func mark_stopptanz(status:bool):
+	# disable connecting/disconnecting multiple times
+	if stopptanz_ongoing==status:
+		return
+	
+	stopptanz_ongoing = status
+	
+	if status==true:
+		EventBus.update_status_stopptanz.connect(stopptanz_react)
+		print("  >[V]: stoptanz now updating pause and play")
+	else:
+		EventBus.update_status_stopptanz.disconnect(stopptanz_react)
+		print("  >[V]: stoptanz no longer updating pause and play")
+
+
+func stopptanz_react(_ping:int, _solved:int, state:int):
+	if not stopptanz_ongoing:
+		return
+	
 	if state==2:
 		pause()
 	else:
@@ -54,6 +73,7 @@ func play_track(track_name:String, force:bool=false):
 	stream = dict_loaded_music_tracks[track_name]
 	animator.play("music_fade_in", -1, 0.35)
 	playing = true
+
 
 func pause():
 	stream_paused = true

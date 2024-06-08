@@ -10,9 +10,9 @@ func _ready():
 
 
 func soft_reset():
-	var popup : CustomPopup = PopupManager.generate_popup("Durch einen Soft Reset wird das Netzwerk zurückgesetzt. Schwache Verbindungen können so wiederhergestellt werden.\nDauer ca. 10-20s (Währenddessen ist keine Bedienung möglich! Verbindet sich danach wieder automatisch.)")
+	var popup : CustomPopup = PopupManager.generate_popup("Durch einen Soft Reset wird das Netzwerk zurückgesetzt.\nSchwache Verbindungen können so wiederhergestellt werden [color=violet]ohne die Rätsel zu resetten[/color].\nDauer ca. 15s (Währenddessen ist keine Bedienung möglich!)")
 	popup.response_confirm.connect( func(): on_soft_reset.emit() )
 
 func hard_reset():
-	var popup : CustomPopup = PopupManager.generate_popup("Durch einen Hard Reset wird das komplette Netzwerk neu synchronisiert. Die Status der Rätsel wird dabei auch zurückgesetzt.\nProbiert vorher den Soft Reset!\nDauer ca. 30s (Währenddessen ist keine Bedienung möglich! Verbindet sich danach wieder automatisch.)")
+	var popup : CustomPopup = PopupManager.generate_popup("Durch einen Hard Reset wird das komplette Netzwerk neu synchronisiert.\nDer [color=violet]Status der Rätsel wird dabei zurückgesetzt[/color]. Probiert also vorher den Soft Reset!\nDauer ca. 30s ([color=violet]Warte bis Rätsel wieder grüne Verbindung[/color] haben.)")
 	popup.response_confirm.connect( func(): on_hard_reset.emit() )
