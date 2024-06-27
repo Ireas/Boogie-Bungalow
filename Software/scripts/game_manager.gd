@@ -23,6 +23,8 @@ signal game_session_finished
 
 # SETUP
 func _ready():
+	print(OS.has_environment("USERNAME"))
+	print(OS.get_environment("USERNAME"))
 	# detect if im working from home to skip connecting to coms
 	if OS.has_environment("USERNAME") and OS.get_environment("USERNAME")=="ireas":
 		WORKING_FROM_HOME = true

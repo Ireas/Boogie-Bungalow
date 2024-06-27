@@ -13,7 +13,7 @@ var DICT_MUSIC_TRACKS : Dictionary = {
 }
 
 var dict_loaded_music_tracks : Dictionary = {}
-var stopptanz_ongoing : bool = false
+#var stopptanz_ongoing : bool = false
 
 func _ready():
 	if not DirAccess.dir_exists_absolute(DIRECTORY_MUSIC_TRACKS):
@@ -34,29 +34,29 @@ func _ready():
 	GameManager.new_game_session_started.connect( func(): pause() )
 	
 
-func mark_stopptanz(status:bool):
-	# disable connecting/disconnecting multiple times
-	if stopptanz_ongoing==status:
-		return
-	
-	stopptanz_ongoing = status
-	
-	if status==true:
-		EventBus.update_status_stopptanz.connect(stopptanz_react)
-		print("  >[V]: stoptanz now updating pause and play")
-	else:
-		EventBus.update_status_stopptanz.disconnect(stopptanz_react)
-		print("  >[V]: stoptanz no longer updating pause and play")
-
-
-func stopptanz_react(_ping:int, _solved:int, state:int):
-	if not stopptanz_ongoing:
-		return
-	
-	if state==2:
-		pause()
-	else:
-		unpause()
+#func mark_stopptanz(status:bool):
+#	# disable connecting/disconnecting multiple times
+#	if stopptanz_ongoing==status:
+#		return
+#	
+#	stopptanz_ongoing = status
+#	
+#	if status==true:
+#		EventBus.update_status_stopptanz.connect(stopptanz_react)
+#		print("  >[V]: stoptanz now updating pause and play")
+#	else:
+#		EventBus.update_status_stopptanz.disconnect(stopptanz_react)
+#		print("  >[V]: stoptanz no longer updating pause and play")
+#
+#
+#func stopptanz_react(_ping:int, _solved:int, state:int):
+#	if not stopptanz_ongoing:
+#		return
+#	
+#	if state==2:
+#		pause()
+#	else:
+#		unpause()
 
 
 func play_track(track_name:String, force:bool=false):
@@ -75,12 +75,14 @@ func play_track(track_name:String, force:bool=false):
 	playing = true
 
 
-func pause():
+func pause(delay:float=0):
+	await get_tree().create_timer(delay).timeout
 	stream_paused = true
 
-func unpause():
+func unpause(delay:float=0):
+	await get_tree().create_timer(delay).timeout
 	stream_paused = false
 
-
+# if song runs out, restart with atmo1
 func _on_finished():
 	play_track("atmo1")

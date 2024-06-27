@@ -1819,10 +1819,11 @@ script = ExtResource("26_l61b3")
 
 [connection signal="button_down" from="RiddleButtons/Controller/Drinks/Panel/ButtonMargin2/Buttons/DrinksSolve" to="Connector" method="DinksSolve"]
 [connection signal="button_down" from="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin/Buttons/StopptanzInit" to="Connector" method="StopptanzInit"]
-[connection signal="button_down" from="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin/Buttons/StopptanzInit" to="MusicPlayer" method="mark_stopptanz" binds= [true]]
 [connection signal="button_down" from="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin/Buttons/StopptanzInit" to="MusicPlayer" method="play_track" binds= ["stopptanz", true]]
 [connection signal="button_down" from="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin/Buttons/StopptanzDance" to="Connector" method="StopptanzDance"]
+[connection signal="button_down" from="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin/Buttons/StopptanzDance" to="MusicPlayer" method="unpause" binds= [1.0]]
 [connection signal="button_down" from="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin/Buttons/StopptanzStop" to="Connector" method="StopptanzStop"]
+[connection signal="button_down" from="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin/Buttons/StopptanzStop" to="MusicPlayer" method="pause" binds= [1.0]]
 [connection signal="button_down" from="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin2/Buttons/StopptanzSolve" to="Connector" method="StopptanzSolve"]
 [connection signal="button_down" from="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin2/Buttons/StopptanzSolve" to="MusicPlayer" method="mark_stopptanz" binds= [false]]
 [connection signal="button_down" from="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin2/Buttons/StopptanzSolve" to="MusicPlayer" method="play_track" binds= ["atmo2"]]
