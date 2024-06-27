@@ -1571,6 +1571,12 @@ metadata/_edit_group_ = true
 layout_mode = 2
 alignment = 2
 
+[node name="ExportLog" type="Button" parent="UtilityButtons/VBoxContainer"]
+layout_mode = 2
+focus_mode = 0
+theme = ExtResource("16_xh5hu")
+text = "Export Log"
+
 [node name="Help" type="Button" parent="UtilityButtons/VBoxContainer"]
 layout_mode = 2
 focus_mode = 0
@@ -1813,13 +1819,13 @@ script = ExtResource("26_l61b3")
 
 [connection signal="button_down" from="RiddleButtons/Controller/Drinks/Panel/ButtonMargin2/Buttons/DrinksSolve" to="Connector" method="DinksSolve"]
 [connection signal="button_down" from="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin/Buttons/StopptanzInit" to="Connector" method="StopptanzInit"]
-[connection signal="button_down" from="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin/Buttons/StopptanzInit" to="MusicPlayer" method="play_track" binds= ["stopptanz", true]]
 [connection signal="button_down" from="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin/Buttons/StopptanzInit" to="MusicPlayer" method="mark_stopptanz" binds= [true]]
+[connection signal="button_down" from="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin/Buttons/StopptanzInit" to="MusicPlayer" method="play_track" binds= ["stopptanz", true]]
 [connection signal="button_down" from="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin/Buttons/StopptanzDance" to="Connector" method="StopptanzDance"]
 [connection signal="button_down" from="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin/Buttons/StopptanzStop" to="Connector" method="StopptanzStop"]
 [connection signal="button_down" from="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin2/Buttons/StopptanzSolve" to="Connector" method="StopptanzSolve"]
-[connection signal="button_down" from="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin2/Buttons/StopptanzSolve" to="MusicPlayer" method="play_track" binds= ["atmo2"]]
 [connection signal="button_down" from="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin2/Buttons/StopptanzSolve" to="MusicPlayer" method="mark_stopptanz" binds= [false]]
+[connection signal="button_down" from="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin2/Buttons/StopptanzSolve" to="MusicPlayer" method="play_track" binds= ["atmo2"]]
 [connection signal="button_down" from="RiddleButtons/Controller/Sparkasten/Panel/ButtonMargin3/Buttons/SparkastenOpen" to="Connector" method="SparkastenOpen"]
 [connection signal="button_down" from="RiddleButtons/Controller/Telefon/Panel/ButtonMargin/Buttons/WasserhahnActivate" to="Connector" method="WasserhahnEnable"]
 [connection signal="button_down" from="RiddleButtons/Controller/Telefon/Panel/ButtonMargin3/Buttons/TelephoneRing" to="Connector" method="TelefonRing"]
@@ -1844,12 +1850,14 @@ script = ExtResource("26_l61b3")
 [connection signal="button_down" from="MarginContainer/ManualMusic/finale" to="MusicPlayer" method="play_track" binds= ["finale", true]]
 [connection signal="button_down" from="MarginContainer/ManualMusic/MarginContainer/HBoxContainer/Play" to="MusicPlayer" method="unpause"]
 [connection signal="button_down" from="MarginContainer/ManualMusic/MarginContainer/HBoxContainer/Stop" to="MusicPlayer" method="pause"]
+[connection signal="button_down" from="UtilityButtons/VBoxContainer/ExportLog" to="Connector" method="ExportCurrentLog"]
 [connection signal="button_down" from="UtilityButtons/VBoxContainer/Help" to="Feedback" method="show"]
 [connection signal="button_down" from="UtilityButtons/VBoxContainer/Debug" to="Debug" method="show"]
 [connection signal="on_hard_reset" from="ResetButtons" to="Connector" method="SystemHardReset"]
 [connection signal="on_soft_reset" from="ResetButtons" to="Connector" method="SystemSoftReset"]
 [connection signal="button_down" from="ResetButtons/Soft" to="ResetButtons" method="soft_reset"]
 [connection signal="button_down" from="ResetButtons/Hard" to="ResetButtons" method="hard_reset"]
+[connection signal="finished" from="MusicPlayer" to="MusicPlayer" method="_on_finished"]
 [connection signal="button_down" from="PregameTimer/MarginContainer/VBoxContainer/ChangeDelayButtons/Decrease" to="PregameTimer" method="increase_delay" binds= [-10]]
 [connection signal="button_down" from="PregameTimer/MarginContainer/VBoxContainer/ChangeDelayButtons/Increase" to="PregameTimer" method="increase_delay" binds= [10]]
 [connection signal="button_down" from="PregameTimer/MarginContainer/VBoxContainer/TimeControlButtons/Skip" to="PregameTimer" method="skip"]

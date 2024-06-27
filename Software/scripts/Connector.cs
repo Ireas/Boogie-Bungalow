@@ -23,7 +23,7 @@ public partial class Connector : Node{
 
 	private const int MAX_ACK_TRIES = 1000;
 
-	private const float SYNC_PACK_DOWNTIME = 0.5f;
+	private const float SYNC_PACK_DOWNTIME = 1f;
 	private const float TELEFPHONE_RING_DURATION = 6f; // I think this does not work properly, but it is not used anyway
 	private const float OPEN_SPARKASTEN_AFTER_STOPPTANZ_DELAY = 2.5f;
 	private const float OPEN_DOOR_AFTER_GAME_FINISH_DELAY = 7f;
@@ -34,6 +34,7 @@ public partial class Connector : Node{
 		SYSTEM_HARD_RESET,
 		DRINKS_SOLVE,
 		DRINKS_STOP_OPENING,
+		STOPPTANZ_FORCE_RESET,
 		STOPPTANZ_INITIALIZE,
 		STOPPTANZ_DANCE,
 		STOPPTANZ_STOP,
@@ -62,6 +63,7 @@ public partial class Connector : Node{
 		{COMMANDS.SYSTEM_HARD_RESET, 		"00,00,01"},
 		{COMMANDS.DRINKS_SOLVE, 			"13,01,00"},
 		{COMMANDS.DRINKS_STOP_OPENING, 		"13,00,00"},
+		{COMMANDS.STOPPTANZ_FORCE_RESET, 	"02,00,00"},
 		{COMMANDS.STOPPTANZ_INITIALIZE, 	"02,00,03"},
 		{COMMANDS.STOPPTANZ_DANCE, 			"02,00,01"},
 		{COMMANDS.STOPPTANZ_STOP, 			"02,00,02"},
@@ -79,8 +81,7 @@ public partial class Connector : Node{
 		{COMMANDS.SEPAREE_BLUE, 			"01,00,03"},
 		{COMMANDS.SEPAREE_WHITE, 			"01,00,06"},
 		{COMMANDS.SEPAREE_LIGHTS_OFF, 		"01,00,00"},
-		{COMMANDS.SEPAREE_OPEN, 			"01,01,09"},
-		{COMMANDS.SEPAREE_STOP_OPENING, 	"01,01,00"},
+		{COMMANDS.SEPAREE_OPEN, 			"01,00,07"},
 	}; 
 
 	
@@ -89,7 +90,7 @@ public partial class Connector : Node{
 		{0, "01,00,00"},
 		{1, "02,00,00"},
 		{2, "03,00,00"},
-		{3, "04,00,00"},
+		// {3, "04,00,00"},
 		{4, "05,00,00"},
 		{5, "13,00,00"},
 		{6, "21,00,00"},
@@ -114,6 +115,7 @@ public partial class Connector : Node{
 	private SerialPort _arduinoMaster;
 	private Logger _logger;
 	private int color_index = -1;
+	private int _stopptanz_ping = 0;
 	private bool final_sequence_started = false;
 	private bool _do_not_reset_separee_lights = false;
 	private SyncState _syncState = SyncState.NOT_STARTED;
@@ -164,6 +166,10 @@ public partial class Connector : Node{
 		_logger = new Logger();
 	}
 
+	public void ExportCurrentLog()
+	{
+		_logger.Export();
+	}
 
 	// initializes serial port 
 	private bool OpenMasterPort()
@@ -243,7 +249,7 @@ public partial class Connector : Node{
 	// sends pack to arduino master
 	private void SendCommand(COMMANDS _command)
 	{
-		_logger.Log("Sending Command: " + _command + " at " + DateTime.Now.ToString("hh:mm:ss"), Logger.LogSeverity.VERBOSE);
+		_logger.Log(" " + DateTime.Now.ToString("hh:mm:ss") + " -> Sending Command: " + _command, Logger.LogSeverity.VERBOSE);
 
 		try
 		{
@@ -266,7 +272,7 @@ public partial class Connector : Node{
 			}
 
 			string data = _arduinoMaster.ReadLine();
-			_logger.Log("Pack Recieved: " + data, Logger.LogSeverity.VERBOSE);
+			_logger.Log(" " + DateTime.Now.ToString("hh:mm:ss") + " -> Pack Recieved: " + data, Logger.LogSeverity.VERBOSE);
 
 			string[] data_split = data.Split(',');
 			processBuffer(data_split);
@@ -319,7 +325,7 @@ public partial class Connector : Node{
 
 			_syncState = SyncState.CURRENTLY_SYNCING;
 			
-			for(int i=0; i<8; i++)
+			for(int i=0; i<7; i++)
 			{
 				if(timer_sync_packages.TimeLeft<=0.0){
 					timer_sync_packages.CallDeferred("start", SYNC_PACK_DOWNTIME);
@@ -345,8 +351,8 @@ public partial class Connector : Node{
 			_logger.Log("Master Node Resynced Node", Logger.LogSeverity.WARNING);
 			return;  
 		}
-		else if(_first_int_in_pack==6
-		){ // this is not recieved after every successful sync time
+		else if(_first_int_in_pack==6)
+		{ // this is not recieved after every successful sync time
 			_logger.Log("Master Node Sync Successful", Logger.LogSeverity.VERBOSE);
 			_eventBus.CallDeferred("emit_sync_successful");
 			return;
@@ -374,7 +380,7 @@ public partial class Connector : Node{
 			_syncState = SyncState.CURRENTLY_SYNCING_AGAIN;
 			
 
-			for(int i=0; i<8; i++)
+			for(int i=0; i<7; i++)
 			{
 				if(timer_sync_packages.TimeLeft<=0.0)
 				{
@@ -440,6 +446,7 @@ public partial class Connector : Node{
 						StopptanzPing = (int)delay;
 						StopptanzSolved = newSolved ? 1 : 0;
 						StopptanzState = newState;
+						_stopptanz_ping = StopptanzPing;
 						break;
 					case 2: //Sparkasten
 						SparkastenPing = (int)delay;
@@ -533,9 +540,11 @@ public partial class Connector : Node{
 	//=====  BUTTONS
 	//========================================
 	// Drinks
-	public void DinksSolve()
+	public async void DinksSolve()
 	{
 		SendCommand(COMMANDS.DRINKS_SOLVE);
+    	await ToSignal(GetTree().CreateTimer(1f), "timeout");
+		SendCommand(COMMANDS.STOPPTANZ_FORCE_RESET);
 	}
 	
 
@@ -546,10 +555,18 @@ public partial class Connector : Node{
 	}
 	public void StopptanzDance()
 	{
+		if(_stopptanz_ping==0)
+		{
+			return;
+		}
 		SendCommand(COMMANDS.STOPPTANZ_DANCE);
 	}
 	public void StopptanzStop()
 	{
+		if(_stopptanz_ping==0)
+		{
+			return;
+		}
 		SendCommand(COMMANDS.STOPPTANZ_STOP);
 	}
 	public async void StopptanzSolve()

@@ -80,3 +80,7 @@ func pause():
 
 func unpause():
 	stream_paused = false
+
+
+func _on_finished():
+	play_track("atmo1")

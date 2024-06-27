@@ -23,6 +23,8 @@ public class Logger{
 		"Boogie-Bungalow/log_"
 	);
 
+    string PATH_EXPORT = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Desktop);
+
 
     //====================  VARIABLES
     private bool busy;
@@ -109,5 +111,12 @@ public class Logger{
         {
             busy = false;
         }
+    }
+
+
+    // export file to Desktop
+    public void Export()
+    {
+        File.Copy(PATH_LOGFILE+"0.txt", PATH_EXPORT+"/log_"+DateTime.Now.ToString("dd.MM.yyyy.hh.mm")+".txt");
     }
 }

@@ -1,4 +1,5 @@
 *.exe
 /Software/.godot
 /Legacy
-/wip
+/WIP
+/Logs
