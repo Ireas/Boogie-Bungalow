@@ -1571,17 +1571,11 @@ metadata/_edit_group_ = true
 layout_mode = 2
 alignment = 2
 
-[node name="ExportLog" type="Button" parent="UtilityButtons/VBoxContainer"]
-layout_mode = 2
-focus_mode = 0
-theme = ExtResource("16_xh5hu")
-text = "Export Log"
-
 [node name="Help" type="Button" parent="UtilityButtons/VBoxContainer"]
 layout_mode = 2
 focus_mode = 0
 theme = ExtResource("16_xh5hu")
-text = "Feedback"
+text = "Hilfe!"
 
 [node name="Debug" type="Button" parent="UtilityButtons/VBoxContainer"]
 layout_mode = 2
@@ -1825,7 +1819,6 @@ script = ExtResource("26_l61b3")
 [connection signal="button_down" from="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin/Buttons/StopptanzStop" to="Connector" method="StopptanzStop"]
 [connection signal="button_down" from="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin/Buttons/StopptanzStop" to="MusicPlayer" method="pause" binds= [1.0]]
 [connection signal="button_down" from="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin2/Buttons/StopptanzSolve" to="Connector" method="StopptanzSolve"]
-[connection signal="button_down" from="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin2/Buttons/StopptanzSolve" to="MusicPlayer" method="mark_stopptanz" binds= [false]]
 [connection signal="button_down" from="RiddleButtons/Controller/Stopptanz/Panel/ButtonMargin2/Buttons/StopptanzSolve" to="MusicPlayer" method="play_track" binds= ["atmo2"]]
 [connection signal="button_down" from="RiddleButtons/Controller/Sparkasten/Panel/ButtonMargin3/Buttons/SparkastenOpen" to="Connector" method="SparkastenOpen"]
 [connection signal="button_down" from="RiddleButtons/Controller/Telefon/Panel/ButtonMargin/Buttons/WasserhahnActivate" to="Connector" method="WasserhahnEnable"]
@@ -1851,8 +1844,8 @@ script = ExtResource("26_l61b3")
 [connection signal="button_down" from="MarginContainer/ManualMusic/finale" to="MusicPlayer" method="play_track" binds= ["finale", true]]
 [connection signal="button_down" from="MarginContainer/ManualMusic/MarginContainer/HBoxContainer/Play" to="MusicPlayer" method="unpause"]
 [connection signal="button_down" from="MarginContainer/ManualMusic/MarginContainer/HBoxContainer/Stop" to="MusicPlayer" method="pause"]
-[connection signal="button_down" from="UtilityButtons/VBoxContainer/ExportLog" to="Connector" method="ExportCurrentLog"]
 [connection signal="button_down" from="UtilityButtons/VBoxContainer/Help" to="Feedback" method="show"]
+[connection signal="button_down" from="UtilityButtons/VBoxContainer/Help" to="Connector" method="ExportCurrentLog"]
 [connection signal="button_down" from="UtilityButtons/VBoxContainer/Debug" to="Debug" method="show"]
 [connection signal="on_hard_reset" from="ResetButtons" to="Connector" method="SystemHardReset"]
 [connection signal="on_soft_reset" from="ResetButtons" to="Connector" method="SystemSoftReset"]

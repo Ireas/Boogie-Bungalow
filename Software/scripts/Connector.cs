@@ -52,6 +52,7 @@ public partial class Connector : Node{
 		SEPAREE_BLUE,
 		SEPAREE_WHITE,
 		SEPAREE_LIGHTS_OFF,
+		SEPAREE_FINAL_SEQUENCE,
 		SEPAREE_OPEN,
 		SEPAREE_STOP_OPENING,
 	}
@@ -81,6 +82,7 @@ public partial class Connector : Node{
 		{COMMANDS.SEPAREE_BLUE, 			"01,00,03"},
 		{COMMANDS.SEPAREE_WHITE, 			"01,00,06"},
 		{COMMANDS.SEPAREE_LIGHTS_OFF, 		"01,00,00"},
+		{COMMANDS.SEPAREE_FINAL_SEQUENCE,	"01,01,09"},
 		{COMMANDS.SEPAREE_OPEN, 			"01,00,07"},
 	}; 
 
@@ -650,7 +652,7 @@ public partial class Connector : Node{
 		ResetPreviousColor();
 		final_sequence_started = true;
 		await ToSignal(GetTree().CreateTimer(OPEN_DOOR_AFTER_GAME_FINISH_DELAY), "timeout");
-		SendCommand(COMMANDS.SEPAREE_OPEN);
+		SendCommand(COMMANDS.SEPAREE_FINAL_SEQUENCE);
 		final_sequence_started = false;
 	}
 
