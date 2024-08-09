@@ -600,9 +600,14 @@ public partial class Connector : Node{
 	{
 		SendCommand(COMMANDS.WASSERHAHN_ENABLE);
 	}
+	int test = 0;
 	public void WasserhahnOpen()
 	{
-		SendCommand(COMMANDS.SEXDUNGEON_OPEN);
+		// SendCommand(COMMANDS.SEXDUNGEON_OPEN);
+
+		_logger.Log("Test:" + ">" + "05,00,0"+test, Logger.LogSeverity.VERBOSE);
+		_arduinoMaster.WriteLine(">" + "05,00,0"+test);
+		test++;
 	}
 
 
@@ -682,6 +687,7 @@ public partial class Connector : Node{
 		_logger.Log("The following serial ports were found", Logger.LogSeverity.VERBOSE);
 		foreach(string port in ports){
 			_logger.Log(" >"+port, Logger.LogSeverity.VERBOSE);
+			_logger.Log("Port Closed", Logger.LogSeverity.VERBOSE);
 		}
 	}
 
