@@ -1,4 +1,4 @@
-using Godot;
+	using Godot;
 using System;
 using System.Collections.Generic;
 using System.IO.Ports;
@@ -313,6 +313,7 @@ public partial class Connector : Node{
 		{
 			_logger.Log("Network Channel set to " + _first_int_in_pack.ToString(), Logger.LogSeverity.WARNING);
 			_eventBus.CallDeferred("emit_sync_successful"); //this is called once every time after sync, so success
+			SepareeLightsOff();
 			return;
 		}
 		else if(_first_int_in_pack==1)
@@ -439,6 +440,7 @@ public partial class Connector : Node{
 						SepareePing = (int)delay;
 						SepareeSolved = newSolved ? 1 : 0;
 						SepareeState = newState;
+
 						if(newState==0) // separee lights went out, reset it to previous color
 						{
 							ResetPreviousColor();
@@ -454,6 +456,7 @@ public partial class Connector : Node{
 						SparkastenPing = (int)delay;
 						SparkastenSolved = newSolved ? 1 : 0;
 						SparkastenState = newState;
+
 						if(newState>0)//sparkasten is open then reset so it can be opened again
 						{ 
 							SendCommand(COMMANDS.SPARKASTEN_STOP_OPENING);
@@ -465,7 +468,8 @@ public partial class Connector : Node{
 						SchichtplanPing = (int)delay;
 						SchichtplanSolved = newSolved ? 1 : 0;
 						SchichtplanState = newState;
-						if(newState==9){
+						if(newState==8 || newState==9)
+						{
 							SendCommand(COMMANDS.SCHICHTPLAN_STOP_OPENING);
 						}
 						break;
@@ -473,7 +477,9 @@ public partial class Connector : Node{
 						DrinksPing = (int)delay;
 						DrinksSolved = newSolved ? 1 : 0;
 						DrinksState = newState;
-						if(newSolved){
+
+						if(newSolved)
+						{
 							SendCommand(COMMANDS.DRINKS_STOP_OPENING);
 						}
 						break;
@@ -600,14 +606,9 @@ public partial class Connector : Node{
 	{
 		SendCommand(COMMANDS.WASSERHAHN_ENABLE);
 	}
-	int test = 0;
 	public void WasserhahnOpen()
 	{
-		// SendCommand(COMMANDS.SEXDUNGEON_OPEN);
-
-		_logger.Log("Test:" + ">" + "05,00,0"+test, Logger.LogSeverity.VERBOSE);
-		_arduinoMaster.WriteLine(">" + "05,00,0"+test);
-		test++;
+		SendCommand(COMMANDS.SEXDUNGEON_OPEN);
 	}
 
 

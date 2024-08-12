@@ -825,7 +825,7 @@ horizontal_alignment = 1
 layout_mode = 2
 theme = ExtResource("17_717m6")
 theme_override_font_sizes/font_size = 12
-text = "Aktivieren"
+text = "Lösen"
 horizontal_alignment = 1
 
 [node name="DisableOverlay" type="Panel" parent="RiddleButtons/Controller/Telefon/Panel/ButtonMargin/Buttons/WasserhahnActivate"]
@@ -836,6 +836,22 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="RiddleButtons/Controller/Telefon/Panel/ButtonMargin/Buttons"]
+layout_mode = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="RiddleButtons/Controller/Telefon/Panel/ButtonMargin/Buttons/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "Geheimgang manuell"
+horizontal_alignment = 1
+
+[node name="Label2" type="Label" parent="RiddleButtons/Controller/Telefon/Panel/ButtonMargin/Buttons/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "geöffnet werden"
+horizontal_alignment = 1
 
 [node name="ButtonMargin2" type="MarginContainer" parent="RiddleButtons/Controller/Telefon/Panel"]
 layout_mode = 1
@@ -937,7 +953,7 @@ layout_mode = 2
 theme = ExtResource("6_42bfr")
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 12
-text = "Sexdungeon"
+text = "Geheimgang"
 horizontal_alignment = 1
 
 [node name="Label2" type="Label" parent="RiddleButtons/Controller/Telefon/Panel/ButtonMargin3/Buttons/SexdungeonOpen/Labels"]
